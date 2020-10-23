@@ -19,9 +19,9 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:orientation="horizontal"
-            android:baselineAligned="false">
+            android:layout_weight="3"
+            android:baselineAligned="false"
+            android:orientation="horizontal">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -35,7 +35,8 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:gravity="center"
-                    android:text="TextView" />
+                    android:text="TextView"
+                    android:textSize="40sp" />
             </LinearLayout>
 
             <LinearLayout
@@ -70,14 +71,13 @@
                     android:id="@+id/textView4"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="@string/indicadorCarretera" />
+                    android:text="@string/indicadorCarretera"
+                    android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/idCarretera"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
                     android:text="TextView" />
             </LinearLayout>
 
@@ -91,14 +91,13 @@
                     android:id="@+id/textView6"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="@string/indicadorLocalidad" />
+                    android:text="@string/indicadorLocalidad"
+                    android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/idLocalidad"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
                     android:text="TextView" />
             </LinearLayout>
 
@@ -112,14 +111,13 @@
                     android:id="@+id/textView2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="@string/indicadorProvincia" />
+                    android:text="@string/indicadorProvincia"
+                    android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/idProvincia"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
                     android:text="TextView" />
             </LinearLayout>
 
@@ -133,14 +131,13 @@
                     android:id="@+id/textView8"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="@string/indicadorPrecioDiesel" />
+                    android:text="@string/indicadorPrecioDiesel"
+                    android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/idDiesel"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
                     android:text="TextView" />
             </LinearLayout>
 
@@ -154,14 +151,13 @@
                     android:id="@+id/textView10"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="@string/indicadorPrecioGasolina" />
+                    android:text="@string/indicadorPrecioGasolina"
+                    android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/idGasolina"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
                     android:text="TextView" />
 
             </LinearLayout>

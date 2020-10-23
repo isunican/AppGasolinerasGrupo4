@@ -65,8 +65,9 @@ public class DetailActivity extends AppCompatActivity {
         textNombreCarretera.setText(gasolinera.getDireccion());
         textNombreProvincia.setText(gasolinera.getProvincia());
         textNombreLocalidad.setText(gasolinera.getLocalidad());
-        textPrecioDiesel.setText(gasolinera.getGasoleoA().toString());
-        textPrecioGasolina.setText(gasolinera.getGasolina95().toString());
+
+        textPrecioDiesel.setText(String.valueOf(gasolinera.getGasoleoA()));
+        textPrecioGasolina.setText(String.valueOf(gasolinera.getGasolina95()));
 
        //textView.setText(gasolinera.toString());
         imagenEmpresa = findViewById(R.id.idFotoEmpresa);
