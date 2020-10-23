@@ -1,6 +1,10 @@
 package com.isunican.proyectobase;
 
 import android.content.Context;
+import android.view.View;
+import android.widget.Adapter;
+
+import androidx.test.espresso.DataInteraction;
 import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.rule.ActivityTestRule;
@@ -24,6 +28,11 @@ import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.junit.Assert.*;
 
+import static org.hamcrest.Matchers.anything;
+import android.widget.GridView;
+import android.widget.ListAdapter;
+import android.widget.ListView;
+
 /**
  * Instrumented test, which will execute on an Android device.
  *
@@ -41,20 +50,17 @@ public class ExampleInstrumentedTest {
         Gasolinera gasolinera;
 
         //Hace click en la primera gasolinera
-        //¿Como hacer click a una posición especifica de la lista?
-        onView(withId(R.id.listViewGasolineras)).perform(click());
+        DataInteraction evento = onData(anything()).inAdapterView(withId(R.id.listViewGasolineras)).atPosition(0);
 
-        //Obtiene el objeto Gasolinera del click pulsado
-        //¿Como obtener el objeto Activity especifico del elemento al que hemos hecho click en la lista?
-        //¿Como llamar al getIntent y get Resources sin una clase activity?
-
-        gasolinera = mActivityTestRule.getIntent().getExtras().getParcelable(getResources().getString(R.string.pasoDatosGasolinera));
+        //Obtiene el objeto Gasolinera de la primera gasolinera de la lista
+        ListView vista = (ListView) mActivityTestRule.getActivity().findViewById(R.id.listViewGasolineras);
+        gasolinera = (Gasolinera) vista.getAdapter().getItem(0);
 
         //Comprobaciones de los strings del detailActivity pulsado.
-        onView(withId(R.id.idNombreEmpresa)).check(matches(withText("repsol")));
+        onView(withId(R.id.idNombreEmpresa)).check(matches(withText(gasolinera.getRotulo())));
+        onView(withId(R.id.idGasolina)).check(matches(withText(String.valueOf(gasolinera.getGasolina95()))));
 
-        onView(withId(R.id.txtOperador1)).perform(replaceText("3.0"));
-
+        /*
         // Select Operation
         onView(withId(R.id.spnOperacion)).perform(click());
         onData(allOf(is(instanceOf(String.class)), is("+"))).perform(click());
@@ -69,6 +75,7 @@ public class ExampleInstrumentedTest {
 
         onView(withId(R.id.btnSaludar)).perform(click);onView(withId(R.id.txtSaludo)).check(matches(withText(“”)));
         assertEquals("com.isunican.proyectobase", appContext.getPackageName());
+        */
     }
 
 

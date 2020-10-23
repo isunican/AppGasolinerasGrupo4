@@ -43,15 +43,18 @@ public class DetailActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
+        DataInteraction evento = onData(anything()).inAdapterView(withId(R.id.listViewEventos)).atPosition(0);
+
+        onData(anything()).inAdapterView(withId(R.id.listViewEventos)).getAdapter();
 
         // muestra el logo en el actionBar
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setIcon(R.drawable.por_defecto_mod);
 
-
+        /*
         // obtiene el objeto Gasolinera a mostrar
         gasolinera = getIntent().getExtras().getParcelable(getResources().getString(R.string.pasoDatosGasolinera));
-
+        */
         //Recogemos los id de los text View.
         textNombreEmpresa = findViewById(R.id.idNombreEmpresa);
         textNombreCarretera = findViewById(R.id.idCarretera);
