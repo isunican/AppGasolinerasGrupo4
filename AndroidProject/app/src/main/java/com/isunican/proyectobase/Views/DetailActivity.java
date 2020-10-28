@@ -43,9 +43,6 @@ public class DetailActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
-        DataInteraction evento = onData(anything()).inAdapterView(withId(R.id.listViewEventos)).atPosition(0);
-
-        onData(anything()).inAdapterView(withId(R.id.listViewEventos)).getAdapter();
 
         // muestra el logo en el actionBar
         getSupportActionBar().setDisplayShowHomeEnabled(true);

@@ -41,7 +41,6 @@ import android.widget.ListView;
 @RunWith(AndroidJUnit4.class)
 public class ExampleInstrumentedTest {
 
-
     @Rule
     public ActivityTestRule<MainActivity> mActivityTestRule = new ActivityTestRule<>(MainActivity.class);
 
