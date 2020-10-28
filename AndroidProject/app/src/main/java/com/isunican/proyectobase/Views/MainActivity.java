@@ -246,8 +246,7 @@ public class MainActivity extends AppCompatActivity {
                      * Alternativa 2: a partir de la vista obtener algun atributo String opcionSeleccionada = ((TextView)v.findViewById(R.id.textViewRotulo)).getText().toString();
                      */
                     Intent myIntent = new Intent(MainActivity.this, DetailActivity.class);
-                    myIntent.putExtra(getResources().getString(R.string.pasoDatosGasolinera),
-                            presenterGasolineras.getGasolineras().get(position));
+                    myIntent.putExtra(getResources().getString(R.string.pasoDatosGasolinera), presenterGasolineras.getGasolineras().get(position));
                     MainActivity.this.startActivity(myIntent);
 
                 }

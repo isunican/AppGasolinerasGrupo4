@@ -1,13 +1,37 @@
 package com.isunican.proyectobase;
 
 import android.content.Context;
+import android.view.View;
+import android.widget.Adapter;
+
+import androidx.test.espresso.DataInteraction;
 import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
+import androidx.test.rule.ActivityTestRule;
 
+import com.isunican.proyectobase.Model.Gasolinera;
+import com.isunican.proyectobase.Views.DetailActivity;
+import com.isunican.proyectobase.Views.MainActivity;
+
+import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import static androidx.test.espresso.Espresso.onData;
+import static androidx.test.espresso.Espresso.onView;
+import static androidx.test.espresso.action.ViewActions.click;
+import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
+import static androidx.test.espresso.action.ViewActions.replaceText;
+import static androidx.test.espresso.assertion.ViewAssertions.matches;
+import static androidx.test.espresso.matcher.ViewMatchers.withId;
+import static androidx.test.espresso.matcher.ViewMatchers.withText;
+import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.junit.Assert.*;
+
+import static org.hamcrest.Matchers.anything;
+import android.widget.GridView;
+import android.widget.ListAdapter;
+import android.widget.ListView;
 
 /**
  * Instrumented test, which will execute on an Android device.
@@ -16,11 +40,32 @@ import static org.junit.Assert.*;
  */
 @RunWith(AndroidJUnit4.class)
 public class ExampleInstrumentedTest {
+
+    @Rule
+    public ActivityTestRule<MainActivity> mActivityTestRule = new ActivityTestRule<>(MainActivity.class);
+
     @Test
     public void useAppContext() {
-        // Context of the app under test.
-        Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
+        Gasolinera gasolinera;
 
-        assertEquals("com.isunican.proyectobase", appContext.getPackageName());
+        //Hace click en la primera gasolinera
+        DataInteraction evento = onData(anything()).inAdapterView(withId(R.id.listViewGasolineras)).atPosition(0);
+        evento.perform(click());
+
+        //Obtiene el objeto Gasolinera de la primera gasolinera de la lista
+        ListView vista = (ListView) mActivityTestRule.getActivity().findViewById(R.id.listViewGasolineras);
+        gasolinera = (Gasolinera) vista.getAdapter().getItem(0);
+
+        //Comprobaciones de los strings del detailActivity pulsado.
+        onView(withId(R.id.idNombreEmpresa)).check(matches(withText(gasolinera.getRotulo())));
+        onView(withId(R.id.idGasolina)).check(matches(withText(String.valueOf(gasolinera.getGasolina95()))));
+        onView(withId(R.id.idDiesel)).check(matches(withText(String.valueOf(gasolinera.getGasoleoA()))));
+        onView(withId(R.id.idCarretera)).check(matches(withText(gasolinera.getDireccion())));
+        onView(withId(R.id.idLocalidad)).check(matches(withText(gasolinera.getLocalidad())));
+        onView(withId(R.id.idProvincia)).check(matches(withText(gasolinera.getProvincia())));
+
     }
+
+
+
 }
