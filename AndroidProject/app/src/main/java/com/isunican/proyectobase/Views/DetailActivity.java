@@ -5,6 +5,9 @@ import com.isunican.proyectobase.Model.*;
 
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.text.TextUtils;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 
@@ -20,31 +23,73 @@ import android.widget.TextView;
 */
 public class DetailActivity extends AppCompatActivity {
 
-    TextView textView;
-    Gasolinera g;
+  TextView textNombreEmpresa;
+  TextView textNombreCarretera;
+  TextView textNombreProvincia;
+  TextView textNombreLocalidad;
+  TextView textPrecioDiesel;
+  TextView textPrecioGasolina;
+  ImageView imagenEmpresa;
+  Gasolinera gasolinera;
 
-    /**
-     * onCreate
-     *
-     * Crea los elementos que conforman la actividad
-     *
-     * @param savedInstanceState
-     */
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_detail);
+  /**
+   * onCreate
+   *
+   * Crea los elementos que conforman la actividad
+   *
+   * @param savedInstanceState
+   */
+  @Override
+  protected void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    setContentView(R.layout.activity_detail);
+    DataInteraction evento = onData(anything()).inAdapterView(withId(R.id.listViewEventos)).atPosition(0);
 
-        // muestra el logo en el actionBar
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
-        getSupportActionBar().setIcon(R.drawable.por_defecto_mod);
+    onData(anything()).inAdapterView(withId(R.id.listViewEventos)).getAdapter();
 
-        // captura el TextView
+    // muestra el logo en el actionBar
+    getSupportActionBar().setDisplayShowHomeEnabled(true);
+    getSupportActionBar().setIcon(R.drawable.por_defecto_mod);
+
+        /*
         // obtiene el objeto Gasolinera a mostrar
-        // y lo introduce en el TextView convertido a cadena de texto
-        textView = findViewById(R.id.textView);
-        g = getIntent().getExtras().getParcelable(getResources().getString(R.string.pasoDatosGasolinera));
-        textView.setText(g.toString());
+        gasolinera = getIntent().getExtras().getParcelable(getResources().getString(R.string.pasoDatosGasolinera));
+        */
+    //Recogemos los id de los text View.
+    textNombreEmpresa = findViewById(R.id.idNombreEmpresa);
+    textNombreCarretera = findViewById(R.id.idCarretera);
+    textNombreProvincia = findViewById(R.id.idProvincia);
+    textNombreLocalidad = findViewById(R.id.idLocalidad);
+    textPrecioDiesel = findViewById(R.id.idDiesel);
+    textPrecioGasolina = findViewById(R.id.idGasolina);
 
+    //Asignamos los datos de la gasolinera a las text View.
+    textNombreEmpresa.setText(gasolinera.getRotulo());
+    textNombreCarretera.setText(gasolinera.getDireccion());
+    textNombreProvincia.setText(gasolinera.getProvincia());
+    textNombreLocalidad.setText(gasolinera.getLocalidad());
+
+    textPrecioDiesel.setText(String.valueOf(gasolinera.getGasoleoA()));
+    textPrecioGasolina.setText(String.valueOf(gasolinera.getGasolina95()));
+
+    //textView.setText(gasolinera.toString());
+    imagenEmpresa = findViewById(R.id.idFotoEmpresa);
+
+    // carga icono
+    {
+      String rotuleImageID = gasolinera.getRotulo().toLowerCase();
+
+      // Tengo que protegerme ante el caso en el que el rotulo solo tiene digitos.
+      // En ese caso getIdentifier devuelve esos digitos en vez de 0.
+      int imageID = getResources().getIdentifier(rotuleImageID,
+              "drawable", getPackageName());
+
+      if (imageID == 0 || TextUtils.isDigitsOnly(rotuleImageID)) {
+        imageID = getResources().getIdentifier(getResources().getString(R.string.pordefecto),
+                "drawable", getPackageName());
+      }
+      imagenEmpresa.setImageResource(imageID);
     }
+
+  }
 }
