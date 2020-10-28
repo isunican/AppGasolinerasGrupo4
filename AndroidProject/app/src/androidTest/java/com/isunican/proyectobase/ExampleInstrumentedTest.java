@@ -50,6 +50,7 @@ public class ExampleInstrumentedTest {
 
         //Hace click en la primera gasolinera
         DataInteraction evento = onData(anything()).inAdapterView(withId(R.id.listViewGasolineras)).atPosition(0);
+        evento.perform(click());
 
         //Obtiene el objeto Gasolinera de la primera gasolinera de la lista
         ListView vista = (ListView) mActivityTestRule.getActivity().findViewById(R.id.listViewGasolineras);
@@ -58,23 +59,11 @@ public class ExampleInstrumentedTest {
         //Comprobaciones de los strings del detailActivity pulsado.
         onView(withId(R.id.idNombreEmpresa)).check(matches(withText(gasolinera.getRotulo())));
         onView(withId(R.id.idGasolina)).check(matches(withText(String.valueOf(gasolinera.getGasolina95()))));
+        onView(withId(R.id.idDiesel)).check(matches(withText(String.valueOf(gasolinera.getGasoleoA()))));
+        onView(withId(R.id.idCarretera)).check(matches(withText(gasolinera.getDireccion())));
+        onView(withId(R.id.idLocalidad)).check(matches(withText(gasolinera.getLocalidad())));
+        onView(withId(R.id.idProvincia)).check(matches(withText(gasolinera.getProvincia())));
 
-        /*
-        // Select Operation
-        onView(withId(R.id.spnOperacion)).perform(click());
-        onData(allOf(is(instanceOf(String.class)), is("+"))).perform(click());
-
-        // Call operation
-        onView(withId(R.id.btnCalcula)).perform(click(), closeSoftKeyboard());
-
-        // Check behaviour
-        onView(withId(R.id.txtResultado)).check(matches(withText("5.0")));
-        // Context of the app under test.
-        Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
-
-        onView(withId(R.id.btnSaludar)).perform(click);onView(withId(R.id.txtSaludo)).check(matches(withText(“”)));
-        assertEquals("com.isunican.proyectobase", appContext.getPackageName());
-        */
     }
 
 
