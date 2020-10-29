@@ -112,6 +112,7 @@ public class MainActivity extends AppCompatActivity implements
         //Creamos el arrayAdapter con la lista del spinner
         ArrayAdapter aa = new ArrayAdapter(this, android.R.layout.simple_spinner_item, combustibles);
         aa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
         //Colocamos los datos en el spinner
         spin.setAdapter(aa);
 
@@ -139,6 +140,7 @@ public class MainActivity extends AppCompatActivity implements
     /**
      * Actualiza la lista de gasolineras o muestra la Información de la aplicación,
      * dependiendo del botón pulsado.
+     *
      * @param item
      * @return
      */
@@ -173,19 +175,47 @@ public class MainActivity extends AppCompatActivity implements
         switch (combustibles[position]) {
             case "Gasolina95":
                 gasolineras = filtrarCombustibleGasolina();
+                cargaGasolineras(gasolineras, 2);
                 break;
             case "GasoleoA":
                 gasolineras = filtrarCombustibleGasoleo();
+                cargaGasolineras(gasolineras, 1);
                 break;
         }
 
 
+
+    }
+
+    private void cargaGasolineras(List<Gasolinera> gasolineras, int opciones) {
+        Toast toast;
+        // Definimos el array adapter
+        adapter = new GasolineraArrayAdapter(this, 0, (ArrayList<Gasolinera>) gasolineras, opciones);
+
+        // Obtenemos la vista de la lista
+        listViewGasolineras = findViewById(R.id.listViewGasolineras);
+
+        // Cargamos los datos en la lista
+        if (!presenterGasolineras.getGasolineras().isEmpty()) {
+            // datos obtenidos con exito
+            listViewGasolineras.setAdapter(adapter);
+            toast = Toast.makeText(getApplicationContext(), getResources().getString(R.string.datos_exito), Toast.LENGTH_LONG);
+        } else {
+            // los datos estan siendo actualizados en el servidor, por lo que no son actualmente accesibles
+            // sucede en torno a las :00 y :30 de cada hora
+            toast = Toast.makeText(getApplicationContext(), getResources().getString(R.string.datos_no_accesibles), Toast.LENGTH_LONG);
+        }
+
+        // Muestra el mensaje del resultado de la operación en un toast
+        if (toast != null) {
+            toast.show();
+        }
     }
 
     /**
      * Retorna la lista de gasolineras eliminando las gasolineras que no tengan gasolina.
      */
-    public List<Gasolinera> filtrarCombustibleGasolina() {
+    private List<Gasolinera> filtrarCombustibleGasolina() {
         List<Gasolinera> gasolineras = presenterGasolineras.getGasolineras();
         List<Gasolinera> gasolinerasFiltradas = new ArrayList<Gasolinera>();
 
@@ -201,7 +231,7 @@ public class MainActivity extends AppCompatActivity implements
     /**
      * Retorna la lista de gasolineras eliminando las gasolineras que no tengan gasoleo.
      */
-    public List<Gasolinera> filtrarCombustibleGasoleo() {
+    private List<Gasolinera> filtrarCombustibleGasoleo() {
         List<Gasolinera> gasolineras = presenterGasolineras.getGasolineras();
         List<Gasolinera> gasolinerasFiltradas = new ArrayList<Gasolinera>();
 
@@ -284,6 +314,7 @@ public class MainActivity extends AppCompatActivity implements
          * a la que pasamos un objeto Gasolinera
          *
          * @param res
+         *
          */
         @Override
         protected void onPostExecute(Boolean res) {
@@ -296,6 +327,7 @@ public class MainActivity extends AppCompatActivity implements
 
             // Si se ha obtenido resultado en la tarea en segundo plano
             if (res) {
+
                 // Definimos el array adapter
                 adapter = new GasolineraArrayAdapter(activity, 0, (ArrayList<Gasolinera>) presenterGasolineras.getGasolineras());
 
@@ -354,12 +386,25 @@ public class MainActivity extends AppCompatActivity implements
 
         Adaptador para inyectar los datos de las gasolineras
         en el listview del layout principal de la aplicacion
+        @param opciones
+        0: muestra todos los precios
+        1: muestra el precio del gasoleo
+        2: muestra el precio de la gasolina
     ------------------------------------------------------------------
     */
     class GasolineraArrayAdapter extends ArrayAdapter<Gasolinera> {
 
         private Context context;
         private List<Gasolinera> listaGasolineras;
+        private int opciones = 0;
+
+        // Constructor
+        public GasolineraArrayAdapter(Context context, int resource, List<Gasolinera> objects, int opciones) {
+            super(context, resource, objects);
+            this.context = context;
+            this.listaGasolineras = objects;
+            this.opciones = opciones;
+        }
 
         // Constructor
         public GasolineraArrayAdapter(Context context, int resource, List<Gasolinera> objects) {
@@ -389,9 +434,23 @@ public class MainActivity extends AppCompatActivity implements
             // Y carga los datos del item
             rotulo.setText(gasolinera.getRotulo());
             direccion.setText(gasolinera.getDireccion());
-            gasoleoA.setText(" " + gasolinera.getGasoleoA() + getResources().getString(R.string.moneda));
-            gasolina95.setText(" " + gasolinera.getGasolina95() + getResources().getString(R.string.moneda));
 
+            switch (opciones) {
+
+                case 0:
+                    gasoleoA.setText(" " + gasolinera.getGasoleoA() + getResources().getString(R.string.moneda));
+                    gasolina95.setText(" " + gasolinera.getGasolina95() + getResources().getString(R.string.moneda));
+                    break;
+
+                case 1:
+                    gasoleoA.setText(" " + gasolinera.getGasoleoA() + getResources().getString(R.string.moneda));
+                    break;
+
+                case 2:
+                    gasolina95.setText(" " + gasolinera.getGasolina95() + getResources().getString(R.string.moneda));
+                    break;
+
+            }
             // carga icono
             {
                 String rotuleImageID = gasolinera.getRotulo().toLowerCase();
