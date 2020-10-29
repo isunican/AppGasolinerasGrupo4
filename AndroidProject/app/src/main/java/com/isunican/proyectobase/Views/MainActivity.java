@@ -29,6 +29,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -41,7 +42,12 @@ import android.widget.Toast;
 
 ------------------------------------------------------------------
 */
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements
+        AdapterView.OnItemSelectedListener{
+
+
+    //String de opciones del spinner de combustibles
+    String[] combustibles = { "Gasolina95", "Gasoleo"};
 
     PresenterGasolineras presenterGasolineras;
 
@@ -95,6 +101,18 @@ public class MainActivity extends AppCompatActivity {
         // se lanza una tarea para cargar los datos de las gasolineras
         // Esto se ha de hacer en segundo plano definiendo una tarea asíncrona
         new CargaDatosGasolinerasTask(this).execute();
+
+        //Getting the instance of Spinner and applying OnItemSelectedListener on it
+        Spinner spin = (Spinner) findViewById(R.id.idSpinnerCombustible);
+        spin.setOnItemSelectedListener(this);
+
+        //Creating the ArrayAdapter instance having the country list
+        ArrayAdapter aa = new ArrayAdapter(this,android.R.layout.simple_spinner_item, combustibles);
+        aa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        //Setting the ArrayAdapter data on the Spinner
+        spin.setAdapter(aa);
+
+
     }
 
 
@@ -127,6 +145,25 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
+
+    /**
+     * Cuando una de las opciones del spinner se pulsen, se activa el método.
+     * Dependiendo del combustible seleccionado, filtra las gasolineras ignorando a las
+     * que no tengan ese combustible. Además, muestra en cada gasolinera el precio del combustible
+     * seleccionado.
+     * @param arg0
+     * @param arg1
+     * @param position
+     * @param id
+     */
+    @Override
+    public void onItemSelected(AdapterView<?> arg0, View arg1, int position, long id) {
+        Toast.makeText(getApplicationContext(),combustibles[position] , Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> arg0) {
+    }
 
     /**
      * CargaDatosGasolinerasTask
