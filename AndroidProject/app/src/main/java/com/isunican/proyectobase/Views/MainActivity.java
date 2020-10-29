@@ -9,10 +9,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import androidx.appcompat.app.AppCompatActivity;
+
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -43,11 +46,11 @@ import android.widget.Toast;
 ------------------------------------------------------------------
 */
 public class MainActivity extends AppCompatActivity implements
-        AdapterView.OnItemSelectedListener{
+        AdapterView.OnItemSelectedListener {
 
 
     //String de opciones del spinner de combustibles
-    String[] combustibles = { "Gasolina95", "Gasoleo"};
+    String[] combustibles = {"Gasolina95", "GasoleoA"};
 
     PresenterGasolineras presenterGasolineras;
 
@@ -63,7 +66,7 @@ public class MainActivity extends AppCompatActivity implements
 
     /**
      * onCreate
-     *
+     * <p>
      * Crea los elementos que conforman la actividad
      *
      * @param savedInstanceState
@@ -77,11 +80,11 @@ public class MainActivity extends AppCompatActivity implements
 
         // Barra de progreso
         // https://materialdoc.com/components/progress/
-        progressBar = new ProgressBar(MainActivity.this,null,android.R.attr.progressBarStyleLarge);
-        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(100,100);
+        progressBar = new ProgressBar(MainActivity.this, null, android.R.attr.progressBarStyleLarge);
+        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(100, 100);
         params.addRule(RelativeLayout.CENTER_IN_PARENT);
         RelativeLayout layout = findViewById(R.id.activity_precio_gasolina);
-        layout.addView(progressBar,params);
+        layout.addView(progressBar, params);
 
         // Muestra el logo en el actionBar
         getSupportActionBar().setDisplayShowHomeEnabled(true);
@@ -102,14 +105,14 @@ public class MainActivity extends AppCompatActivity implements
         // Esto se ha de hacer en segundo plano definiendo una tarea asíncrona
         new CargaDatosGasolinerasTask(this).execute();
 
-        //Getting the instance of Spinner and applying OnItemSelectedListener on it
+        //Cogemos el spinner
         Spinner spin = (Spinner) findViewById(R.id.idSpinnerCombustible);
         spin.setOnItemSelectedListener(this);
 
-        //Creating the ArrayAdapter instance having the country list
-        ArrayAdapter aa = new ArrayAdapter(this,android.R.layout.simple_spinner_item, combustibles);
+        //Creamos el arrayAdapter con la lista del spinner
+        ArrayAdapter aa = new ArrayAdapter(this, android.R.layout.simple_spinner_item, combustibles);
         aa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        //Setting the ArrayAdapter data on the Spinner
+        //Colocamos los datos en el spinner
         spin.setAdapter(aa);
 
 
@@ -118,12 +121,12 @@ public class MainActivity extends AppCompatActivity implements
 
     /**
      * Menú action bar
-     *
+     * <p>
      * Redefine métodos para el uso de un menú de tipo action bar.
-     *
+     * <p>
      * onCreateOptionsMenu
      * Carga las opciones del menú a partir del fichero de recursos menu/menu.xml
-     *
+     * <p>
      * onOptionsItemSelected
      * Define las respuestas a las distintas opciones del menú
      */
@@ -132,16 +135,22 @@ public class MainActivity extends AppCompatActivity implements
         getMenuInflater().inflate(R.menu.menu, menu);
         return true;
     }
+
+    /**
+     * Actualiza la lista de gasolineras o muestra la Información de la aplicación,
+     * dependiendo del botón pulsado.
+     * @param item
+     * @return
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if(item.getItemId()==R.id.itemActualizar){
+        if (item.getItemId() == R.id.itemActualizar) {
             mSwipeRefreshLayout.setRefreshing(true);
             new CargaDatosGasolinerasTask(this).execute();
-        }
-        else if(item.getItemId()==R.id.itemInfo){
+        } else if (item.getItemId() == R.id.itemInfo) {
             Intent myIntent = new Intent(MainActivity.this, InfoActivity.class);
             MainActivity.this.startActivity(myIntent);
-            }
+        }
         return true;
     }
 
@@ -151,6 +160,7 @@ public class MainActivity extends AppCompatActivity implements
      * Dependiendo del combustible seleccionado, filtra las gasolineras ignorando a las
      * que no tengan ese combustible. Además, muestra en cada gasolinera el precio del combustible
      * seleccionado.
+     *
      * @param arg0
      * @param arg1
      * @param position
@@ -158,8 +168,52 @@ public class MainActivity extends AppCompatActivity implements
      */
     @Override
     public void onItemSelected(AdapterView<?> arg0, View arg1, int position, long id) {
-        Toast.makeText(getApplicationContext(),combustibles[position] , Toast.LENGTH_LONG).show();
+        Toast.makeText(getApplicationContext(), combustibles[position], Toast.LENGTH_LONG).show();
+        List<Gasolinera> gasolineras;
+        switch (combustibles[position]) {
+            case "Gasolina95":
+                gasolineras = filtrarCombustibleGasolina();
+                break;
+            case "GasoleoA":
+                gasolineras = filtrarCombustibleGasoleo();
+                break;
+        }
+
+
     }
+
+    /**
+     * Retorna la lista de gasolineras eliminando las gasolineras que no tengan gasolina.
+     */
+    public List<Gasolinera> filtrarCombustibleGasolina() {
+        List<Gasolinera> gasolineras = presenterGasolineras.getGasolineras();
+        List<Gasolinera> gasolinerasFiltradas = new ArrayList<Gasolinera>();
+
+        //Añadimos todas las gasolineras que tengan el combustible deseado.
+        for (Gasolinera g : gasolineras) {
+            if (g.getGasolina95() != 0.0) {
+                gasolinerasFiltradas.add(g);
+            }
+        }
+        return gasolinerasFiltradas;
+    }
+
+    /**
+     * Retorna la lista de gasolineras eliminando las gasolineras que no tengan gasoleo.
+     */
+    public List<Gasolinera> filtrarCombustibleGasoleo() {
+        List<Gasolinera> gasolineras = presenterGasolineras.getGasolineras();
+        List<Gasolinera> gasolinerasFiltradas = new ArrayList<Gasolinera>();
+
+        //Añadimos todas las gasolineras que tengan el combustible deseado.
+        for (Gasolinera g : gasolineras) {
+            if (g.getGasoleoA() != 0.0) {
+                gasolinerasFiltradas.add(g);
+            }
+        }
+        return gasolinerasFiltradas;
+    }
+
 
     @Override
     public void onNothingSelected(AdapterView<?> arg0) {
@@ -167,17 +221,17 @@ public class MainActivity extends AppCompatActivity implements
 
     /**
      * CargaDatosGasolinerasTask
-     *
+     * <p>
      * Tarea asincrona para obtener los datos de las gasolineras
      * en segundo plano.
-     *
+     * <p>
      * Redefinimos varios métodos que se ejecutan en el siguiente orden:
      * onPreExecute: activamos el dialogo de progreso
      * doInBackground: solicitamos que el presenter cargue los datos
      * onPostExecute: desactiva el dialogo de progreso,
-     *    muestra las gasolineras en formato lista (a partir de un adapter)
-     *    y define la acción al realizar al seleccionar alguna de ellas
-     *
+     * muestra las gasolineras en formato lista (a partir de un adapter)
+     * y define la acción al realizar al seleccionar alguna de ellas
+     * <p>
      * http://www.sgoliver.net/blog/tareas-en-segundo-plano-en-android-i-thread-y-asynctask/
      */
     private class CargaDatosGasolinerasTask extends AsyncTask<Void, Void, Boolean> {
@@ -186,6 +240,7 @@ public class MainActivity extends AppCompatActivity implements
 
         /**
          * Constructor de la tarea asincrona
+         *
          * @param activity
          */
         public CargaDatosGasolinerasTask(Activity activity) {
@@ -194,7 +249,7 @@ public class MainActivity extends AppCompatActivity implements
 
         /**
          * onPreExecute
-         *
+         * <p>
          * Metodo ejecutado de forma previa a la ejecucion de la tarea definida en el metodo doInBackground()
          * Muestra un diálogo de progreso
          */
@@ -205,9 +260,10 @@ public class MainActivity extends AppCompatActivity implements
 
         /**
          * doInBackground
-         *
+         * <p>
          * Tarea ejecutada en segundo plano
          * Llama al presenter para que lance el método de carga de los datos de las gasolineras
+         *
          * @param params
          * @return boolean
          */
@@ -218,7 +274,7 @@ public class MainActivity extends AppCompatActivity implements
 
         /**
          * onPostExecute
-         *
+         * <p>
          * Se ejecuta al finalizar doInBackground
          * Oculta el diálogo de progreso.
          * Muestra en una lista los datos de las gasolineras cargadas,
