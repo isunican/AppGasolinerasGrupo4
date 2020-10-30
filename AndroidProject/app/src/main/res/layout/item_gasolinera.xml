@@ -38,13 +38,15 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/textViewDireccion"
         android:layout_marginTop="@dimen/marginTopLayoutPrecios"
-        android:layout_toRightOf="@id/imageViewLogo">
+        android:layout_toRightOf="@id/imageViewLogo"
+        android:filterTouchesWhenObscured="false">
 
         <TextView
             android:id="@+id/textViewGasoleoALabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/marginLeftPrecios"
+            android:layout_marginLeft="@dimen/marginTextView"
+            android:gravity="start"
             android:text="@string/gasoleoa"
             android:textStyle="bold" />
 
