@@ -18,5 +18,8 @@
     <string name="indicadorPrecioDiesel">"Precio diesel: "</string>
     <string name="indicadorPrecioGasolina">"Precio gasolina: "</string>
     <string name="indicadorProvincia">"Provincia: "</string>
+    <string name="filtrarPrecio">Filtrar Precio</string>
+    <string name="minPrecio">Min</string>
+    <string name="maxPrecio">Max</string>
 
 </resources>
