@@ -64,6 +64,8 @@ public class MainActivity extends AppCompatActivity implements
     // Swipe and refresh (para recargar la lista con un swipe)
     SwipeRefreshLayout mSwipeRefreshLayout;
 
+    String combustibleActual = combustibles[0];
+
     /**
      * onCreate
      * <p>
@@ -171,6 +173,7 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     public void onItemSelected(AdapterView<?> arg0, View arg1, int position, long id) {
 
+        combustibleActual = combustibles[position];
         Toast.makeText(getApplicationContext(), combustibles[position], Toast.LENGTH_LONG).show();
         List<Gasolinera> gasolineras;
         switch (combustibles[position]) {
@@ -310,7 +313,6 @@ public class MainActivity extends AppCompatActivity implements
          * a la que pasamos un objeto Gasolinera
          *
          * @param res
-         *
          */
         @Override
         protected void onPostExecute(Boolean res) {
@@ -324,31 +326,23 @@ public class MainActivity extends AppCompatActivity implements
             // Si se ha obtenido resultado en la tarea en segundo plano
             if (res) {
 
-                // Definimos el array adapter
-                adapter = new GasolineraArrayAdapter(activity, 0, (ArrayList<Gasolinera>) presenterGasolineras.getGasolineras());
+                List<Gasolinera> gasolinerasTemporales = presenterGasolineras.getGasolineras();
 
-                // Obtenemos la vista de la lista
-                listViewGasolineras = findViewById(R.id.listViewGasolineras);
+                switch (combustibleActual) {
+                    case "Gasolina95":
+                        gasolinerasTemporales = filtrarCombustibleGasolina(gasolinerasTemporales);
+                        cargaGasolineras(gasolinerasTemporales, 2);
+                        break;
 
-                // Cargamos los datos en la lista
-                if (!presenterGasolineras.getGasolineras().isEmpty()) {
-                    // datos obtenidos con exito
-                    listViewGasolineras.setAdapter(adapter);
-                    toast = Toast.makeText(getApplicationContext(), getResources().getString(R.string.datos_exito), Toast.LENGTH_LONG);
-                } else {
-                    // los datos estan siendo actualizados en el servidor, por lo que no son actualmente accesibles
-                    // sucede en torno a las :00 y :30 de cada hora
-                    toast = Toast.makeText(getApplicationContext(), getResources().getString(R.string.datos_no_accesibles), Toast.LENGTH_LONG);
+                    case "GasoleoA":
+                        gasolinerasTemporales = filtrarCombustibleGasoleo(gasolinerasTemporales);
+                        cargaGasolineras(gasolinerasTemporales, 1);
+                        break;
                 }
-            } else {
-                // error en la obtencion de datos desde el servidor
-                toast = Toast.makeText(getApplicationContext(), getResources().getString(R.string.datos_no_obtenidos), Toast.LENGTH_LONG);
             }
 
-            // Muestra el mensaje del resultado de la operación en un toast
-            if (toast != null) {
-                toast.show();
-            }
+
+
 
             /*
              * Define el manejo de los eventos de click sobre elementos de la lista
@@ -430,20 +424,47 @@ public class MainActivity extends AppCompatActivity implements
             // Y carga los datos del item
             rotulo.setText(gasolinera.getRotulo());
             direccion.setText(gasolinera.getDireccion());
+            TextView viewGasoleo;
+            TextView viewGasolina;
+
+            viewGasoleo = view.findViewById(R.id.textViewGasoleoALabel);
+            viewGasolina = view.findViewById(R.id.textViewGasolina95Label);
+
+
+            TextView viewGasoleoEspacio;
+            TextView viewGasolinaEspacio;
+
+            viewGasoleoEspacio = view.findViewById(R.id.textViewGasoleoA);
+            viewGasolinaEspacio = view.findViewById(R.id.textViewGasolina95);
 
             switch (opciones) {
 
                 case 0:
                     gasoleoA.setText(" " + gasolinera.getGasoleoA() + getResources().getString(R.string.moneda));
                     gasolina95.setText(" " + gasolinera.getGasolina95() + getResources().getString(R.string.moneda));
+                    viewGasoleo.setVisibility(View.VISIBLE);
+                    viewGasolina.setVisibility(View.VISIBLE);
+
+                    viewGasoleoEspacio.setVisibility(View.VISIBLE);
+                    viewGasolinaEspacio.setVisibility(View.VISIBLE);
                     break;
 
                 case 1:
                     gasoleoA.setText(" " + gasolinera.getGasoleoA() + getResources().getString(R.string.moneda));
+                    viewGasoleo.setVisibility(View.VISIBLE);
+                    viewGasolina.setVisibility(View.GONE);
+
+                    viewGasoleoEspacio.setVisibility(View.VISIBLE);
+                    viewGasolinaEspacio.setVisibility(View.GONE);
                     break;
 
                 case 2:
                     gasolina95.setText(" " + gasolinera.getGasolina95() + getResources().getString(R.string.moneda));
+                    viewGasoleo.setVisibility(View.GONE);
+                    viewGasolina.setVisibility(View.VISIBLE);
+
+                    viewGasoleoEspacio.setVisibility(View.GONE);
+                    viewGasolinaEspacio.setVisibility(View.VISIBLE);
                     break;
 
             }
