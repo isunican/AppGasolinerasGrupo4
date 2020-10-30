@@ -178,11 +178,11 @@ public class MainActivity extends AppCompatActivity implements
         List<Gasolinera> gasolineras;
         switch (combustibles[position]) {
             case "Gasolina95":
-                gasolineras = filtrarCombustibleGasolina(presenterGasolineras.getGasolineras());
+                gasolineras = PresenterGasolineras.filtrarCombustibleGasolina(presenterGasolineras.getGasolineras());
                 cargaGasolineras(gasolineras, 2);
                 break;
             case "GasoleoA":
-                gasolineras = filtrarCombustibleGasoleo(presenterGasolineras.getGasolineras());
+                gasolineras = PresenterGasolineras.filtrarCombustibleGasoleo(presenterGasolineras.getGasolineras());
                 cargaGasolineras(gasolineras, 1);
                 break;
         }
@@ -213,35 +213,6 @@ public class MainActivity extends AppCompatActivity implements
         }
     }
 
-    /**
-     * Retorna la lista de gasolineras eliminando las gasolineras que no tengan gasolina.
-     */
-    private List<Gasolinera> filtrarCombustibleGasolina(List<Gasolinera> gasolineras) {
-        List<Gasolinera> gasolinerasFiltradas = new ArrayList<Gasolinera>();
-
-        //Añadimos todas las gasolineras que tengan el combustible deseado.
-        for (Gasolinera g : gasolineras) {
-            if (g.getGasolina95() != 0.0) {
-                gasolinerasFiltradas.add(g);
-            }
-        }
-        return gasolinerasFiltradas;
-    }
-
-    /**
-     * Retorna la lista de gasolineras eliminando las gasolineras que no tengan gasoleo.
-     */
-    private List<Gasolinera> filtrarCombustibleGasoleo(List<Gasolinera> gasolineras) {
-        List<Gasolinera> gasolinerasFiltradas = new ArrayList<Gasolinera>();
-
-        //Añadimos todas las gasolineras que tengan el combustible deseado.
-        for (Gasolinera g : gasolineras) {
-            if (g.getGasoleoA() != 0.0) {
-                gasolinerasFiltradas.add(g);
-            }
-        }
-        return gasolinerasFiltradas;
-    }
 
 
     @Override
@@ -330,12 +301,12 @@ public class MainActivity extends AppCompatActivity implements
 
                 switch (combustibleActual) {
                     case "Gasolina95":
-                        gasolinerasTemporales = filtrarCombustibleGasolina(gasolinerasTemporales);
+                        gasolinerasTemporales = PresenterGasolineras.filtrarCombustibleGasolina(gasolinerasTemporales);
                         cargaGasolineras(gasolinerasTemporales, 2);
                         break;
 
                     case "GasoleoA":
-                        gasolinerasTemporales = filtrarCombustibleGasoleo(gasolinerasTemporales);
+                        gasolinerasTemporales = PresenterGasolineras.filtrarCombustibleGasoleo(gasolinerasTemporales);
                         cargaGasolineras(gasolinerasTemporales, 1);
                         break;
                 }
