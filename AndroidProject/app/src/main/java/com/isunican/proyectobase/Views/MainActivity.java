@@ -170,21 +170,19 @@ public class MainActivity extends AppCompatActivity implements
      */
     @Override
     public void onItemSelected(AdapterView<?> arg0, View arg1, int position, long id) {
+
         Toast.makeText(getApplicationContext(), combustibles[position], Toast.LENGTH_LONG).show();
         List<Gasolinera> gasolineras;
         switch (combustibles[position]) {
             case "Gasolina95":
-                gasolineras = filtrarCombustibleGasolina();
+                gasolineras = filtrarCombustibleGasolina(presenterGasolineras.getGasolineras());
                 cargaGasolineras(gasolineras, 2);
                 break;
             case "GasoleoA":
-                gasolineras = filtrarCombustibleGasoleo();
+                gasolineras = filtrarCombustibleGasoleo(presenterGasolineras.getGasolineras());
                 cargaGasolineras(gasolineras, 1);
                 break;
         }
-
-
-
     }
 
     private void cargaGasolineras(List<Gasolinera> gasolineras, int opciones) {
@@ -215,8 +213,7 @@ public class MainActivity extends AppCompatActivity implements
     /**
      * Retorna la lista de gasolineras eliminando las gasolineras que no tengan gasolina.
      */
-    private List<Gasolinera> filtrarCombustibleGasolina() {
-        List<Gasolinera> gasolineras = presenterGasolineras.getGasolineras();
+    private List<Gasolinera> filtrarCombustibleGasolina(List<Gasolinera> gasolineras) {
         List<Gasolinera> gasolinerasFiltradas = new ArrayList<Gasolinera>();
 
         //Añadimos todas las gasolineras que tengan el combustible deseado.
@@ -231,8 +228,7 @@ public class MainActivity extends AppCompatActivity implements
     /**
      * Retorna la lista de gasolineras eliminando las gasolineras que no tengan gasoleo.
      */
-    private List<Gasolinera> filtrarCombustibleGasoleo() {
-        List<Gasolinera> gasolineras = presenterGasolineras.getGasolineras();
+    private List<Gasolinera> filtrarCombustibleGasoleo(List<Gasolinera> gasolineras) {
         List<Gasolinera> gasolinerasFiltradas = new ArrayList<Gasolinera>();
 
         //Añadimos todas las gasolineras que tengan el combustible deseado.
