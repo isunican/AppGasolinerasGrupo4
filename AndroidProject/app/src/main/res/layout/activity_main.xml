@@ -50,12 +50,6 @@
                 android:text="@string/filtrarPrecio"
                 android:textAlignment="center" />
 
-            <Spinner
-                android:id="@+id/idSpinnerCombustible"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_gravity="end" />
-
         </LinearLayout>
 
         <LinearLayout

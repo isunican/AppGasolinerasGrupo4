@@ -44,8 +44,7 @@ public class PresenterGasolineras {
     public void setGasolineras(List<Gasolinera> l) {
         this.gasolineras = l;
     }
-
-
+    
     /**
      * cargaDatosGasolineras
      *
@@ -118,5 +117,53 @@ public class PresenterGasolineras {
             Log.e("ERROR", "Error en la obtención de gasolineras: " + e.getMessage());
             return false;
         }
+    }
+
+    /**
+            * Filtra las gasolineras, eliminando de la lista todas las gasolineras que no se encuentren en el
+     * rango de precio especificado.
+            *
+            * @param gasolineras
+     * @param min,        minimo precio del rango.
+            * @param max,        maximo precio del rango.
+            * @return
+            */
+    static public List<Gasolinera> filtraPrecioGasolina(List<Gasolinera> gasolineras, double min, double max) {
+
+        List<Gasolinera> gasolinerasFiltradas = new ArrayList<Gasolinera>();
+
+        //Añadimos todas las gasolineras que tengan el combustible deseado.
+        for (Gasolinera g : gasolineras) {
+            double combustibleActual = g.getGasolina95();
+
+            if (combustibleActual >= min && combustibleActual <= max) {
+                gasolinerasFiltradas.add(g);
+            }
+        }
+        return gasolinerasFiltradas;
+    }
+
+    /**
+            * Filtra las gasolineras, eliminando de la lista todas las gasolineras que no se encuentren en el
+     * rango de precio especificado.
+            *
+            * @param gasolineras
+     * @param min,        minimo precio del rango.
+            * @param max,        maximo precio del rango.
+            * @return
+            */
+    static public List<Gasolinera> filtraPrecioGasoleo(List<Gasolinera> gasolineras, double min, double max) {
+
+        List<Gasolinera> gasolinerasFiltradas = new ArrayList<Gasolinera>();
+
+        //Añadimos todas las gasolineras que tengan el combustible deseado.
+        for (Gasolinera g : gasolineras) {
+            double combustibleActual = g.getGasoleoA();
+
+            if (combustibleActual >= min && combustibleActual <= max) {
+                gasolinerasFiltradas.add(g);
+            }
+        }
+        return gasolinerasFiltradas;
     }
 }
