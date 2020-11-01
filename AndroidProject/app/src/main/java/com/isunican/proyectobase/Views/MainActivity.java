@@ -178,8 +178,6 @@ public class MainActivity extends AppCompatActivity implements
                 gasolineras = filtrarCombustibleGasoleo();
                 break;
         }
-
-
     }
 
     /**
