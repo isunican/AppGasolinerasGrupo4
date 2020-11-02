@@ -65,7 +65,4 @@ public class ExampleInstrumentedTest {
         onView(withId(R.id.idProvincia)).check(matches(withText(gasolinera.getProvincia())));
 
     }
-
-
-
 }
