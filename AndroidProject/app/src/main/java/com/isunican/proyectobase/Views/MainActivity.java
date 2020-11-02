@@ -25,6 +25,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
@@ -54,6 +56,13 @@ public class MainActivity extends AppCompatActivity {
 
     // Swipe and refresh (para recargar la lista con un swipe)
     SwipeRefreshLayout mSwipeRefreshLayout;
+
+    // Botón a través del cuál se podrá filtrar el rango de precios con el que queremos que se muestren las gasolineras
+    Button botonFiltrarPrecio;
+
+    // Obtención de los precios max y min
+    EditText precioMin;
+    EditText precioMax;
 
     /**
      * onCreate
@@ -95,8 +104,26 @@ public class MainActivity extends AppCompatActivity {
         // se lanza una tarea para cargar los datos de las gasolineras
         // Esto se ha de hacer en segundo plano definiendo una tarea asíncrona
         new CargaDatosGasolinerasTask(this).execute();
-    }
 
+        botonFiltrarPrecio = findViewById(R.id.botonFiltrarPrecio);
+
+        precioMin = findViewById(R.id.idPrecioMin);
+        precioMax = findViewById(R.id.idPrecioMax);
+
+        final double pMin = Double.parseDouble(precioMin.getText().toString());
+        final double pMax = Double.parseDouble(precioMax.getText().toString());
+
+        botonFiltrarPrecio.setOnClickListener(new View.OnClickListener()
+        {
+            public void onClick(View v)
+            {
+                List<Gasolinera> gasolinerasFiltradas = PresenterGasolineras.filtraPrecioGasoleo(presenterGasolineras.getGasolineras(), pMin, pMax);
+                cargaGasolineras(gasolinerasFiltradas);
+
+                //PresenterGasolineras.filtraPrecioGasolina(presenterGasolineras.getGasolineras(), precioMin, precioMax);
+            }
+        });
+    }
 
     /**
      * Menú action bar
@@ -125,6 +152,31 @@ public class MainActivity extends AppCompatActivity {
             MainActivity.this.startActivity(myIntent);
             }
         return true;
+    }
+
+    private void cargaGasolineras(List<Gasolinera> gasolineras) {
+        Toast toast;
+        // Definimos el array adapter
+        adapter = new GasolineraArrayAdapter(this, 0, (ArrayList<Gasolinera>) gasolineras);
+
+        // Obtenemos la vista de la lista
+        listViewGasolineras = findViewById(R.id.listViewGasolineras);
+
+        // Cargamos los datos en la lista
+        if (!presenterGasolineras.getGasolineras().isEmpty()) {
+            // datos obtenidos con exito
+            listViewGasolineras.setAdapter(adapter);
+            toast = Toast.makeText(getApplicationContext(), getResources().getString(R.string.datos_exito), Toast.LENGTH_LONG);
+        } else {
+            // los datos estan siendo actualizados en el servidor, por lo que no son actualmente accesibles
+            // sucede en torno a las :00 y :30 de cada hora
+            toast = Toast.makeText(getApplicationContext(), getResources().getString(R.string.datos_no_accesibles), Toast.LENGTH_LONG);
+        }
+
+        // Muestra el mensaje del resultado de la operación en un toast
+        if (toast != null) {
+            toast.show();
+        }
     }
 
 

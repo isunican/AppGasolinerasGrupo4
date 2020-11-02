@@ -44,7 +44,7 @@ public class PresenterGasolineras {
     public void setGasolineras(List<Gasolinera> l) {
         this.gasolineras = l;
     }
-    
+
     /**
      * cargaDatosGasolineras
      *
