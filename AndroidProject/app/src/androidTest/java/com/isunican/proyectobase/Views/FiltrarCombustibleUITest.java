@@ -44,11 +44,11 @@ public class FiltrarCombustibleUITest {
         Gasolinera gasolinera;
 
         //Hace click en el filtro de Gasoleo A, TODO UTILIZAR BOTON DE FILTRO
-        DataInteraction evento1 = onData(anything()).inAdapterView(ViewMatchers.withId(R.id.idPrecioMin));
+        DataInteraction evento1 = onData(anything()).inAdapterView(ViewMatchers.withId(R.id.idSpinnerCombustible));
         evento1.perform(click());
 
         //Hace click en el filtro de Gasolina 95, TODO LO MISMO QUE ANTES
-        DataInteraction evento2 = onData(anything()).inAdapterView(ViewMatchers.withId(R.id.idPrecioMin));
+        DataInteraction evento2 = onData(anything()).inAdapterView(ViewMatchers.withId(R.id.));
         evento2.perform(click());
 
         //Obtiene la lista de cada objeto Gasolinera después de aplicar el filtro
