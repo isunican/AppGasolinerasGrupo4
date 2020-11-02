@@ -47,8 +47,11 @@
                 android:layout_marginEnd="120sp"
                 android:layout_weight="2"
                 android:gravity="start"
+                android:onClick="myClickHandler"
                 android:text="@string/filtrarPrecio"
-                android:textAlignment="center" />
+                android:textAlignment="center"
+                />
+
 
         </LinearLayout>
 

@@ -64,6 +64,8 @@ public class MainActivity extends AppCompatActivity {
     EditText precioMin;
     EditText precioMax;
 
+
+
     /**
      * onCreate
      *
@@ -105,26 +107,21 @@ public class MainActivity extends AppCompatActivity {
         // Esto se ha de hacer en segundo plano definiendo una tarea asíncrona
         new CargaDatosGasolinerasTask(this).execute();
 
-        botonFiltrarPrecio = findViewById(R.id.botonFiltrarPrecio);
+       // botonFiltrarPrecio = findViewById(R.id.botonFiltrarPrecio);
 
+    }
+    //public void main
+
+    public void myClickHandler(View target) {
         precioMin = findViewById(R.id.idPrecioMin);
         precioMax = findViewById(R.id.idPrecioMax);
+        double pMin = Double.parseDouble(precioMin.getText().toString());
+        double pMax = Double.parseDouble(precioMax.getText().toString());
 
-        final double pMin = Double.parseDouble(precioMin.getText().toString());
-        final double pMax = Double.parseDouble(precioMax.getText().toString());
-
-        botonFiltrarPrecio.setOnClickListener(new View.OnClickListener()
-        {
-            public void onClick(View v)
-            {
-                List<Gasolinera> gasolinerasFiltradas = PresenterGasolineras.filtraPrecioGasoleo(presenterGasolineras.getGasolineras(), pMin, pMax);
-                cargaGasolineras(gasolinerasFiltradas);
-
-                //PresenterGasolineras.filtraPrecioGasolina(presenterGasolineras.getGasolineras(), precioMin, precioMax);
-            }
-        });
+        List<Gasolinera> gasolinerasFiltradas = PresenterGasolineras.filtraPrecioGasoleo(presenterGasolineras.getGasolineras(), pMin, pMax);
+        cargaGasolineras(gasolinerasFiltradas);
+        //PresenterGasolineras.filtraPrecioGasolina(presenterGasolineras.getGasolineras(), precioMin, precioMax);
     }
-
     /**
      * Menú action bar
      *
@@ -388,5 +385,4 @@ public class MainActivity extends AppCompatActivity {
             return view;
         }
     }
-
 }
