@@ -48,8 +48,8 @@ public class FiltrarCombustibleUITest {
         evento1.perform(click());
 
         //Hace click en el filtro de Gasolina 95, TODO LO MISMO QUE ANTES
-        DataInteraction evento2 = onData(anything()).inAdapterView(ViewMatchers.withId(R.id.));
-        evento2.perform(click());
+        //DataInteraction evento2 = onData(anything()).inAdapterView(ViewMatchers.withId(R.id.));
+        //evento2.perform(click());
 
         //Obtiene la lista de cada objeto Gasolinera después de aplicar el filtro
         ListView vista = (ListView) mActivityTestRule.getActivity().findViewById(R.id.listViewGasolineras);
