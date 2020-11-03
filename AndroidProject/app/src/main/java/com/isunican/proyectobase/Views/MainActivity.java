@@ -48,7 +48,6 @@ import android.widget.Toast;
 public class MainActivity extends AppCompatActivity implements
         AdapterView.OnItemSelectedListener {
 
-
     //String de opciones del spinner de combustibles
     String[] combustibles = {"Gasolina95", "GasoleoA"};
 
