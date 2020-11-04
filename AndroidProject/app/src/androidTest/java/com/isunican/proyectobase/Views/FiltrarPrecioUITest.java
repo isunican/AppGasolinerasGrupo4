@@ -1,6 +1,8 @@
 package com.isunican.proyectobase.Views;
 
 import androidx.test.espresso.DataInteraction;
+import androidx.test.espresso.UiController;
+import androidx.test.espresso.ViewAction;
 import androidx.test.espresso.ViewInteraction;
 import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.filters.LargeTest;
@@ -27,17 +29,20 @@ import org.junit.runner.RunWith;
 import java.util.HashSet;
 import java.util.Set;
 
+import static androidx.test.espresso.Espresso.closeSoftKeyboard;
 import static androidx.test.espresso.Espresso.onData;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.replaceText;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
+import static androidx.test.espresso.matcher.ViewMatchers.isAssignableFrom;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.anything;
 import static org.hamcrest.Matchers.lessThan;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 @RunWith(AndroidJUnit4.class)
@@ -50,26 +55,26 @@ public class FiltrarPrecioUITest {
     public void useAppContext() {
 
         Gasolinera gasolinera;
+        HashSet<Gasolinera> gasolineras = new HashSet<Gasolinera>();
+
+        //CASO 1
 
         //Hace click en la primera gasolinera e introduce un precio mínimo
-        DataInteraction evento1 = onData(anything()).inAdapterView(ViewMatchers.withId(R.id.idPrecioMin));
+        ViewInteraction evento1 = onView(withId(R.id.idPrecioMin));
         evento1.perform(click());
-        evento1.perform(replaceText("1.8"));
+        evento1.perform(replaceText("1.100"));
 
         //Hace click en la segunda gasolinera e introduce un precio máximo
-        DataInteraction evento2 = onData(anything()).inAdapterView(ViewMatchers.withId(R.id.idPrecioMax));
+        ViewInteraction evento2 = onView(withId(R.id.idPrecioMax));
         evento2.perform(click());
-        evento2.perform(replaceText("2"));
+        evento2.perform(replaceText("1.200"));
+        closeSoftKeyboard();
 
-        Set<Gasolinera> gasolineras = new HashSet<Gasolinera>();
+        //Pulsa el boton filtrar
+        onView(withId(R.id.botonFiltrarPrecio)).perform(click());
 
         //Obtiene la lista de cada objeto Gasolinera después de aplicar el filtro
         ListView vista = (ListView) mActivityTestRule.getActivity().findViewById(R.id.listViewGasolineras);
-
-        //Hace click en el filtro de GasoleoA
-        //DataInteraction evento3 = onData(anything()).inAdapterView(ViewMatchers.withId(R.id.));
-        //evento3.perform(click());
-        //evento3.perform(replaceText("2"));
 
         //Se recorren las gasolineras devueltas y se comprueba que gasolina95 y gasoleoA estan en el rango del filtro
         for(int i=0;i<vista.getAdapter().getCount();i++){
@@ -77,20 +82,64 @@ public class FiltrarPrecioUITest {
             gasolineras.add(gasolinera);
 
             //Se comprueba que los valores de la vista son iguales que los de la gasolinera obtenida
-            //onView(withId(R.id.textViewGasolina95)).check(matches(withText(String.valueOf(gasolinera.getGasoleoA()))));
-            //onView(withId(R.id.textViewGasoleoA)).check(matches(withText(String.valueOf(gasolinera.getGasoleoA()))));
+            onData(anything()).inAdapterView(withId(R.id.listViewGasolineras)).atPosition(i).onChildView(withId(R.id.textViewGasoleoA)).check(matches(withText((" " + String.valueOf(gasolinera.getGasoleoA()) + "€"))));
+            onData(anything()).inAdapterView(withId(R.id.listViewGasolineras)).atPosition(i).onChildView(withId(R.id.textViewGasolina95)).check(matches(withText(" " + String.valueOf(gasolinera.getGasolina95() + "€"))));
 
-            //Assert, se comprueba que el precio de la gasolinera es, TODO TENER EN CUENTA EL TIPO DE GASOLINA
-            assertTrue(gasolinera.getGasoleoA()<2);
-            assertTrue(gasolinera.getGasoleoA()>1.8);
-
-            assertTrue(gasolinera.getGasolina95()<2);
-            assertTrue(gasolinera.getGasolina95()>1.8);
-
-            //onView(withId(R.id.textViewGasolina95)).check(matches(new TextViewValueMatcher()));
-
-
+            //Se comprueba que el precio de la gasolinera en la interfaz esta en el rango de valores
+            onData(anything()).inAdapterView(withId(R.id.listViewGasolineras)).atPosition(i).onChildView(withId(R.id.textViewGasolina95)).check(matches(new TextViewValueMatcher()));
+            onData(anything()).inAdapterView(withId(R.id.listViewGasolineras)).atPosition(i).onChildView(withId(R.id.textViewGasoleoA)).check(matches(new TextViewValueMatcher()));
         }
+
+        //CASO 2
+
+        //Hace click en la primera gasolinera e introduce un precio mínimo
+        ViewInteraction evento3 = onView(withId(R.id.idPrecioMin));
+        evento3.perform(click());
+        evento3.perform(replaceText("100.000"));
+
+        //Hace click en la segunda gasolinera e introduce un precio máximo
+        ViewInteraction evento4 = onView(withId(R.id.idPrecioMax));
+        evento4.perform(click());
+        evento4.perform(replaceText("101.000"));
+        closeSoftKeyboard();
+
+        //Pulsa el boton filtrar
+        onView(withId(R.id.botonFiltrarPrecio)).perform(click());
+
+        //Obtiene la lista de cada objeto Gasolinera después de aplicar el filtro
+        vista = (ListView) mActivityTestRule.getActivity().findViewById(R.id.listViewGasolineras);
+
+        //Se comprueba que la listview no tiene elementos
+        assertTrue(vista.getCount() == 0);
+
+        //CASO 3
+
+        //Hace click en la primera gasolinera e introduce un precio mínimo
+        ViewInteraction evento5 = onView(withId(R.id.idPrecioMin));
+        evento5.perform(click());
+        evento5.perform(replaceText("1.300"));
+
+        //Hace click en la segunda gasolinera e introduce un precio máximo
+        ViewInteraction evento6 = onView(withId(R.id.idPrecioMax));
+        evento6.perform(click());
+        evento6.perform(replaceText("1.400"));
+        closeSoftKeyboard();
+
+        //Pulsa el boton filtrar
+        onView(withId(R.id.botonFiltrarPrecio)).perform(click());
+
+        //Obtiene la lista de cada objeto Gasolinera después de aplicar el filtro
+        vista = (ListView) mActivityTestRule.getActivity().findViewById(R.id.listViewGasolineras);
+
+        //Se recorren las gasolineras devueltas y se comprueba que gasolina95 y gasoleoA estan en el rango del filtro
+        for(int i=0;i<vista.getAdapter().getCount();i++){
+            gasolinera = (Gasolinera) vista.getAdapter().getItem(i);
+
+            //Se comprueba que las gasolineras obtenidas no estan en las obtenidas en el caso 1
+            assertFalse(gasolineras.contains(gasolinera));
+        }
+
+
     }
 
     public class TextViewValueMatcher extends TypeSafeMatcher<View> {
@@ -98,7 +147,8 @@ public class FiltrarPrecioUITest {
         protected boolean matchesSafely(View item) {
             TextView textView = (TextView) item;
             String value = textView.getText().toString();
-            boolean matching = Double.parseDouble(value)<2 && Double.parseDouble(value)>1.8;
+            //Este matching esta pensado en el caso de que el precio de la gasolina no suba más de 4 cifras, se podría adaptar en un futuro
+            boolean matching = Double.parseDouble(value.substring(0,4))<1.201 && Double.parseDouble(value.substring(0,4))>1.099;
             return matching;
         }
 
