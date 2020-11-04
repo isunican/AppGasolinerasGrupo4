@@ -138,19 +138,26 @@ public class MainActivity extends AppCompatActivity implements
 
         List<Gasolinera> gasolinerasFiltradas;
 
+        try {
+            switch (combustibleActual) {
+                case "Gasolina95":
+                    gasolinerasFiltradas = PresenterGasolineras.filtrarCombustibleGasolina(presenterGasolineras.getGasolineras());
+                    gasolinerasFiltradas = PresenterGasolineras.filtraPrecioGasolina(gasolinerasFiltradas, pMin, pMax);
+                    cargaGasolineras(gasolinerasFiltradas, 2);
+                    break;
 
-        switch (combustibleActual) {
-            case "Gasolina95":
-                gasolinerasFiltradas = PresenterGasolineras.filtrarCombustibleGasolina(presenterGasolineras.getGasolineras());
-                gasolinerasFiltradas = PresenterGasolineras.filtraPrecioGasolina(gasolinerasFiltradas, pMin, pMax);
-                cargaGasolineras(gasolinerasFiltradas, 2);
-                break;
-
-            case "GasoleoA":
-                gasolinerasFiltradas = PresenterGasolineras.filtrarCombustibleGasoleo(presenterGasolineras.getGasolineras());
-                gasolinerasFiltradas = PresenterGasolineras.filtraPrecioGasoleo(gasolinerasFiltradas, pMin, pMax);
-                cargaGasolineras(gasolinerasFiltradas, 1);
-                break;
+                case "GasoleoA":
+                    gasolinerasFiltradas = PresenterGasolineras.filtrarCombustibleGasoleo(presenterGasolineras.getGasolineras());
+                    gasolinerasFiltradas = PresenterGasolineras.filtraPrecioGasoleo(gasolinerasFiltradas, pMin, pMax);
+                    cargaGasolineras(gasolinerasFiltradas, 1);
+                    break;
+            }
+        }
+        catch(PresenterGasolineras.DatoNoValido e)
+        {
+            Toast toast;
+            toast = Toast.makeText(getApplicationContext(), "Datos introducidos invalidos, introduzca parámetros correctos", Toast.LENGTH_LONG);
+            toast.show();
         }
 
         //PresenterGasolineras.filtraPrecioGasolina(presenterGasolineras.getGasolineras(), precioMin, precioMax);

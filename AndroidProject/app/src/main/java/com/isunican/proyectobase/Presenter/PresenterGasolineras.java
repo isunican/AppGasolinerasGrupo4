@@ -30,6 +30,8 @@ public class PresenterGasolineras {
     public static final String URL_GASOLINERAS_SANTANDER = "https://sedeaplicaciones.minetur.gob.es/ServiciosRESTCarburantes/PreciosCarburantes/EstacionesTerrestres/FiltroMunicipio/5819";
     public static final String SANTANDER = "Santander";
 
+    public static class DatoNoValido extends RuntimeException {}
+
     /**
      * Constructor, getters y setters
      */
@@ -44,7 +46,6 @@ public class PresenterGasolineras {
     public void setGasolineras(List<Gasolinera> l) {
         this.gasolineras = l;
     }
-
 
     /**
      * cargaDatosGasolineras
@@ -159,7 +160,19 @@ public class PresenterGasolineras {
      * @param max,        maximo precio del rango.
      * @return
      */
-    static public List<Gasolinera> filtraPrecioGasolina(List<Gasolinera> gasolineras, double min, double max) {
+    static public List<Gasolinera> filtraPrecioGasolina(List<Gasolinera> gasolineras, double min, double max) throws DatoNoValido{
+
+        //Comprueba número negativo en ambas etiquetas
+        if(min < 0 || max < 0)
+        {
+            throw new DatoNoValido();
+        }
+
+        //Comprueba que min no pueda ser mayor que max
+        if(min > max)
+        {
+            throw new DatoNoValido();
+        }
 
         List<Gasolinera> gasolinerasFiltradas = new ArrayList<Gasolinera>();
 
@@ -183,7 +196,19 @@ public class PresenterGasolineras {
      * @param max,        maximo precio del rango.
      * @return
      */
-    static public List<Gasolinera> filtraPrecioGasoleo(List<Gasolinera> gasolineras, double min, double max) {
+    static public List<Gasolinera> filtraPrecioGasoleo(List<Gasolinera> gasolineras, double min, double max) throws DatoNoValido{
+
+        //Comprueba número negativo en ambas etiquetas
+        if(min < 0 || max < 0)
+        {
+            throw new DatoNoValido();
+        }
+
+        //Comprueba que min no pueda ser mayor que max
+        if(min > max)
+        {
+            throw new DatoNoValido();
+        }
 
         List<Gasolinera> gasolinerasFiltradas = new ArrayList<Gasolinera>();
 
