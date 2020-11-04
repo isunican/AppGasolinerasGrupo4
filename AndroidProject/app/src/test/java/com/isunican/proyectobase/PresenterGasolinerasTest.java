@@ -18,7 +18,6 @@ import static org.junit.Assert.*;
  */
 public class PresenterGasolinerasTest {
     // Declaracion de los objetos que vamos a usar en los test
-    private PresenterGasolineras sut;
 
     private List<Gasolinera> gasolinerasPrecioCompleto = new ArrayList<Gasolinera>();     //Lista de Gasolineras con gasolineras con distintos combustibles
     private List<Gasolinera> gasolinerasPrecioGasolina = new ArrayList<Gasolinera>();     // Lista de Gasolineras solo con gasoleoA
@@ -36,7 +35,7 @@ public class PresenterGasolinerasTest {
 
     @Before
     public void setUp() throws Exception{
-        sut = new PresenterGasolineras();
+
         //Inicializacion de las gasolineras y las listas
         gasoleo = new Gasolinera(0, "","","",1.0, 0.0, "");
         gasoleo2 = new Gasolinera(0, "","","",1.5, 0.0, "");
@@ -59,7 +58,6 @@ public class PresenterGasolinerasTest {
 
         gasolinerasPrecioGasoleo.add(gasoleo);
         gasolinerasPrecioGasoleo.add(gasoleo2);
-
     }
 
     /*
@@ -67,18 +65,22 @@ public class PresenterGasolinerasTest {
     public void filtrarPrecioGasolina() throws DatoNoValido{
 
         //Caso valido UT.1a
-        assertEquals(gasolinerasPrecioGasolina, sut.filtraPrecioGasolina(gasolinerasPrecioCompleto, 1.0, 1.5));
+        assertEquals(gasolinerasPrecioGasolina, PresenterGasolineras.filtraPrecioGasolina(gasolinerasPrecioCompleto, 1.0, 1.5));
 
         //Caso valido UT.1b
-        assertEquals(gasolinerasVacias, sut.filtraPrecioGasolina(gasolinerasPrecioGasoleo, 0.5,1.0));
+        assertEquals(gasolinerasVacias, PresenterGasolineras.filtraPrecioGasolina(gasolinerasPrecioCompleto, 100.0, 200.0));
 
         //Caso valido UT.1c
-        assertEquals(gasolinerasVacias, sut.filtraPrecioGasolina(gasolinerasVacias, 1.0,1.5));
+        assertEquals(gasolinerasVacias, PresenterGasolineras.filtraPrecioGasolina(gasolinerasPrecioGasoleo, 0.5,1.0));
+
+        //Caso valido UT.1d
+        assertEquals(gasolinerasVacias, PresenterGasolineras.filtraPrecioGasolina(gasolinerasVacias, 1.0,1.5));
 
 
-        //Caso no valido Ut.1d
+/*
+        //Caso no valido Ut.1a
         try{
-            sut.filtraPrecioGasolina(gasolinerasPrecioCompleto, 2.0,1.5);
+            PresenterGasolineras.filtraPrecioGasolina(gasolinerasPrecioCompleto, 2.0,1.5);
             fail();
         } catch (DatoNoValido e){
 
@@ -86,7 +88,7 @@ public class PresenterGasolinerasTest {
 
         //Caso no valido Ut.1e
         try{
-            sut.filtraPrecioGasolina(gasolinerasPrecioCompleto, -1.0,1.0);
+            PresenterGasolineras.filtraPrecioGasolina(gasolinerasPrecioCompleto, -1.0,1.0);
             fail();
         } catch (DatoNoValido e){
 
@@ -94,7 +96,7 @@ public class PresenterGasolinerasTest {
 
         //Caso no valido Ut.1f
         try{
-            sut.filtraPrecioGasolina(gasolinerasPrecioCompleto, 1.0,-1.5);
+            PresenterGasolineras.filtraPrecioGasolina(gasolinerasPrecioCompleto, 1.0,-1.5);
             fail();
         } catch (DatoNoValido e){
 
@@ -105,40 +107,44 @@ public class PresenterGasolinerasTest {
     @Test
     public void filtrarPrecioGasoleo() throws DatoNoValido{
 
-        //Caso valido UT.1a
-        assertEquals(gasolinerasPrecioGasoleo, sut.filtraPrecioGasoleo(gasolinerasPrecioCompleto, 1.0, 1.5));
+        //Caso valido UT.2a
+        assertEquals(gasolinerasPrecioGasoleo, PresenterGasolineras.filtraPrecioGasoleo(gasolinerasPrecioCompleto, 1.0, 1.5));
 
-        //Caso valido UT.1b
-        assertEquals(gasolinerasVacias, sut.filtraPrecioGasoleo(gasolinerasPrecioGasolina, 0.5,1.0));
+        //Caso valido UT.2b
+        assertEquals(gasolinerasVacias, PresenterGasolineras.filtraPrecioGasolina(gasolinerasPrecioCompleto, 100.0, 200.0));
 
-        //Caso valido UT.1c
-        assertEquals(gasolinerasVacias, sut.filtraPrecioGasoleo(gasolinerasVacias, 1.0,1.5));
+        //Caso valido UT.2b
+        assertEquals(gasolinerasVacias, PresenterGasolineras.filtraPrecioGasoleo(gasolinerasPrecioGasolina, 0.5,1.0));
 
-        /*
-        //Caso no valido Ut.1d
+        //Caso valido UT.2c
+        assertEquals(gasolinerasVacias, PresenterGasolineras.filtraPrecioGasoleo(gasolinerasVacias, 1.0,1.5));
+
+
+        //Caso no valido Ut.2d
         try{
-            sut.filtraPrecioGasolina(gasolinerasPrecioCompleto, 2.0,1.5);
+            PresenterGasolineras.filtraPrecioGasolina(gasolinerasPrecioCompleto, 2.0,1.5);
             fail();
         } catch (DatoNoValido e){
 
         };
 
 
-        //Caso no valido Ut.1e
+        //Caso no valido Ut.2e
         try{
-            sut.filtraPrecioGasolina(gasolinerasPrecioCompleto, -1.0,1.0);
+            PresenterGasolineras.filtraPrecioGasolina(gasolinerasPrecioCompleto, -1.0,1.0);
             fail();
         } catch (DatoNoValido e){
 
         };
 
-        //Caso no valido Ut.1f
+        //Caso no valido Ut.2f
         try{
-            sut.filtraPrecioGasolina(gasolinerasPrecioCompleto, 1.0,-1.5);
+            PresenterGasolineras.filtraPrecioGasolina(gasolinerasPrecioCompleto, 1.0,-1.5);
             fail();
         } catch (DatoNoValido e){
 
         };
 
-    }*/
+    }
+    */
 }
