@@ -9,10 +9,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import androidx.appcompat.app.AppCompatActivity;
+
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,6 +34,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -43,7 +47,11 @@ import android.widget.Toast;
 
 ------------------------------------------------------------------
 */
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements
+        AdapterView.OnItemSelectedListener {
+
+    //String de opciones del spinner de combustibles
+    String[] combustibles = {"Gasolina95", "GasoleoA"};
 
     PresenterGasolineras presenterGasolineras;
 
@@ -64,11 +72,11 @@ public class MainActivity extends AppCompatActivity {
     EditText precioMin;
     EditText precioMax;
 
-
+    String combustibleActual = combustibles[0];
 
     /**
      * onCreate
-     *
+     * <p>
      * Crea los elementos que conforman la actividad
      *
      * @param savedInstanceState
@@ -82,11 +90,11 @@ public class MainActivity extends AppCompatActivity {
 
         // Barra de progreso
         // https://materialdoc.com/components/progress/
-        progressBar = new ProgressBar(MainActivity.this,null,android.R.attr.progressBarStyleLarge);
-        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(100,100);
+        progressBar = new ProgressBar(MainActivity.this, null, android.R.attr.progressBarStyleLarge);
+        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(100, 100);
         params.addRule(RelativeLayout.CENTER_IN_PARENT);
         RelativeLayout layout = findViewById(R.id.activity_precio_gasolina);
-        layout.addView(progressBar,params);
+        layout.addView(progressBar, params);
 
         // Muestra el logo en el actionBar
         getSupportActionBar().setDisplayShowHomeEnabled(true);
@@ -107,29 +115,56 @@ public class MainActivity extends AppCompatActivity {
         // Esto se ha de hacer en segundo plano definiendo una tarea asíncrona
         new CargaDatosGasolinerasTask(this).execute();
 
-       // botonFiltrarPrecio = findViewById(R.id.botonFiltrarPrecio);
+        //Cogemos el spinner
+        Spinner spin = (Spinner) findViewById(R.id.idSpinnerCombustible);
+        spin.setOnItemSelectedListener(this);
+
+        //Creamos el arrayAdapter con la lista del spinner
+        ArrayAdapter aa = new ArrayAdapter(this, android.R.layout.simple_spinner_item, combustibles);
+        aa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        //Colocamos los datos en el spinner
+        spin.setAdapter(aa);
+
 
     }
-    //public void main
 
     public void myClickHandler(View target) {
         precioMin = findViewById(R.id.idPrecioMin);
         precioMax = findViewById(R.id.idPrecioMax);
+
         double pMin = Double.parseDouble(precioMin.getText().toString());
         double pMax = Double.parseDouble(precioMax.getText().toString());
 
-        List<Gasolinera> gasolinerasFiltradas = PresenterGasolineras.filtraPrecioGasoleo(presenterGasolineras.getGasolineras(), pMin, pMax);
-        cargaGasolineras(gasolinerasFiltradas);
+        List<Gasolinera> gasolinerasFiltradas;
+
+
+        switch (combustibleActual) {
+            case "Gasolina95":
+                gasolinerasFiltradas = PresenterGasolineras.filtrarCombustibleGasolina(presenterGasolineras.getGasolineras());
+                gasolinerasFiltradas = PresenterGasolineras.filtraPrecioGasolina(gasolinerasFiltradas, pMin, pMax);
+                cargaGasolineras(gasolinerasFiltradas, 2);
+                break;
+
+            case "GasoleoA":
+                gasolinerasFiltradas = PresenterGasolineras.filtrarCombustibleGasoleo(presenterGasolineras.getGasolineras());
+                gasolinerasFiltradas = PresenterGasolineras.filtraPrecioGasoleo(gasolinerasFiltradas, pMin, pMax);
+                cargaGasolineras(gasolinerasFiltradas, 1);
+                break;
+        }
+
         //PresenterGasolineras.filtraPrecioGasolina(presenterGasolineras.getGasolineras(), precioMin, precioMax);
     }
+
+
     /**
      * Menú action bar
-     *
+     * <p>
      * Redefine métodos para el uso de un menú de tipo action bar.
-     *
+     * <p>
      * onCreateOptionsMenu
      * Carga las opciones del menú a partir del fichero de recursos menu/menu.xml
-     *
+     * <p>
      * onOptionsItemSelected
      * Define las respuestas a las distintas opciones del menú
      */
@@ -138,23 +173,60 @@ public class MainActivity extends AppCompatActivity {
         getMenuInflater().inflate(R.menu.menu, menu);
         return true;
     }
+
+    /**
+     * Actualiza la lista de gasolineras o muestra la Información de la aplicación,
+     * dependiendo del botón pulsado.
+     *
+     * @param item
+     * @return
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if(item.getItemId()==R.id.itemActualizar){
+        if (item.getItemId() == R.id.itemActualizar) {
             mSwipeRefreshLayout.setRefreshing(true);
             new CargaDatosGasolinerasTask(this).execute();
-        }
-        else if(item.getItemId()==R.id.itemInfo){
+        } else if (item.getItemId() == R.id.itemInfo) {
             Intent myIntent = new Intent(MainActivity.this, InfoActivity.class);
             MainActivity.this.startActivity(myIntent);
-            }
+        }
         return true;
     }
 
-    private void cargaGasolineras(List<Gasolinera> gasolineras) {
+
+    /**
+     * Cuando una de las opciones del spinner se pulsen, se activa el método.
+     * Dependiendo del combustible seleccionado, filtra las gasolineras ignorando a las
+     * que no tengan ese combustible. Además, muestra en cada gasolinera el precio del combustible
+     * seleccionado.
+     *
+     * @param arg0
+     * @param arg1
+     * @param position
+     * @param id
+     */
+    @Override
+    public void onItemSelected(AdapterView<?> arg0, View arg1, int position, long id) {
+
+        combustibleActual = combustibles[position];
+        Toast.makeText(getApplicationContext(), combustibles[position], Toast.LENGTH_LONG).show();
+        List<Gasolinera> gasolineras;
+        switch (combustibles[position]) {
+            case "Gasolina95":
+                gasolineras = PresenterGasolineras.filtrarCombustibleGasolina(presenterGasolineras.getGasolineras());
+                cargaGasolineras(gasolineras, 2);
+                break;
+            case "GasoleoA":
+                gasolineras = PresenterGasolineras.filtrarCombustibleGasoleo(presenterGasolineras.getGasolineras());
+                cargaGasolineras(gasolineras, 1);
+                break;
+        }
+    }
+
+    private void cargaGasolineras(List<Gasolinera> gasolineras, int opciones) {
         Toast toast;
         // Definimos el array adapter
-        adapter = new GasolineraArrayAdapter(this, 0, (ArrayList<Gasolinera>) gasolineras);
+        adapter = new GasolineraArrayAdapter(this, 0, (ArrayList<Gasolinera>) gasolineras, opciones);
 
         // Obtenemos la vista de la lista
         listViewGasolineras = findViewById(R.id.listViewGasolineras);
@@ -177,19 +249,24 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+
+    @Override
+    public void onNothingSelected(AdapterView<?> arg0) {
+    }
+
     /**
      * CargaDatosGasolinerasTask
-     *
+     * <p>
      * Tarea asincrona para obtener los datos de las gasolineras
      * en segundo plano.
-     *
+     * <p>
      * Redefinimos varios métodos que se ejecutan en el siguiente orden:
      * onPreExecute: activamos el dialogo de progreso
      * doInBackground: solicitamos que el presenter cargue los datos
      * onPostExecute: desactiva el dialogo de progreso,
-     *    muestra las gasolineras en formato lista (a partir de un adapter)
-     *    y define la acción al realizar al seleccionar alguna de ellas
-     *
+     * muestra las gasolineras en formato lista (a partir de un adapter)
+     * y define la acción al realizar al seleccionar alguna de ellas
+     * <p>
      * http://www.sgoliver.net/blog/tareas-en-segundo-plano-en-android-i-thread-y-asynctask/
      */
     private class CargaDatosGasolinerasTask extends AsyncTask<Void, Void, Boolean> {
@@ -198,6 +275,7 @@ public class MainActivity extends AppCompatActivity {
 
         /**
          * Constructor de la tarea asincrona
+         *
          * @param activity
          */
         public CargaDatosGasolinerasTask(Activity activity) {
@@ -206,7 +284,7 @@ public class MainActivity extends AppCompatActivity {
 
         /**
          * onPreExecute
-         *
+         * <p>
          * Metodo ejecutado de forma previa a la ejecucion de la tarea definida en el metodo doInBackground()
          * Muestra un diálogo de progreso
          */
@@ -217,9 +295,10 @@ public class MainActivity extends AppCompatActivity {
 
         /**
          * doInBackground
-         *
+         * <p>
          * Tarea ejecutada en segundo plano
          * Llama al presenter para que lance el método de carga de los datos de las gasolineras
+         *
          * @param params
          * @return boolean
          */
@@ -230,7 +309,7 @@ public class MainActivity extends AppCompatActivity {
 
         /**
          * onPostExecute
-         *
+         * <p>
          * Se ejecuta al finalizar doInBackground
          * Oculta el diálogo de progreso.
          * Muestra en una lista los datos de las gasolineras cargadas,
@@ -252,31 +331,24 @@ public class MainActivity extends AppCompatActivity {
 
             // Si se ha obtenido resultado en la tarea en segundo plano
             if (res) {
-                // Definimos el array adapter
-                adapter = new GasolineraArrayAdapter(activity, 0, (ArrayList<Gasolinera>) presenterGasolineras.getGasolineras());
 
-                // Obtenemos la vista de la lista
-                listViewGasolineras = findViewById(R.id.listViewGasolineras);
+                List<Gasolinera> gasolinerasTemporales = presenterGasolineras.getGasolineras();
 
-                // Cargamos los datos en la lista
-                if (!presenterGasolineras.getGasolineras().isEmpty()) {
-                    // datos obtenidos con exito
-                    listViewGasolineras.setAdapter(adapter);
-                    toast = Toast.makeText(getApplicationContext(), getResources().getString(R.string.datos_exito), Toast.LENGTH_LONG);
-                } else {
-                    // los datos estan siendo actualizados en el servidor, por lo que no son actualmente accesibles
-                    // sucede en torno a las :00 y :30 de cada hora
-                    toast = Toast.makeText(getApplicationContext(), getResources().getString(R.string.datos_no_accesibles), Toast.LENGTH_LONG);
+                switch (combustibleActual) {
+                    case "Gasolina95":
+                        gasolinerasTemporales = PresenterGasolineras.filtrarCombustibleGasolina(gasolinerasTemporales);
+                        cargaGasolineras(gasolinerasTemporales, 2);
+                        break;
+
+                    case "GasoleoA":
+                        gasolinerasTemporales = PresenterGasolineras.filtrarCombustibleGasoleo(gasolinerasTemporales);
+                        cargaGasolineras(gasolinerasTemporales, 1);
+                        break;
                 }
-            } else {
-                // error en la obtencion de datos desde el servidor
-                toast = Toast.makeText(getApplicationContext(), getResources().getString(R.string.datos_no_obtenidos), Toast.LENGTH_LONG);
             }
 
-            // Muestra el mensaje del resultado de la operación en un toast
-            if (toast != null) {
-                toast.show();
-            }
+
+
 
             /*
              * Define el manejo de los eventos de click sobre elementos de la lista
@@ -310,12 +382,25 @@ public class MainActivity extends AppCompatActivity {
 
         Adaptador para inyectar los datos de las gasolineras
         en el listview del layout principal de la aplicacion
+        @param opciones
+        0: muestra todos los precios
+        1: muestra el precio del gasoleo
+        2: muestra el precio de la gasolina
     ------------------------------------------------------------------
     */
     class GasolineraArrayAdapter extends ArrayAdapter<Gasolinera> {
 
         private Context context;
         private List<Gasolinera> listaGasolineras;
+        private int opciones = 0;
+
+        // Constructor
+        public GasolineraArrayAdapter(Context context, int resource, List<Gasolinera> objects, int opciones) {
+            super(context, resource, objects);
+            this.context = context;
+            this.listaGasolineras = objects;
+            this.opciones = opciones;
+        }
 
         // Constructor
         public GasolineraArrayAdapter(Context context, int resource, List<Gasolinera> objects) {
@@ -345,9 +430,50 @@ public class MainActivity extends AppCompatActivity {
             // Y carga los datos del item
             rotulo.setText(gasolinera.getRotulo());
             direccion.setText(gasolinera.getDireccion());
-            gasoleoA.setText(" " + gasolinera.getGasoleoA() + getResources().getString(R.string.moneda));
-            gasolina95.setText(" " + gasolinera.getGasolina95() + getResources().getString(R.string.moneda));
+            TextView viewGasoleo;
+            TextView viewGasolina;
 
+            viewGasoleo = view.findViewById(R.id.textViewGasoleoALabel);
+            viewGasolina = view.findViewById(R.id.textViewGasolina95Label);
+
+
+            TextView viewGasoleoEspacio;
+            TextView viewGasolinaEspacio;
+
+            viewGasoleoEspacio = view.findViewById(R.id.textViewGasoleoA);
+            viewGasolinaEspacio = view.findViewById(R.id.textViewGasolina95);
+
+            switch (opciones) {
+
+                case 0:
+                    gasoleoA.setText(" " + gasolinera.getGasoleoA() + getResources().getString(R.string.moneda));
+                    gasolina95.setText(" " + gasolinera.getGasolina95() + getResources().getString(R.string.moneda));
+                    viewGasoleo.setVisibility(View.VISIBLE);
+                    viewGasolina.setVisibility(View.VISIBLE);
+
+                    viewGasoleoEspacio.setVisibility(View.VISIBLE);
+                    viewGasolinaEspacio.setVisibility(View.VISIBLE);
+                    break;
+
+                case 1:
+                    gasoleoA.setText(" " + gasolinera.getGasoleoA() + getResources().getString(R.string.moneda));
+                    viewGasoleo.setVisibility(View.VISIBLE);
+                    viewGasolina.setVisibility(View.GONE);
+
+                    viewGasoleoEspacio.setVisibility(View.VISIBLE);
+                    viewGasolinaEspacio.setVisibility(View.GONE);
+                    break;
+
+                case 2:
+                    gasolina95.setText(" " + gasolinera.getGasolina95() + getResources().getString(R.string.moneda));
+                    viewGasoleo.setVisibility(View.GONE);
+                    viewGasolina.setVisibility(View.VISIBLE);
+
+                    viewGasoleoEspacio.setVisibility(View.GONE);
+                    viewGasolinaEspacio.setVisibility(View.VISIBLE);
+                    break;
+
+            }
             // carga icono
             {
                 String rotuleImageID = gasolinera.getRotulo().toLowerCase();
@@ -385,4 +511,5 @@ public class MainActivity extends AppCompatActivity {
             return view;
         }
     }
+
 }
