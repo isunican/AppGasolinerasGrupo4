@@ -62,9 +62,8 @@ public class PresenterGasolinerasTest {
 
     }
 
-    /*
     @Test
-    public void filtrarPrecioGasolina() throws DatoNoValido{
+    public void filtrarPrecioGasolina() throws PresenterGasolineras.DatoNoValido{
 
         //Caso valido UT.1a
         assertEquals(gasolinerasPrecioGasolina, sut.filtraPrecioGasolina(gasolinerasPrecioCompleto, 1.0, 1.5));
@@ -80,7 +79,7 @@ public class PresenterGasolinerasTest {
         try{
             sut.filtraPrecioGasolina(gasolinerasPrecioCompleto, 2.0,1.5);
             fail();
-        } catch (DatoNoValido e){
+        } catch (PresenterGasolineras.DatoNoValido e){
 
         };
 
@@ -88,7 +87,7 @@ public class PresenterGasolinerasTest {
         try{
             sut.filtraPrecioGasolina(gasolinerasPrecioCompleto, -1.0,1.0);
             fail();
-        } catch (DatoNoValido e){
+        } catch (PresenterGasolineras.DatoNoValido e){
 
         };
 
@@ -96,14 +95,14 @@ public class PresenterGasolinerasTest {
         try{
             sut.filtraPrecioGasolina(gasolinerasPrecioCompleto, 1.0,-1.5);
             fail();
-        } catch (DatoNoValido e){
+        } catch (PresenterGasolineras.DatoNoValido e){
 
         };
 
     }
 
     @Test
-    public void filtrarPrecioGasoleo() throws DatoNoValido{
+    public void filtrarPrecioGasoleo() throws PresenterGasolineras.DatoNoValido{
 
         //Caso valido UT.1a
         assertEquals(gasolinerasPrecioGasoleo, sut.filtraPrecioGasoleo(gasolinerasPrecioCompleto, 1.0, 1.5));
@@ -114,12 +113,11 @@ public class PresenterGasolinerasTest {
         //Caso valido UT.1c
         assertEquals(gasolinerasVacias, sut.filtraPrecioGasoleo(gasolinerasVacias, 1.0,1.5));
 
-        /*
         //Caso no valido Ut.1d
         try{
             sut.filtraPrecioGasolina(gasolinerasPrecioCompleto, 2.0,1.5);
             fail();
-        } catch (DatoNoValido e){
+        } catch (PresenterGasolineras.DatoNoValido e){
 
         };
 
@@ -128,7 +126,7 @@ public class PresenterGasolinerasTest {
         try{
             sut.filtraPrecioGasolina(gasolinerasPrecioCompleto, -1.0,1.0);
             fail();
-        } catch (DatoNoValido e){
+        } catch (PresenterGasolineras.DatoNoValido e){
 
         };
 
@@ -136,9 +134,9 @@ public class PresenterGasolinerasTest {
         try{
             sut.filtraPrecioGasolina(gasolinerasPrecioCompleto, 1.0,-1.5);
             fail();
-        } catch (DatoNoValido e){
+        } catch (PresenterGasolineras.DatoNoValido e){
 
         };
 
-    }*/
+    }
 }
