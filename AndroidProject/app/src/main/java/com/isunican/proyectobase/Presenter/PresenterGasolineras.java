@@ -87,7 +87,7 @@ public class PresenterGasolineras {
      * Parsea la información para obtener una lista de gasolineras.
      * Finalmente, dicha lista queda almacenada en la clase.
      *
-     * @param String Nombre del fichero
+     //* @param String Nombre del fichero
      * @return boolean Devuelve true si se han podido cargar los datos
      */
     public boolean cargaDatosLocales(String fichero){
@@ -104,7 +104,7 @@ public class PresenterGasolineras {
      * y extraer una lista de gasolineras.
      * Finalmente, dicha lista queda almacenada en la clase.
      *
-     * @param String Dirección URL del JSON con los datos
+     //* @param String Dirección URL del JSON con los datos
      * @return boolean Devuelve true si se han podido cargar los datos
      */
     public boolean cargaDatosRemotos(String direccion){
