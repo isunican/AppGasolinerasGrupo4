@@ -18,40 +18,48 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="8">
+            android:layout_weight="5">
 
             <EditText
                 android:id="@+id/idPrecioMin"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="top"
                 android:layout_weight="0.5"
                 android:ems="3"
-                android:gravity="center"
-                android:inputType="numberDecimal"
-                android:text="@string/minPrecio" />
+                android:gravity="center|top"
+                android:hint="@string/minPrecio"
+                android:inputType="numberDecimal" />
 
             <EditText
                 android:id="@+id/idPrecioMax"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="top"
                 android:layout_weight="0.5"
                 android:ems="3"
-                android:gravity="center"
-                android:inputType="numberDecimal"
-                android:text="@string/maxPrecio" />
+                android:gravity="center|top"
+                android:hint="@string/maxPrecio"
+                android:inputType="numberDecimal" />
 
             <Button
                 android:id="@+id/botonFiltrarPrecio"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="120sp"
+                android:layout_gravity="top"
+                android:layout_marginEnd="50sp"
                 android:layout_weight="2"
-                android:gravity="start"
+                android:gravity="start|top"
                 android:onClick="myClickHandler"
                 android:text="@string/filtrarPrecio"
-                android:textAlignment="center"
-                />
+                android:textAlignment="center" />
 
+            <Spinner
+                android:id="@+id/idSpinnerCombustible"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:gravity="top" />
 
         </LinearLayout>
 
