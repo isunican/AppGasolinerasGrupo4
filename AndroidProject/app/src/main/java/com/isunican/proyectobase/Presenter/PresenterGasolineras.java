@@ -29,11 +29,8 @@ public class PresenterGasolineras {
     public static final String URL_GASOLINERAS_CANTABRIA = "https://sedeaplicaciones.minetur.gob.es/ServiciosRESTCarburantes/PreciosCarburantes/EstacionesTerrestres/FiltroCCAA/06";
     public static final String URL_GASOLINERAS_SANTANDER = "https://sedeaplicaciones.minetur.gob.es/ServiciosRESTCarburantes/PreciosCarburantes/EstacionesTerrestres/FiltroMunicipio/5819";
     public static final String SANTANDER = "Santander";
-<<<<<<< HEAD
-=======
 
     public static class DatoNoValido extends RuntimeException {}
->>>>>>> feature/399092-FiltrarPorPrecio
 
     /**
      * Constructor, getters y setters
@@ -154,8 +151,6 @@ public class PresenterGasolineras {
         return gasolinerasFiltradas;
     }
 
-<<<<<<< HEAD
-=======
     /**
      * Filtra las gasolineras, eliminando de la lista todas las gasolineras que no se encuentren en el
      * rango de precio especificado.
@@ -227,6 +222,4 @@ public class PresenterGasolineras {
         }
         return gasolinerasFiltradas;
     }
-
->>>>>>> feature/399092-FiltrarPorPrecio
 }

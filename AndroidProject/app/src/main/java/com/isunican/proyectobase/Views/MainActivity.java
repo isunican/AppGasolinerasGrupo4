@@ -65,8 +65,6 @@ public class MainActivity extends AppCompatActivity implements
     // Swipe and refresh (para recargar la lista con un swipe)
     SwipeRefreshLayout mSwipeRefreshLayout;
 
-<<<<<<< HEAD
-=======
     // Botón a través del cuál se podrá filtrar el rango de precios con el que queremos que se muestren las gasolineras
     Button botonFiltrarPrecio;
 
@@ -74,7 +72,6 @@ public class MainActivity extends AppCompatActivity implements
     EditText precioMin;
     EditText precioMax;
 
->>>>>>> feature/399092-FiltrarPorPrecio
     String combustibleActual = combustibles[0];
 
     /**
@@ -128,10 +125,6 @@ public class MainActivity extends AppCompatActivity implements
 
         //Colocamos los datos en el spinner
         spin.setAdapter(aa);
-
-
-<<<<<<< HEAD
-=======
     }
 
     public void myClickHandler(View target) {
@@ -164,9 +157,7 @@ public class MainActivity extends AppCompatActivity implements
             toast = Toast.makeText(getApplicationContext(), "Datos introducidos invalidos, introduzca parámetros correctos", Toast.LENGTH_LONG);
             toast.show();
         }
-
         //PresenterGasolineras.filtraPrecioGasolina(presenterGasolineras.getGasolineras(), precioMin, precioMax);
->>>>>>> feature/399092-FiltrarPorPrecio
     }
 
 
@@ -449,23 +440,12 @@ public class MainActivity extends AppCompatActivity implements
             viewGasoleo = view.findViewById(R.id.textViewGasoleoALabel);
             viewGasolina = view.findViewById(R.id.textViewGasolina95Label);
 
-<<<<<<< HEAD
-
             TextView viewGasoleoEspacio;
             TextView viewGasolinaEspacio;
 
             viewGasoleoEspacio = view.findViewById(R.id.textViewGasoleoA);
             viewGasolinaEspacio = view.findViewById(R.id.textViewGasolina95);
 
-=======
-
-            TextView viewGasoleoEspacio;
-            TextView viewGasolinaEspacio;
-
-            viewGasoleoEspacio = view.findViewById(R.id.textViewGasoleoA);
-            viewGasolinaEspacio = view.findViewById(R.id.textViewGasolina95);
-
->>>>>>> feature/399092-FiltrarPorPrecio
             switch (opciones) {
 
                 case 0:
@@ -534,5 +514,4 @@ public class MainActivity extends AppCompatActivity implements
             return view;
         }
     }
-
 }
