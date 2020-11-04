@@ -29,6 +29,11 @@ public class PresenterGasolineras {
     public static final String URL_GASOLINERAS_CANTABRIA = "https://sedeaplicaciones.minetur.gob.es/ServiciosRESTCarburantes/PreciosCarburantes/EstacionesTerrestres/FiltroCCAA/06";
     public static final String URL_GASOLINERAS_SANTANDER = "https://sedeaplicaciones.minetur.gob.es/ServiciosRESTCarburantes/PreciosCarburantes/EstacionesTerrestres/FiltroMunicipio/5819";
     public static final String SANTANDER = "Santander";
+<<<<<<< HEAD
+=======
+
+    public static class DatoNoValido extends RuntimeException {}
+>>>>>>> feature/399092-FiltrarPorPrecio
 
     /**
      * Constructor, getters y setters
@@ -44,7 +49,6 @@ public class PresenterGasolineras {
     public void setGasolineras(List<Gasolinera> l) {
         this.gasolineras = l;
     }
-
 
     /**
      * cargaDatosGasolineras
@@ -88,7 +92,7 @@ public class PresenterGasolineras {
      * Parsea la información para obtener una lista de gasolineras.
      * Finalmente, dicha lista queda almacenada en la clase.
      *
-     * @param String Nombre del fichero
+    // * @param String Nombre del fichero
      * @return boolean Devuelve true si se han podido cargar los datos
      */
     public boolean cargaDatosLocales(String fichero) {
@@ -105,7 +109,7 @@ public class PresenterGasolineras {
      * y extraer una lista de gasolineras.
      * Finalmente, dicha lista queda almacenada en la clase.
      *
-     * @param String Dirección URL del JSON con los datos
+    // * @param String Dirección URL del JSON con los datos
      * @return boolean Devuelve true si se han podido cargar los datos
      */
     public boolean cargaDatosRemotos(String direccion) {
@@ -150,6 +154,8 @@ public class PresenterGasolineras {
         return gasolinerasFiltradas;
     }
 
+<<<<<<< HEAD
+=======
     /**
      * Filtra las gasolineras, eliminando de la lista todas las gasolineras que no se encuentren en el
      * rango de precio especificado.
@@ -159,7 +165,19 @@ public class PresenterGasolineras {
      * @param max,        maximo precio del rango.
      * @return
      */
-    static public List<Gasolinera> filtraPrecioGasolina(List<Gasolinera> gasolineras, double min, double max) {
+    static public List<Gasolinera> filtraPrecioGasolina(List<Gasolinera> gasolineras, double min, double max) throws DatoNoValido{
+
+        //Comprueba número negativo en ambas etiquetas
+        if(min < 0 || max < 0)
+        {
+            throw new DatoNoValido();
+        }
+
+        //Comprueba que min no pueda ser mayor que max
+        if(min > max)
+        {
+            throw new DatoNoValido();
+        }
 
         List<Gasolinera> gasolinerasFiltradas = new ArrayList<Gasolinera>();
 
@@ -174,8 +192,6 @@ public class PresenterGasolineras {
         return gasolinerasFiltradas;
     }
 
-
-
     /**
      * Filtra las gasolineras, eliminando de la lista todas las gasolineras que no se encuentren en el
      * rango de precio especificado.
@@ -185,7 +201,19 @@ public class PresenterGasolineras {
      * @param max,        maximo precio del rango.
      * @return
      */
-    static public List<Gasolinera> filtraPrecioGasoleo(List<Gasolinera> gasolineras, double min, double max) {
+    static public List<Gasolinera> filtraPrecioGasoleo(List<Gasolinera> gasolineras, double min, double max) throws DatoNoValido{
+
+        //Comprueba número negativo en ambas etiquetas
+        if(min < 0 || max < 0)
+        {
+            throw new DatoNoValido();
+        }
+
+        //Comprueba que min no pueda ser mayor que max
+        if(min > max)
+        {
+            throw new DatoNoValido();
+        }
 
         List<Gasolinera> gasolinerasFiltradas = new ArrayList<Gasolinera>();
 
@@ -199,4 +227,6 @@ public class PresenterGasolineras {
         }
         return gasolinerasFiltradas;
     }
+
+>>>>>>> feature/399092-FiltrarPorPrecio
 }

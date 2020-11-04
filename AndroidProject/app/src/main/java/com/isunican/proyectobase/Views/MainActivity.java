@@ -28,6 +28,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
@@ -48,7 +50,6 @@ import android.widget.Toast;
 public class MainActivity extends AppCompatActivity implements
         AdapterView.OnItemSelectedListener {
 
-
     //String de opciones del spinner de combustibles
     String[] combustibles = {"Gasolina95", "GasoleoA"};
 
@@ -64,6 +65,16 @@ public class MainActivity extends AppCompatActivity implements
     // Swipe and refresh (para recargar la lista con un swipe)
     SwipeRefreshLayout mSwipeRefreshLayout;
 
+<<<<<<< HEAD
+=======
+    // Botón a través del cuál se podrá filtrar el rango de precios con el que queremos que se muestren las gasolineras
+    Button botonFiltrarPrecio;
+
+    // Obtención de los precios max y min
+    EditText precioMin;
+    EditText precioMax;
+
+>>>>>>> feature/399092-FiltrarPorPrecio
     String combustibleActual = combustibles[0];
 
     /**
@@ -119,6 +130,43 @@ public class MainActivity extends AppCompatActivity implements
         spin.setAdapter(aa);
 
 
+<<<<<<< HEAD
+=======
+    }
+
+    public void myClickHandler(View target) {
+        precioMin = findViewById(R.id.idPrecioMin);
+        precioMax = findViewById(R.id.idPrecioMax);
+
+        double pMin = Double.parseDouble(precioMin.getText().toString());
+        double pMax = Double.parseDouble(precioMax.getText().toString());
+
+        List<Gasolinera> gasolinerasFiltradas;
+
+        try {
+            switch (combustibleActual) {
+                case "Gasolina95":
+                    gasolinerasFiltradas = PresenterGasolineras.filtrarCombustibleGasolina(presenterGasolineras.getGasolineras());
+                    gasolinerasFiltradas = PresenterGasolineras.filtraPrecioGasolina(gasolinerasFiltradas, pMin, pMax);
+                    cargaGasolineras(gasolinerasFiltradas, 2);
+                    break;
+
+                case "GasoleoA":
+                    gasolinerasFiltradas = PresenterGasolineras.filtrarCombustibleGasoleo(presenterGasolineras.getGasolineras());
+                    gasolinerasFiltradas = PresenterGasolineras.filtraPrecioGasoleo(gasolinerasFiltradas, pMin, pMax);
+                    cargaGasolineras(gasolinerasFiltradas, 1);
+                    break;
+            }
+        }
+        catch(PresenterGasolineras.DatoNoValido e)
+        {
+            Toast toast;
+            toast = Toast.makeText(getApplicationContext(), "Datos introducidos invalidos, introduzca parámetros correctos", Toast.LENGTH_LONG);
+            toast.show();
+        }
+
+        //PresenterGasolineras.filtraPrecioGasolina(presenterGasolineras.getGasolineras(), precioMin, precioMax);
+>>>>>>> feature/399092-FiltrarPorPrecio
     }
 
 
@@ -401,6 +449,7 @@ public class MainActivity extends AppCompatActivity implements
             viewGasoleo = view.findViewById(R.id.textViewGasoleoALabel);
             viewGasolina = view.findViewById(R.id.textViewGasolina95Label);
 
+<<<<<<< HEAD
 
             TextView viewGasoleoEspacio;
             TextView viewGasolinaEspacio;
@@ -408,6 +457,15 @@ public class MainActivity extends AppCompatActivity implements
             viewGasoleoEspacio = view.findViewById(R.id.textViewGasoleoA);
             viewGasolinaEspacio = view.findViewById(R.id.textViewGasolina95);
 
+=======
+
+            TextView viewGasoleoEspacio;
+            TextView viewGasolinaEspacio;
+
+            viewGasoleoEspacio = view.findViewById(R.id.textViewGasoleoA);
+            viewGasolinaEspacio = view.findViewById(R.id.textViewGasolina95);
+
+>>>>>>> feature/399092-FiltrarPorPrecio
             switch (opciones) {
 
                 case 0:
