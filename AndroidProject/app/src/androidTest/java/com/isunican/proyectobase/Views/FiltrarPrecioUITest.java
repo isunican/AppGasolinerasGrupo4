@@ -145,7 +145,6 @@ public class FiltrarPrecioUITest {
             TextView textView = (TextView) item;
             String value = textView.getText().toString();
             value = value.replace("€","");
-            //Este matching esta pensado en el caso de que el precio de la gasolina no suba más de 4 cifras, se podría adaptar en un futuro
             boolean matching = Double.parseDouble(value)<=1.200 && Double.parseDouble(value)>=1.1;
             return matching;
         }
