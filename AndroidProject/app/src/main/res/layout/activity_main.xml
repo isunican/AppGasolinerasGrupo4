@@ -28,8 +28,8 @@
                 android:layout_weight="0.5"
                 android:ems="3"
                 android:gravity="center|top"
-                android:inputType="numberDecimal"
-                android:text="@string/minPrecio" />
+                android:hint="@string/minPrecio"
+                android:inputType="numberDecimal" />
 
             <EditText
                 android:id="@+id/idPrecioMax"
@@ -39,8 +39,8 @@
                 android:layout_weight="0.5"
                 android:ems="3"
                 android:gravity="center|top"
-                android:inputType="numberDecimal"
-                android:text="@string/maxPrecio" />
+                android:hint="@string/maxPrecio"
+                android:inputType="numberDecimal" />
 
             <Button
                 android:id="@+id/botonFiltrarPrecio"
