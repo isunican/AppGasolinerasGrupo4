@@ -125,7 +125,7 @@ public class PresenterGasolineras {
      * Retorna la lista de gasolineras eliminando las gasolineras que no tengan gasolina.
      */
     public static List<Gasolinera> filtrarCombustibleGasolina(List<Gasolinera> gasolineras) {
-        List<Gasolinera> gasolinerasFiltradas = new ArrayList<Gasolinera>();
+        List<Gasolinera> gasolinerasFiltradas = new ArrayList<>();
 
         //Añadimos todas las gasolineras que tengan el combustible deseado.
         for (Gasolinera g : gasolineras) {
@@ -140,7 +140,7 @@ public class PresenterGasolineras {
      * Retorna la lista de gasolineras eliminando las gasolineras que no tengan gasoleo.
      */
     public static List<Gasolinera> filtrarCombustibleGasoleo(List<Gasolinera> gasolineras) {
-        List<Gasolinera> gasolinerasFiltradas = new ArrayList<Gasolinera>();
+        List<Gasolinera> gasolinerasFiltradas = new ArrayList<>();
 
         //Añadimos todas las gasolineras que tengan el combustible deseado.
         for (Gasolinera g : gasolineras) {
@@ -160,7 +160,7 @@ public class PresenterGasolineras {
      * @param max,        maximo precio del rango.
      * @return
      */
-    public static List<Gasolinera> filtraPrecioGasolina(List<Gasolinera> gasolineras, double min, double max) throws DatoNoValido{
+    public static List<Gasolinera> filtraPrecioGasolina(List<Gasolinera> gasolineras, double min, double max){
 
         //Comprueba número negativo en ambas etiquetas
         if(min < 0 || max < 0)
@@ -174,7 +174,7 @@ public class PresenterGasolineras {
             throw new DatoNoValido();
         }
 
-        List<Gasolinera> gasolinerasFiltradas = new ArrayList<Gasolinera>();
+        List<Gasolinera> gasolinerasFiltradas = new ArrayList<>();
 
         //Añadimos todas las gasolineras que tengan el combustible deseado.
         for (Gasolinera g : gasolineras) {
@@ -196,7 +196,7 @@ public class PresenterGasolineras {
      * @param max,        maximo precio del rango.
      * @return
      */
-    public static List<Gasolinera> filtraPrecioGasoleo(List<Gasolinera> gasolineras, double min, double max) throws DatoNoValido{
+    public static List<Gasolinera> filtraPrecioGasoleo(List<Gasolinera> gasolineras, double min, double max){
 
         //Comprueba número negativo en ambas etiquetas
         if(min < 0 || max < 0)
@@ -210,7 +210,7 @@ public class PresenterGasolineras {
             throw new DatoNoValido();
         }
 
-        List<Gasolinera> gasolinerasFiltradas = new ArrayList<Gasolinera>();
+        List<Gasolinera> gasolinerasFiltradas = new ArrayList<>();
 
         //Añadimos todas las gasolineras que tengan el combustible deseado.
         for (Gasolinera g : gasolineras) {

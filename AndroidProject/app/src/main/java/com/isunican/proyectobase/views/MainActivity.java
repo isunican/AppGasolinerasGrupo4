@@ -74,6 +74,7 @@ public class MainActivity extends AppCompatActivity implements
     static final String GASOLINA95 = "Gasolina95";
     static final String GASOLEOA = "GasoleoA";
 
+
     /**
      * onCreate
      * <p>
@@ -120,16 +121,15 @@ public class MainActivity extends AppCompatActivity implements
         spin.setOnItemSelectedListener(this);
 
         //Creamos el arrayAdapter con la lista del spinner
-        ArrayAdapter aa = new ArrayAdapter(this, android.R.layout.simple_spinner_item, combustibles);
+        ArrayAdapter<String> aa = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, combustibles);
         aa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
         //Colocamos los datos en el spinner
         spin.setAdapter(aa);
     }
 
-    public void myClickHandler(View target) {
-
-
+    @SuppressWarnings("Necesario parametro")
+    public void myClickHandler(View view) {
         precioMin = findViewById(R.id.idPrecioMin);
         precioMax = findViewById(R.id.idPrecioMax);
 
@@ -314,6 +314,7 @@ public class MainActivity extends AppCompatActivity implements
          * <p>
          * Metodo ejecutado de forma previa a la ejecucion de la tarea definida en el metodo doInBackground()
          * Muestra un diálogo de progreso
+         * @deprecated
          */
         @Override
         @Deprecated
@@ -326,7 +327,7 @@ public class MainActivity extends AppCompatActivity implements
          * <p>
          * Tarea ejecutada en segundo plano
          * Llama al presenter para que lance el método de carga de los datos de las gasolineras
-         *
+         * @deprecated
          * @param params
          * @return boolean
          */
@@ -346,6 +347,7 @@ public class MainActivity extends AppCompatActivity implements
          * Define el manejo de la selección de los elementos de la lista,
          * lanzando con una intent una actividad de detalle
          * a la que pasamos un objeto Gasolinera
+         * @deprecated
          *
          * @param res
          */
@@ -397,9 +399,6 @@ public class MainActivity extends AppCompatActivity implements
                     /* Obtengo el elemento directamente de su posicion,
                      * ya que es la misma que ocupa en la lista
                      */
-
-                    //Alternativa 1: a partir de posicion obtener algun atributo int opcionSeleccionada = ((Gasolinera) a.getItemAtPosition(position)).getIdeess();
-                    //Alternativa 2: a partir de la vista obtener algun atributo String opcionSeleccionada = ((TextView)v.findViewById(R.id.textViewRotulo)).getText().toString();
                     Intent myIntent = new Intent(MainActivity.this, DetailActivity.class);
                     myIntent.putExtra(getResources().getString(R.string.pasoDatosGasolinera), presenterGasolineras.getGasolineras().get(position));
                     MainActivity.this.startActivity(myIntent);

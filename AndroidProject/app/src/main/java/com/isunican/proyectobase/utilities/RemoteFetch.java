@@ -33,4 +33,5 @@ public class RemoteFetch {
         return new BufferedInputStream(urlConnection.getInputStream());
     }
 
+    private RemoteFetch(){ }
 }
