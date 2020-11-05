@@ -1,10 +1,10 @@
-package com.isunican.proyectobase.Presenter;
+package com.isunican.proyectobase.presenter;
 
 import android.util.Log;
 
-import com.isunican.proyectobase.Model.*;
-import com.isunican.proyectobase.Utilities.ParserJSONGasolineras;
-import com.isunican.proyectobase.Utilities.RemoteFetch;
+import com.isunican.proyectobase.model.*;
+import com.isunican.proyectobase.utilities.ParserJSONGasolineras;
+import com.isunican.proyectobase.utilities.RemoteFetch;
 
 import java.io.BufferedInputStream;
 import java.util.ArrayList;

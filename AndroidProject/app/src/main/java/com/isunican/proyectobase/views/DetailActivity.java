@@ -1,7 +1,7 @@
-package com.isunican.proyectobase.Views;
+package com.isunican.proyectobase.views;
 
 import com.isunican.proyectobase.R;
-import com.isunican.proyectobase.Model.*;
+import com.isunican.proyectobase.model.*;
 
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;

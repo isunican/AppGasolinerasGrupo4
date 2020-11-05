@@ -1,6 +1,6 @@
-package com.isunican.proyectobase.Utilities;
+package com.isunican.proyectobase.utilities;
 
-import com.isunican.proyectobase.Model.*;
+import com.isunican.proyectobase.model.*;
 
 import android.util.JsonReader;
 import android.util.JsonToken;

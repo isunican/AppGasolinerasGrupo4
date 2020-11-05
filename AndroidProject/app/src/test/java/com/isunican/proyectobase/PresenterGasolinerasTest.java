@@ -1,7 +1,7 @@
 package com.isunican.proyectobase;
 
-import com.isunican.proyectobase.Model.Gasolinera;
-import com.isunican.proyectobase.Presenter.PresenterGasolineras;
+import com.isunican.proyectobase.model.Gasolinera;
+import com.isunican.proyectobase.presenter.PresenterGasolineras;
 
 import org.junit.Before;
 import org.junit.Test;
