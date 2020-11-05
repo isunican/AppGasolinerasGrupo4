@@ -1,7 +1,7 @@
-package com.isunican.proyectobase.Views;
+package com.isunican.proyectobase.views;
 
-import com.isunican.proyectobase.Presenter.*;
-import com.isunican.proyectobase.Model.*;
+import com.isunican.proyectobase.presenter.*;
+import com.isunican.proyectobase.model.*;
 import com.isunican.proyectobase.R;
 
 import android.app.Activity;
@@ -16,7 +16,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import android.view.LayoutInflater;
@@ -319,6 +318,7 @@ public class MainActivity extends AppCompatActivity implements
          * Muestra un diálogo de progreso
          */
         @Override
+        @Deprecated
         protected void onPreExecute() {
             progressBar.setVisibility(View.VISIBLE);  //To show ProgressBar
         }
@@ -333,6 +333,7 @@ public class MainActivity extends AppCompatActivity implements
          * @return boolean
          */
         @Override
+        @Deprecated
         protected Boolean doInBackground(Void... params) {
             return presenterGasolineras.cargaDatosGasolineras();
         }
@@ -351,7 +352,10 @@ public class MainActivity extends AppCompatActivity implements
          * @param res
          */
         @Override
+        @Deprecated
         protected void onPostExecute(Boolean res) {
+
+            boolean result = res;
 
             // Si el progressDialog estaba activado, lo oculta
             progressBar.setVisibility(View.GONE);     // To Hide ProgressBar
@@ -359,7 +363,7 @@ public class MainActivity extends AppCompatActivity implements
             mSwipeRefreshLayout.setRefreshing(false);
 
             // Si se ha obtenido resultado en la tarea en segundo plano
-            if (res) {
+            if (result) {
 
                 List<Gasolinera> gasolinerasTemporales = presenterGasolineras.getGasolineras();
 

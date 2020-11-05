@@ -8,7 +8,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context=".Views.MainActivity">
+    tools:context=".views.MainActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -18,7 +18,8 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="5">
+            android:layout_weight="5"
+            android:baselineAligned="false">
 
             <EditText
                 android:id="@+id/idPrecioMin"
@@ -27,9 +28,10 @@
                 android:layout_gravity="top"
                 android:layout_weight="0.5"
                 android:ems="3"
-                android:gravity="center|top"
+                android:gravity="top"
                 android:hint="@string/minPrecio"
-                android:inputType="numberDecimal" />
+                android:inputType="numberDecimal"
+                android:textAlignment="center" />
 
             <EditText
                 android:id="@+id/idPrecioMax"
@@ -38,9 +40,10 @@
                 android:layout_gravity="top"
                 android:layout_weight="0.5"
                 android:ems="3"
-                android:gravity="center|top"
+                android:gravity="top"
                 android:hint="@string/maxPrecio"
-                android:inputType="numberDecimal" />
+                android:inputType="numberDecimal"
+                android:textAlignment="center" />
 
             <Button
                 android:id="@+id/botonFiltrarPrecio"

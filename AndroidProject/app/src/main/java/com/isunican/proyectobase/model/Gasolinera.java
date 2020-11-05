@@ -1,4 +1,4 @@
-package com.isunican.proyectobase.Model;
+package com.isunican.proyectobase.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;

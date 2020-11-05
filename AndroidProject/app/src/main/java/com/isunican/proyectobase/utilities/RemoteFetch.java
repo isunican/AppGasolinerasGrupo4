@@ -1,4 +1,4 @@
-package com.isunican.proyectobase.Utilities;
+package com.isunican.proyectobase.utilities;
 
 import java.io.BufferedInputStream;
 import java.io.IOException;

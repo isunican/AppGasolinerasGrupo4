@@ -1,7 +1,5 @@
 package com.isunican.proyectobase;
 
-import com.isunican.proyectobase.Model.Gasolinera;
-
 import org.junit.Test;
 
 import static org.junit.Assert.*;

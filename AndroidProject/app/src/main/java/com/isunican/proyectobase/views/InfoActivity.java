@@ -1,4 +1,4 @@
-package com.isunican.proyectobase.Views;
+package com.isunican.proyectobase.views;
 
 import com.isunican.proyectobase.R;
 
