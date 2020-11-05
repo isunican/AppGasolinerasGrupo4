@@ -19,8 +19,6 @@ import android.util.DisplayMetrics;
 import java.util.ArrayList;
 import java.util.List;
 
-import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -51,7 +49,7 @@ public class MainActivity extends AppCompatActivity implements
         AdapterView.OnItemSelectedListener {
 
     //String de opciones del spinner de combustibles
-    String[] combustibles = {"Gasolina95", "GasoleoA"};
+    String[] combustibles = {GASOLINA95, GASOLEOA};
 
     PresenterGasolineras presenterGasolineras;
 
@@ -135,8 +133,11 @@ public class MainActivity extends AppCompatActivity implements
         precioMin = findViewById(R.id.idPrecioMin);
         precioMax = findViewById(R.id.idPrecioMax);
 
+        if(precioMax != null || precioMin != null){
+
         double pMin = Double.parseDouble(precioMin.getText().toString());
         double pMax = Double.parseDouble(precioMax.getText().toString());
+
 
         List<Gasolinera> gasolinerasFiltradas;
 
@@ -153,16 +154,22 @@ public class MainActivity extends AppCompatActivity implements
                     gasolinerasFiltradas = PresenterGasolineras.filtraPrecioGasoleo(gasolinerasFiltradas, pMin, pMax);
                     cargaGasolineras(gasolinerasFiltradas, 1);
                     break;
+                default:
             }
         }
         catch(PresenterGasolineras.DatoNoValido e)
         {
-            Toast toast;
-            toast = Toast.makeText(getApplicationContext(), "Datos introducidos invalidos, introduzca parámetros correctos", Toast.LENGTH_LONG);
-            toast.show();
+            notificaDatoNoValido();
         }
+        }else {
+            notificaDatoNoValido();
+        }
+    }
 
-        //PresenterGasolineras.filtraPrecioGasolina(presenterGasolineras.getGasolineras(), precioMin, precioMax);
+    private void notificaDatoNoValido() {
+        Toast toast;
+        toast = Toast.makeText(getApplicationContext(), "Datos introducidos invalidos, introduzca parámetros correctos", Toast.LENGTH_LONG);
+        toast.show();
     }
 
 
@@ -229,13 +236,14 @@ public class MainActivity extends AppCompatActivity implements
                 gasolineras = PresenterGasolineras.filtrarCombustibleGasoleo(presenterGasolineras.getGasolineras());
                 cargaGasolineras(gasolineras, 1);
                 break;
+            default:
         }
     }
 
     private void cargaGasolineras(List<Gasolinera> gasolineras, int opciones) {
         Toast toast;
         // Definimos el array adapter
-        adapter = new GasolineraArrayAdapter(this, 0, (ArrayList<Gasolinera>) gasolineras, opciones);
+        adapter = new GasolineraArrayAdapter(this, 0, gasolineras, opciones);
 
         // Obtenemos la vista de la lista
         listViewGasolineras = findViewById(R.id.listViewGasolineras);
@@ -265,6 +273,8 @@ public class MainActivity extends AppCompatActivity implements
      */
     @Override
     public void onNothingSelected(AdapterView<?> arg0) {
+        //Método que actua cuando un objeto desaparece del spinner. Ya que en el código nuestro las gasolineras están fijas,
+        //no debe hacer nada.
     }
 
     /**
@@ -335,7 +345,6 @@ public class MainActivity extends AppCompatActivity implements
          */
         @Override
         protected void onPostExecute(Boolean res) {
-            Toast toast;
 
             // Si el progressDialog estaba activado, lo oculta
             progressBar.setVisibility(View.GONE);     // To Hide ProgressBar
@@ -378,9 +387,9 @@ public class MainActivity extends AppCompatActivity implements
 
                     /* Obtengo el elemento directamente de su posicion,
                      * ya que es la misma que ocupa en la lista
-                     * Alternativa 1: a partir de posicion obtener algun atributo int opcionSeleccionada = ((Gasolinera) a.getItemAtPosition(position)).getIdeess();
-                     * Alternativa 2: a partir de la vista obtener algun atributo String opcionSeleccionada = ((TextView)v.findViewById(R.id.textViewRotulo)).getText().toString();
                      */
+                    //Alternativa 1: a partir de posicion obtener algun atributo int opcionSeleccionada = ((Gasolinera) a.getItemAtPosition(position)).getIdeess();
+                    //Alternativa 2: a partir de la vista obtener algun atributo String opcionSeleccionada = ((TextView)v.findViewById(R.id.textViewRotulo)).getText().toString();
                     Intent myIntent = new Intent(MainActivity.this, DetailActivity.class);
                     myIntent.putExtra(getResources().getString(R.string.pasoDatosGasolinera), presenterGasolineras.getGasolineras().get(position));
                     MainActivity.this.startActivity(myIntent);
@@ -432,7 +441,7 @@ public class MainActivity extends AppCompatActivity implements
             Gasolinera gasolinera = listaGasolineras.get(position);
 
             // Indica el layout a usar en cada elemento de la lista
-            LayoutInflater inflater = (LayoutInflater) context.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
+            LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
             View view = inflater.inflate(R.layout.item_gasolinera, null);
 
@@ -488,6 +497,7 @@ public class MainActivity extends AppCompatActivity implements
                     viewGasoleoEspacio.setVisibility(View.GONE);
                     viewGasolinaEspacio.setVisibility(View.VISIBLE);
                     break;
+                default:
 
             }
             // carga icono
