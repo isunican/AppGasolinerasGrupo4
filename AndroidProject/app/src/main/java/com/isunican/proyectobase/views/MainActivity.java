@@ -1,8 +1,9 @@
+
 package com.isunican.proyectobase.views;
 
 import com.isunican.proyectobase.presenter.*;
-import com.isunican.proyectobase.model.*;
 import com.isunican.proyectobase.R;
+import com.isunican.proyectobase.model.*;
 
 import android.app.Activity;
 import android.content.Context;
@@ -399,7 +400,7 @@ public class MainActivity extends AppCompatActivity implements
                     /* Obtengo el elemento directamente de su posicion,
                      * ya que es la misma que ocupa en la lista
                      */
-                    
+
                     //Alternativa 1: a partir de posicion obtener algun atributo int opcionSeleccionada = ((Gasolinera) a.getItemAtPosition(position)).getIdeess();
                     //Alternativa 2: a partir de la vista obtener algun atributo String opcionSeleccionada = ((TextView)v.findViewById(R.id.textViewRotulo)).getText().toString();
                     Intent myIntent = new Intent(MainActivity.this, DetailActivity.class);
