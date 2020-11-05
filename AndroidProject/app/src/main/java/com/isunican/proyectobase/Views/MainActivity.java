@@ -74,6 +74,8 @@ public class MainActivity extends AppCompatActivity implements
 
     String combustibleActual = combustibles[0];
 
+    static final String GASOLINA95= "Gasolina95";
+    static final String GASOLEOA ="GasoleoA";
     /**
      * onCreate
      * <p>
@@ -140,13 +142,13 @@ public class MainActivity extends AppCompatActivity implements
 
         try {
             switch (combustibleActual) {
-                case "Gasolina95":
+                case GASOLINA95:
                     gasolinerasFiltradas = PresenterGasolineras.filtrarCombustibleGasolina(presenterGasolineras.getGasolineras());
                     gasolinerasFiltradas = PresenterGasolineras.filtraPrecioGasolina(gasolinerasFiltradas, pMin, pMax);
                     cargaGasolineras(gasolinerasFiltradas, 2);
                     break;
 
-                case "GasoleoA":
+                case GASOLEOA:
                     gasolinerasFiltradas = PresenterGasolineras.filtrarCombustibleGasoleo(presenterGasolineras.getGasolineras());
                     gasolinerasFiltradas = PresenterGasolineras.filtraPrecioGasoleo(gasolinerasFiltradas, pMin, pMax);
                     cargaGasolineras(gasolinerasFiltradas, 1);
@@ -219,11 +221,11 @@ public class MainActivity extends AppCompatActivity implements
         Toast.makeText(getApplicationContext(), combustibles[position], Toast.LENGTH_LONG).show();
         List<Gasolinera> gasolineras;
         switch (combustibles[position]) {
-            case "Gasolina95":
+            case GASOLINA95:
                 gasolineras = PresenterGasolineras.filtrarCombustibleGasolina(presenterGasolineras.getGasolineras());
                 cargaGasolineras(gasolineras, 2);
                 break;
-            case "GasoleoA":
+            case GASOLEOA:
                 gasolineras = PresenterGasolineras.filtrarCombustibleGasoleo(presenterGasolineras.getGasolineras());
                 cargaGasolineras(gasolineras, 1);
                 break;
@@ -256,7 +258,11 @@ public class MainActivity extends AppCompatActivity implements
     }
 
 
-
+    /**
+     * Método que actua cuando un objeto desaparece del spinner. Ya que en el código nuestro las gasolineras están fijas,
+     * no debe hacer nada.
+     * @param arg0
+     */
     @Override
     public void onNothingSelected(AdapterView<?> arg0) {
     }
@@ -342,15 +348,17 @@ public class MainActivity extends AppCompatActivity implements
                 List<Gasolinera> gasolinerasTemporales = presenterGasolineras.getGasolineras();
 
                 switch (combustibleActual) {
-                    case "Gasolina95":
+                    case GASOLINA95:
                         gasolinerasTemporales = PresenterGasolineras.filtrarCombustibleGasolina(gasolinerasTemporales);
                         cargaGasolineras(gasolinerasTemporales, 2);
                         break;
 
-                    case "GasoleoA":
+                    case GASOLEOA:
                         gasolinerasTemporales = PresenterGasolineras.filtrarCombustibleGasoleo(gasolinerasTemporales);
                         cargaGasolineras(gasolinerasTemporales, 1);
                         break;
+
+                    default:
                 }
             }
 
@@ -425,6 +433,7 @@ public class MainActivity extends AppCompatActivity implements
 
             // Indica el layout a usar en cada elemento de la lista
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
+
             View view = inflater.inflate(R.layout.item_gasolinera, null);
 
             // Asocia las variables de dicho layout
@@ -482,20 +491,7 @@ public class MainActivity extends AppCompatActivity implements
 
             }
             // carga icono
-            {
-                String rotuleImageID = gasolinera.getRotulo().toLowerCase();
-
-                // Tengo que protegerme ante el caso en el que el rotulo solo tiene digitos.
-                // En ese caso getIdentifier devuelve esos digitos en vez de 0.
-                int imageID = context.getResources().getIdentifier(rotuleImageID,
-                        "drawable", context.getPackageName());
-
-                if (imageID == 0 || TextUtils.isDigitsOnly(rotuleImageID)) {
-                    imageID = context.getResources().getIdentifier(getResources().getString(R.string.pordefecto),
-                            "drawable", context.getPackageName());
-                }
-                logo.setImageResource(imageID);
-            }
+            cargaIcono(gasolinera, logo);
 
 
             // Si las dimensiones de la pantalla son menores
@@ -516,6 +512,21 @@ public class MainActivity extends AppCompatActivity implements
             }
 
             return view;
+        }
+
+        private void cargaIcono(Gasolinera gasolinera, ImageView logo) {
+            String rotuleImageID = gasolinera.getRotulo().toLowerCase();
+
+            // Tengo que protegerme ante el caso en el que el rotulo solo tiene digitos.
+            // En ese caso getIdentifier devuelve esos digitos en vez de 0.
+            int imageID = context.getResources().getIdentifier(rotuleImageID,
+                    "drawable", context.getPackageName());
+
+            if (imageID == 0 || TextUtils.isDigitsOnly(rotuleImageID)) {
+                imageID = context.getResources().getIdentifier(getResources().getString(R.string.pordefecto),
+                        "drawable", context.getPackageName());
+            }
+            logo.setImageResource(imageID);
         }
     }
 
