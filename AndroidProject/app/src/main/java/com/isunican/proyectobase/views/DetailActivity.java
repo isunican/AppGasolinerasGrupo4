@@ -68,7 +68,6 @@ public class DetailActivity extends AppCompatActivity {
         textPrecioDiesel.setText(String.valueOf(gasolinera.getGasoleoA()));
         textPrecioGasolina.setText(String.valueOf(gasolinera.getGasolina95()));
 
-       //textView.setText(gasolinera.toString());
         imagenEmpresa = findViewById(R.id.idFotoEmpresa);
 
         // carga icono
