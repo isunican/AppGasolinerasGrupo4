@@ -72,8 +72,9 @@ public class MainActivity extends AppCompatActivity implements
 
     String combustibleActual = combustibles[0];
 
-    static final String GASOLINA95= "Gasolina95";
-    static final String GASOLEOA ="GasoleoA";
+    static final String GASOLINA95 = "Gasolina95";
+    static final String GASOLEOA = "GasoleoA";
+
     /**
      * onCreate
      * <p>
@@ -130,40 +131,45 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     public void myClickHandler(View target) {
+
+
         precioMin = findViewById(R.id.idPrecioMin);
         precioMax = findViewById(R.id.idPrecioMax);
 
-        if(precioMax != null || precioMin != null){
+        String min = precioMin.getText().toString();
+        String max = precioMax.getText().toString();
 
-        double pMin = Double.parseDouble(precioMin.getText().toString());
-        double pMax = Double.parseDouble(precioMax.getText().toString());
+        if (!min.equals("") && !min.equals("")) {
+
+            double pMin = Double.parseDouble(min);
+            double pMax = Double.parseDouble(max);
 
 
-        List<Gasolinera> gasolinerasFiltradas;
+            List<Gasolinera> gasolinerasFiltradas;
 
-        try {
-            switch (combustibleActual) {
-                case GASOLINA95:
-                    gasolinerasFiltradas = PresenterGasolineras.filtrarCombustibleGasolina(presenterGasolineras.getGasolineras());
-                    gasolinerasFiltradas = PresenterGasolineras.filtraPrecioGasolina(gasolinerasFiltradas, pMin, pMax);
-                    cargaGasolineras(gasolinerasFiltradas, 2);
-                    break;
+            try {
+                switch (combustibleActual) {
+                    case GASOLINA95:
+                        gasolinerasFiltradas = PresenterGasolineras.filtrarCombustibleGasolina(presenterGasolineras.getGasolineras());
+                        gasolinerasFiltradas = PresenterGasolineras.filtraPrecioGasolina(gasolinerasFiltradas, pMin, pMax);
+                        cargaGasolineras(gasolinerasFiltradas, 2);
+                        break;
 
-                case GASOLEOA:
-                    gasolinerasFiltradas = PresenterGasolineras.filtrarCombustibleGasoleo(presenterGasolineras.getGasolineras());
-                    gasolinerasFiltradas = PresenterGasolineras.filtraPrecioGasoleo(gasolinerasFiltradas, pMin, pMax);
-                    cargaGasolineras(gasolinerasFiltradas, 1);
-                    break;
-                default:
+                    case GASOLEOA:
+                        gasolinerasFiltradas = PresenterGasolineras.filtrarCombustibleGasoleo(presenterGasolineras.getGasolineras());
+                        gasolinerasFiltradas = PresenterGasolineras.filtraPrecioGasoleo(gasolinerasFiltradas, pMin, pMax);
+                        cargaGasolineras(gasolinerasFiltradas, 1);
+                        break;
+                    default:
+                }
+            } catch (PresenterGasolineras.DatoNoValido e) {
+                notificaDatoNoValido();
             }
-        }
-        catch(PresenterGasolineras.DatoNoValido e)
-        {
+        } else {
             notificaDatoNoValido();
         }
-        }else {
-            notificaDatoNoValido();
-        }
+
+
     }
 
     private void notificaDatoNoValido() {
@@ -269,6 +275,7 @@ public class MainActivity extends AppCompatActivity implements
     /**
      * Método que actua cuando un objeto desaparece del spinner. Ya que en el código nuestro las gasolineras están fijas,
      * no debe hacer nada.
+     *
      * @param arg0
      */
     @Override
