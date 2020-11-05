@@ -1,0 +1,20 @@
+Index: .idea/modules.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<project version=\"4\">\r\n  <component name=\"ProjectModuleManager\">\r\n    <modules>\r\n      <module fileurl=\"file://$PROJECT_DIR$/.idea/modules/app/AndroidProject.app.iml\" filepath=\"$PROJECT_DIR$/.idea/modules/app/AndroidProject.app.iml\" />\r\n      <module fileurl=\"file://$PROJECT_DIR$/.idea/modules/AppGasolinerasGrupo4.AndroidProject.iml\" filepath=\"$PROJECT_DIR$/.idea/modules/AppGasolinerasGrupo4.AndroidProject.iml\" />\r\n    </modules>\r\n  </component>\r\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- .idea/modules.xml	(revision 6911a2202f75c2ef9964f1da148b4d9878dd4c00)
++++ .idea/modules.xml	(date 1604596850185)
+@@ -2,6 +2,7 @@
+ <project version="4">
+   <component name="ProjectModuleManager">
+     <modules>
++      <module fileurl="file://$PROJECT_DIR$/.idea/modules/AndroidProject.iml" filepath="$PROJECT_DIR$/.idea/modules/AndroidProject.iml" />
+       <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/AndroidProject.app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/AndroidProject.app.iml" />
+       <module fileurl="file://$PROJECT_DIR$/.idea/modules/AppGasolinerasGrupo4.AndroidProject.iml" filepath="$PROJECT_DIR$/.idea/modules/AppGasolinerasGrupo4.AndroidProject.iml" />
+     </modules>
+diff --git .idea/shelf/Uncommitted_changes_before_Checkout_at_05_11_2020_12_05__Default_Changelist_.xml .idea/shelf/Uncommitted_changes_before_Checkout_at_05_11_2020_12_05__Default_Changelist_.xml
+diff --git .idea/shelf/Uncommitted_changes_before_Checkout_at_03_11_2020_12_37__Default_Changelist_.xml .idea/shelf/Uncommitted_changes_before_Checkout_at_03_11_2020_12_37__Default_Changelist_.xml
+diff --git .idea/shelf/Uncommitted_changes_before_Checkout_at_04_11_2020_20_36__Default_Changelist_.xml .idea/shelf/Uncommitted_changes_before_Checkout_at_04_11_2020_20_36__Default_Changelist_.xml
