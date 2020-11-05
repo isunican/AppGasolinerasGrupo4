@@ -81,13 +81,10 @@ public class FiltrarPrecioUITest {
             gasolinera = (Gasolinera) vista.getAdapter().getItem(i);
             gasolineras.add(gasolinera);
 
-            //Se comprueba que los valores de la vista son iguales que los de la gasolinera obtenida
-            onData(anything()).inAdapterView(withId(R.id.listViewGasolineras)).atPosition(i).onChildView(withId(R.id.textViewGasoleoA)).check(matches(withText((" " + String.valueOf(gasolinera.getGasoleoA()) + "€"))));
             onData(anything()).inAdapterView(withId(R.id.listViewGasolineras)).atPosition(i).onChildView(withId(R.id.textViewGasolina95)).check(matches(withText(" " + String.valueOf(gasolinera.getGasolina95() + "€"))));
 
             //Se comprueba que el precio de la gasolinera en la interfaz esta en el rango de valores
             onData(anything()).inAdapterView(withId(R.id.listViewGasolineras)).atPosition(i).onChildView(withId(R.id.textViewGasolina95)).check(matches(new TextViewValueMatcher()));
-            onData(anything()).inAdapterView(withId(R.id.listViewGasolineras)).atPosition(i).onChildView(withId(R.id.textViewGasoleoA)).check(matches(new TextViewValueMatcher()));
         }
 
         //CASO 2
@@ -147,8 +144,8 @@ public class FiltrarPrecioUITest {
         protected boolean matchesSafely(View item) {
             TextView textView = (TextView) item;
             String value = textView.getText().toString();
-            //Este matching esta pensado en el caso de que el precio de la gasolina no suba más de 4 cifras, se podría adaptar en un futuro
-            boolean matching = Double.parseDouble(value.substring(0,4))<1.201 && Double.parseDouble(value.substring(0,4))>1.099;
+            value = value.replace("€","");
+            boolean matching = Double.parseDouble(value)<=1.200 && Double.parseDouble(value)>=1.1;
             return matching;
         }
 
