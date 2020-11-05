@@ -42,8 +42,8 @@ import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.anything;
 import static org.hamcrest.Matchers.lessThan;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
 
 @RunWith(AndroidJUnit4.class)
 public class FiltrarPrecioUITest {
@@ -107,8 +107,7 @@ public class FiltrarPrecioUITest {
         vista = (ListView) mActivityTestRule.getActivity().findViewById(R.id.listViewGasolineras);
 
         //Se comprueba que la listview no tiene elementos
-        assertTrue(vista.getCount() == 0);
-
+        assertEquals(0, vista.getCount());
         //CASO 3
 
         //Hace click en la primera gasolinera e introduce un precio mínimo

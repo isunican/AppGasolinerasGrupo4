@@ -1,4 +1,4 @@
-package com.isunican.proyectobase.Views;
+﻿package com.isunican.proyectobase.Views;
 
 import com.isunican.proyectobase.Presenter.*;
 import com.isunican.proyectobase.Model.*;
@@ -19,8 +19,6 @@ import android.util.DisplayMetrics;
 import java.util.ArrayList;
 import java.util.List;
 
-import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -51,7 +49,7 @@ public class MainActivity extends AppCompatActivity implements
         AdapterView.OnItemSelectedListener {
 
     //String de opciones del spinner de combustibles
-    String[] combustibles = {"Gasolina95", "GasoleoA"};
+    String[] combustibles = {GASOLINA95, GASOLEOA};
 
     PresenterGasolineras presenterGasolineras;
 
@@ -73,6 +71,9 @@ public class MainActivity extends AppCompatActivity implements
     EditText precioMax;
 
     String combustibleActual = combustibles[0];
+
+    static final String GASOLINA95 = "Gasolina95";
+    static final String GASOLEOA = "GasoleoA";
 
     /**
      * onCreate
@@ -128,36 +129,51 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     public void myClickHandler(View target) {
+
+
         precioMin = findViewById(R.id.idPrecioMin);
         precioMax = findViewById(R.id.idPrecioMax);
 
-        double pMin = Double.parseDouble(precioMin.getText().toString());
-        double pMax = Double.parseDouble(precioMax.getText().toString());
+        String min = precioMin.getText().toString();
+        String max = precioMax.getText().toString();
 
-        List<Gasolinera> gasolinerasFiltradas;
+        if (!min.equals("") && !min.equals("")) {
 
-        try {
-            switch (combustibleActual) {
-                case "Gasolina95":
-                    gasolinerasFiltradas = PresenterGasolineras.filtrarCombustibleGasolina(presenterGasolineras.getGasolineras());
-                    gasolinerasFiltradas = PresenterGasolineras.filtraPrecioGasolina(gasolinerasFiltradas, pMin, pMax);
-                    cargaGasolineras(gasolinerasFiltradas, 2);
-                    break;
+            double pMin = Double.parseDouble(min);
+            double pMax = Double.parseDouble(max);
 
-                case "GasoleoA":
-                    gasolinerasFiltradas = PresenterGasolineras.filtrarCombustibleGasoleo(presenterGasolineras.getGasolineras());
-                    gasolinerasFiltradas = PresenterGasolineras.filtraPrecioGasoleo(gasolinerasFiltradas, pMin, pMax);
-                    cargaGasolineras(gasolinerasFiltradas, 1);
-                    break;
+
+            List<Gasolinera> gasolinerasFiltradas;
+
+            try {
+                switch (combustibleActual) {
+                    case GASOLINA95:
+                        gasolinerasFiltradas = PresenterGasolineras.filtrarCombustibleGasolina(presenterGasolineras.getGasolineras());
+                        gasolinerasFiltradas = PresenterGasolineras.filtraPrecioGasolina(gasolinerasFiltradas, pMin, pMax);
+                        cargaGasolineras(gasolinerasFiltradas, 2);
+                        break;
+
+                    case GASOLEOA:
+                        gasolinerasFiltradas = PresenterGasolineras.filtrarCombustibleGasoleo(presenterGasolineras.getGasolineras());
+                        gasolinerasFiltradas = PresenterGasolineras.filtraPrecioGasoleo(gasolinerasFiltradas, pMin, pMax);
+                        cargaGasolineras(gasolinerasFiltradas, 1);
+                        break;
+                    default:
+                }
+            } catch (PresenterGasolineras.DatoNoValido e) {
+                notificaDatoNoValido();
             }
+        } else {
+            notificaDatoNoValido();
         }
-        catch(PresenterGasolineras.DatoNoValido e)
-        {
-            Toast toast;
-            toast = Toast.makeText(getApplicationContext(), "Datos introducidos invalidos, introduzca parámetros correctos", Toast.LENGTH_LONG);
-            toast.show();
-        }
-        //PresenterGasolineras.filtraPrecioGasolina(presenterGasolineras.getGasolineras(), precioMin, precioMax);
+
+
+    }
+
+    private void notificaDatoNoValido() {
+        Toast toast;
+        toast = Toast.makeText(getApplicationContext(), "Datos introducidos invalidos, introduzca parámetros correctos", Toast.LENGTH_LONG);
+        toast.show();
     }
 
 
@@ -216,21 +232,22 @@ public class MainActivity extends AppCompatActivity implements
         Toast.makeText(getApplicationContext(), combustibles[position], Toast.LENGTH_LONG).show();
         List<Gasolinera> gasolineras;
         switch (combustibles[position]) {
-            case "Gasolina95":
+            case GASOLINA95:
                 gasolineras = PresenterGasolineras.filtrarCombustibleGasolina(presenterGasolineras.getGasolineras());
                 cargaGasolineras(gasolineras, 2);
                 break;
-            case "GasoleoA":
+            case GASOLEOA:
                 gasolineras = PresenterGasolineras.filtrarCombustibleGasoleo(presenterGasolineras.getGasolineras());
                 cargaGasolineras(gasolineras, 1);
                 break;
+            default:
         }
     }
 
     private void cargaGasolineras(List<Gasolinera> gasolineras, int opciones) {
         Toast toast;
         // Definimos el array adapter
-        adapter = new GasolineraArrayAdapter(this, 0, (ArrayList<Gasolinera>) gasolineras, opciones);
+        adapter = new GasolineraArrayAdapter(this, 0, gasolineras, opciones);
 
         // Obtenemos la vista de la lista
         listViewGasolineras = findViewById(R.id.listViewGasolineras);
@@ -253,9 +270,16 @@ public class MainActivity extends AppCompatActivity implements
     }
 
 
-
+    /**
+     * Método que actua cuando un objeto desaparece del spinner. Ya que en el código nuestro las gasolineras están fijas,
+     * no debe hacer nada.
+     *
+     * @param arg0
+     */
     @Override
     public void onNothingSelected(AdapterView<?> arg0) {
+        //Método que actua cuando un objeto desaparece del spinner. Ya que en el código nuestro las gasolineras están fijas,
+        //no debe hacer nada.
     }
 
     /**
@@ -326,7 +350,6 @@ public class MainActivity extends AppCompatActivity implements
          */
         @Override
         protected void onPostExecute(Boolean res) {
-            Toast toast;
 
             // Si el progressDialog estaba activado, lo oculta
             progressBar.setVisibility(View.GONE);     // To Hide ProgressBar
@@ -339,15 +362,17 @@ public class MainActivity extends AppCompatActivity implements
                 List<Gasolinera> gasolinerasTemporales = presenterGasolineras.getGasolineras();
 
                 switch (combustibleActual) {
-                    case "Gasolina95":
+                    case GASOLINA95:
                         gasolinerasTemporales = PresenterGasolineras.filtrarCombustibleGasolina(gasolinerasTemporales);
                         cargaGasolineras(gasolinerasTemporales, 2);
                         break;
 
-                    case "GasoleoA":
+                    case GASOLEOA:
                         gasolinerasTemporales = PresenterGasolineras.filtrarCombustibleGasoleo(gasolinerasTemporales);
                         cargaGasolineras(gasolinerasTemporales, 1);
                         break;
+
+                    default:
                 }
             }
 
@@ -367,9 +392,9 @@ public class MainActivity extends AppCompatActivity implements
 
                     /* Obtengo el elemento directamente de su posicion,
                      * ya que es la misma que ocupa en la lista
-                     * Alternativa 1: a partir de posicion obtener algun atributo int opcionSeleccionada = ((Gasolinera) a.getItemAtPosition(position)).getIdeess();
-                     * Alternativa 2: a partir de la vista obtener algun atributo String opcionSeleccionada = ((TextView)v.findViewById(R.id.textViewRotulo)).getText().toString();
                      */
+                    //Alternativa 1: a partir de posicion obtener algun atributo int opcionSeleccionada = ((Gasolinera) a.getItemAtPosition(position)).getIdeess();
+                    //Alternativa 2: a partir de la vista obtener algun atributo String opcionSeleccionada = ((TextView)v.findViewById(R.id.textViewRotulo)).getText().toString();
                     Intent myIntent = new Intent(MainActivity.this, DetailActivity.class);
                     myIntent.putExtra(getResources().getString(R.string.pasoDatosGasolinera), presenterGasolineras.getGasolineras().get(position));
                     MainActivity.this.startActivity(myIntent);
@@ -421,7 +446,8 @@ public class MainActivity extends AppCompatActivity implements
             Gasolinera gasolinera = listaGasolineras.get(position);
 
             // Indica el layout a usar en cada elemento de la lista
-            LayoutInflater inflater = (LayoutInflater) context.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
+            LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
             View view = inflater.inflate(R.layout.item_gasolinera, null);
 
             // Asocia las variables de dicho layout
@@ -475,23 +501,11 @@ public class MainActivity extends AppCompatActivity implements
                     viewGasoleoEspacio.setVisibility(View.GONE);
                     viewGasolinaEspacio.setVisibility(View.VISIBLE);
                     break;
+                default:
 
             }
             // carga icono
-            {
-                String rotuleImageID = gasolinera.getRotulo().toLowerCase();
-
-                // Tengo que protegerme ante el caso en el que el rotulo solo tiene digitos.
-                // En ese caso getIdentifier devuelve esos digitos en vez de 0.
-                int imageID = context.getResources().getIdentifier(rotuleImageID,
-                        "drawable", context.getPackageName());
-
-                if (imageID == 0 || TextUtils.isDigitsOnly(rotuleImageID)) {
-                    imageID = context.getResources().getIdentifier(getResources().getString(R.string.pordefecto),
-                            "drawable", context.getPackageName());
-                }
-                logo.setImageResource(imageID);
-            }
+            cargaIcono(gasolinera, logo);
 
 
             // Si las dimensiones de la pantalla son menores
@@ -512,6 +526,21 @@ public class MainActivity extends AppCompatActivity implements
             }
 
             return view;
+        }
+
+        private void cargaIcono(Gasolinera gasolinera, ImageView logo) {
+            String rotuleImageID = gasolinera.getRotulo().toLowerCase();
+
+            // Tengo que protegerme ante el caso en el que el rotulo solo tiene digitos.
+            // En ese caso getIdentifier devuelve esos digitos en vez de 0.
+            int imageID = context.getResources().getIdentifier(rotuleImageID,
+                    "drawable", context.getPackageName());
+
+            if (imageID == 0 || TextUtils.isDigitsOnly(rotuleImageID)) {
+                imageID = context.getResources().getIdentifier(getResources().getString(R.string.pordefecto),
+                        "drawable", context.getPackageName());
+            }
+            logo.setImageResource(imageID);
         }
     }
 }
