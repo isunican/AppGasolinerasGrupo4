@@ -138,7 +138,7 @@ public class MainActivity extends AppCompatActivity implements
         String min = precioMin.getText().toString();
         String max = precioMax.getText().toString();
 
-        if (!min.equals("") && !min.equals("")) {
+        if (!min.equals("") && !max.equals("")) {
 
             double pMin = Double.parseDouble(min);
             double pMax = Double.parseDouble(max);
@@ -399,6 +399,7 @@ public class MainActivity extends AppCompatActivity implements
                     /* Obtengo el elemento directamente de su posicion,
                      * ya que es la misma que ocupa en la lista
                      */
+                    
                     //Alternativa 1: a partir de posicion obtener algun atributo int opcionSeleccionada = ((Gasolinera) a.getItemAtPosition(position)).getIdeess();
                     //Alternativa 2: a partir de la vista obtener algun atributo String opcionSeleccionada = ((TextView)v.findViewById(R.id.textViewRotulo)).getText().toString();
                     Intent myIntent = new Intent(MainActivity.this, DetailActivity.class);
