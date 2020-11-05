@@ -36,11 +36,8 @@ public class ParserJSONGasolineras {
      * @throws IOException
      */
     public static List<Gasolinera> parseaArrayGasolineras (InputStream in) throws IOException {
-        JsonReader reader = new JsonReader(new InputStreamReader(in, "UTF-8"));
-        try {
+        try (JsonReader reader = new JsonReader(new InputStreamReader(in, "UTF-8"))) {
             return readArrayGasolineras(reader);
-        } finally {
-            reader.close();
         }
     }
 
@@ -61,7 +58,7 @@ public class ParserJSONGasolineras {
      * @throws IOException
      */
     public static List readArrayGasolineras (JsonReader reader) throws IOException {
-        List<Gasolinera> listGasolineras = new ArrayList<>();
+        List<Gasolinera> listGasolineras = new ArrayList<Gasolinera>();
 
         reader.beginObject();
         while(reader.hasNext()){

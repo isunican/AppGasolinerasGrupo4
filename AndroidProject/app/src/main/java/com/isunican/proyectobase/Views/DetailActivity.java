@@ -72,20 +72,23 @@ public class DetailActivity extends AppCompatActivity {
         imagenEmpresa = findViewById(R.id.idFotoEmpresa);
 
         // carga icono
-        {
-            String rotuleImageID = gasolinera.getRotulo().toLowerCase();
-
-            // Tengo que protegerme ante el caso en el que el rotulo solo tiene digitos.
-            // En ese caso getIdentifier devuelve esos digitos en vez de 0.
-            int imageID = getResources().getIdentifier(rotuleImageID,
-                    "drawable", getPackageName());
-
-            if (imageID == 0 || TextUtils.isDigitsOnly(rotuleImageID)) {
-                imageID = getResources().getIdentifier(getResources().getString(R.string.pordefecto),
-                        "drawable", getPackageName());
-            }
-            imagenEmpresa.setImageResource(imageID);
-        }
+        cargaIcono();
 
     }
+
+    private void cargaIcono() {
+        String rotuleImageID = gasolinera.getRotulo().toLowerCase();
+
+        // Tengo que protegerme ante el caso en el que el rotulo solo tiene digitos.
+        // En ese caso getIdentifier devuelve esos digitos en vez de 0.
+        int imageID = getResources().getIdentifier(rotuleImageID,
+                "drawable", getPackageName());
+
+        if (imageID == 0 || TextUtils.isDigitsOnly(rotuleImageID)) {
+            imageID = getResources().getIdentifier(getResources().getString(R.string.pordefecto),
+                    "drawable", getPackageName());
+        }
+        imagenEmpresa.setImageResource(imageID);
+    }
+
 }
