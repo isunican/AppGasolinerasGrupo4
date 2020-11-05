@@ -45,8 +45,8 @@
             android:id="@+id/textViewGasoleoALabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/marginTextView"
             android:gravity="start"
+            android:layout_marginLeft="@dimen/marginLogo"
             android:text="@string/gasoleoa"
             android:textStyle="bold" />
 
@@ -61,7 +61,7 @@
             android:id="@+id/textViewGasolina95Label"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/marginTextView"
+            android:layout_marginLeft="@dimen/marginLogo"
             android:layout_toRightOf="@+id/textViewGasoleoA"
             android:text="@string/gasolina95"
             android:textStyle="bold" />
