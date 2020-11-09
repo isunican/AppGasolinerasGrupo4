@@ -8,19 +8,86 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context=".Views.MainActivity">
+    tools:context=".views.MainActivity">
 
-    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/swiperefresh"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-        <ListView
-            android:id="@+id/listViewGasolineras"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            android:layout_weight="5"
+            android:baselineAligned="false">
 
-    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+            <EditText
+                android:id="@+id/idPrecioMin"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="top"
+                android:layout_weight="0.5"
+                android:ems="3"
+                android:gravity="top"
+                android:hint="@string/minPrecio"
+                android:inputType="numberDecimal"
+                android:textAlignment="center" />
+
+            <EditText
+                android:id="@+id/idPrecioMax"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="top"
+                android:layout_weight="0.5"
+                android:ems="3"
+                android:gravity="top"
+                android:hint="@string/maxPrecio"
+                android:inputType="numberDecimal"
+                android:textAlignment="center" />
+
+            <Button
+                android:id="@+id/botonFiltrarPrecio"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="top"
+                android:layout_marginEnd="50sp"
+                android:layout_weight="2"
+                android:gravity="start|top"
+                android:onClick="myClickHandler"
+                android:text="@string/filtrarPrecio"
+                android:textAlignment="center" />
+
+            <Spinner
+                android:id="@+id/idSpinnerCombustible"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:gravity="top" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:baselineAligned="true"
+            android:orientation="horizontal">
+
+            <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+                android:id="@+id/swiperefresh"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <ListView
+                    android:id="@+id/listViewGasolineras"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+
+            </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+        </LinearLayout>
+
+    </LinearLayout>
 
 </RelativeLayout>
+
 

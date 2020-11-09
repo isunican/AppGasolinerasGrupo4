@@ -1,17 +1,11 @@
 package com.isunican.proyectobase;
 
-import android.content.Context;
-import android.view.View;
-import android.widget.Adapter;
-
 import androidx.test.espresso.DataInteraction;
-import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.rule.ActivityTestRule;
 
-import com.isunican.proyectobase.Model.Gasolinera;
-import com.isunican.proyectobase.Views.DetailActivity;
-import com.isunican.proyectobase.Views.MainActivity;
+import com.isunican.proyectobase.model.Gasolinera;
+import com.isunican.proyectobase.views.MainActivity;
 
 import org.junit.Rule;
 import org.junit.Test;
@@ -20,17 +14,12 @@ import org.junit.runner.RunWith;
 import static androidx.test.espresso.Espresso.onData;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
-import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
-import static androidx.test.espresso.action.ViewActions.replaceText;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
-import static org.hamcrest.CoreMatchers.instanceOf;
-import static org.junit.Assert.*;
 
 import static org.hamcrest.Matchers.anything;
-import android.widget.GridView;
-import android.widget.ListAdapter;
+
 import android.widget.ListView;
 
 /**
@@ -65,7 +54,4 @@ public class ExampleInstrumentedTest {
         onView(withId(R.id.idProvincia)).check(matches(withText(gasolinera.getProvincia())));
 
     }
-
-
-
 }
