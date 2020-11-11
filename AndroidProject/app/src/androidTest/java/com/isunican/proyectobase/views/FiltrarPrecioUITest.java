@@ -30,6 +30,8 @@ import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.anything;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.fail;
 
 @RunWith(AndroidJUnit4.class)
 public class FiltrarPrecioUITest {
@@ -38,7 +40,7 @@ public class FiltrarPrecioUITest {
     public ActivityTestRule<MainActivity> mActivityTestRule = new ActivityTestRule<>(MainActivity.class);
 
     @Test
-    public void useAppContext() {
+    public void pruebasInterfazFiltrarPrecio() {
 
         Gasolinera gasolinera;
         HashSet<Gasolinera> gasolineras = new HashSet<Gasolinera>();
@@ -94,6 +96,7 @@ public class FiltrarPrecioUITest {
 
         //Se comprueba que la listview no tiene elementos
         assertEquals(0, vista.getCount());
+
         //CASO 3
 
         //Hace click en la primera gasolinera e introduce un precio mínimo
@@ -121,6 +124,86 @@ public class FiltrarPrecioUITest {
             assertFalse(gasolineras.contains(gasolinera));
         }
 
+        //CASO 4
+
+        //Hace click e introduce un precio mínimo vacio
+        ViewInteraction evento7 = onView(withId(R.id.idPrecioMin));
+        evento5.perform(click());
+        evento5.perform(replaceText(""));
+
+        //Pulsa el boton filtrar
+        onView(withId(R.id.botonFiltrarPrecio)).perform(click());
+
+        //Se recorren las gasolineras devueltas y se comprueba que la lista esta vacia
+        for(int i=0;i<vista.getAdapter().getCount();i++){
+            gasolinera = (Gasolinera) vista.getAdapter().getItem(i);
+
+            if (vista.getAdapter()!=null) {
+                if (vista.getAdapter().getCount() > 0) {
+                    // listView not empty
+                    fail("Error, la lista debería estar vacía");
+                } else {
+                    // listView  empty
+
+                }
+            }
+        }
+
+        //CASO 5
+
+        //Hace click e introduce un precio máximo vacio
+        ViewInteraction evento8 = onView(withId(R.id.idPrecioMax));
+        evento5.perform(click());
+        evento5.perform(replaceText(""));
+
+
+        //Pulsa el boton filtrar
+        onView(withId(R.id.botonFiltrarPrecio)).perform(click());
+
+        //Se recorren las gasolineras devueltas y se comprueba que la lista esta vacia
+        for(int i=0;i<vista.getAdapter().getCount();i++){
+            gasolinera = (Gasolinera) vista.getAdapter().getItem(i);
+
+            if (vista.getAdapter()!=null) {
+                if (vista.getAdapter().getCount() > 0) {
+                    // listView not empty
+                    fail("Error, la lista debería estar vacía");
+                } else {
+                    // listView  empty
+
+                }
+            }
+        }
+
+        //CASO 6
+
+        //Hace click e introduce un precio mínimo y máximo vacio
+        ViewInteraction evento9 = onView(withId(R.id.idPrecioMin));
+        evento5.perform(click());
+        evento5.perform(replaceText(""));
+
+        //Hace click e introduce un precio máximo
+        ViewInteraction evento10 = onView(withId(R.id.idPrecioMax));
+        evento8.perform(click());
+        evento8.perform(replaceText(""));
+        closeSoftKeyboard();
+
+        //Pulsa el boton filtrar
+        onView(withId(R.id.botonFiltrarPrecio)).perform(click());
+
+        //Se recorren las gasolineras devueltas y se comprueba que la lista esta vacia
+        for(int i=0;i<vista.getAdapter().getCount();i++){
+            gasolinera = (Gasolinera) vista.getAdapter().getItem(i);
+
+            if (vista.getAdapter()!=null) {
+                if (vista.getAdapter().getCount() > 0) {
+                    // listView not empty
+                    fail("Error, la lista debería estar vacía");
+                } else {
+                    // listView  empty
+                }
+            }
+        }
 
     }
 
