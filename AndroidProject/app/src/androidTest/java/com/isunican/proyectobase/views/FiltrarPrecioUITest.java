@@ -39,11 +39,19 @@ public class FiltrarPrecioUITest {
     @Rule
     public ActivityTestRule<MainActivity> mActivityTestRule = new ActivityTestRule<>(MainActivity.class);
 
+    //Se utilizan estos atributos para cambiar los valores del matcher
+    private double comparacion_min;
+    private double comparacion_max;
+
+
     @Test
     public void pruebasInterfazFiltrarPrecio() {
 
         Gasolinera gasolinera;
         HashSet<Gasolinera> gasolineras = new HashSet<Gasolinera>();
+        comparacion_max = 1.200;
+        comparacion_min = 1.1;
+
 
         //CASO 1
 
@@ -128,62 +136,76 @@ public class FiltrarPrecioUITest {
 
         //Hace click e introduce un precio mínimo vacio
         ViewInteraction evento7 = onView(withId(R.id.idPrecioMin));
-        evento5.perform(click());
-        evento5.perform(replaceText(""));
+        evento7.perform(click());
+        evento7.perform(replaceText(""));
+
+        //Hace click e introduce un precio máximo
+        ViewInteraction evento8 = onView(withId(R.id.idPrecioMax));
+        evento8.perform(click());
+        evento8.perform(replaceText("1.200"));
 
         //Pulsa el boton filtrar
         onView(withId(R.id.botonFiltrarPrecio)).perform(click());
 
-        //Se recorren las gasolineras devueltas y se comprueba que la lista esta vacia
+        //Obtiene la lista de cada objeto Gasolinera después de aplicar el filtro
+        vista = (ListView) mActivityTestRule.getActivity().findViewById(R.id.listViewGasolineras);
+
+        comparacion_max = 1.200;
+        comparacion_min = 0;
+
+        //Se recorren las gasolineras devueltas y se comprueba que gasolina95 y gasoleoA estan en el rango del filtro
         for(int i=0;i<vista.getAdapter().getCount();i++){
             gasolinera = (Gasolinera) vista.getAdapter().getItem(i);
+            gasolineras.add(gasolinera);
 
-            if (vista.getAdapter()!=null) {
-                if (vista.getAdapter().getCount() > 0) {
-                    // listView not empty
-                    fail("Error, la lista debería estar vacía");
-                } else {
-                    // listView  empty
+            onData(anything()).inAdapterView(withId(R.id.listViewGasolineras)).atPosition(i).onChildView(withId(R.id.textViewGasolina95)).check(matches(withText(" " + String.valueOf(gasolinera.getGasolina95() + "€"))));
 
-                }
-            }
+            //Se comprueba que el precio de la gasolinera en la interfaz esta en el rango de valores
+            onData(anything()).inAdapterView(withId(R.id.listViewGasolineras)).atPosition(i).onChildView(withId(R.id.textViewGasolina95)).check(matches(new TextViewValueMatcher()));
         }
 
         //CASO 5
 
+        //Hace click e introduce un precio mínimo
+        ViewInteraction evento10 = onView(withId(R.id.idPrecioMin));
+        evento10.perform(click());
+        evento10.perform(replaceText("1.200"));
+
         //Hace click e introduce un precio máximo vacio
-        ViewInteraction evento8 = onView(withId(R.id.idPrecioMax));
-        evento5.perform(click());
-        evento5.perform(replaceText(""));
+        ViewInteraction evento9 = onView(withId(R.id.idPrecioMax));
+        evento9.perform(click());
+        evento9.perform(replaceText(""));
 
 
         //Pulsa el boton filtrar
         onView(withId(R.id.botonFiltrarPrecio)).perform(click());
 
-        //Se recorren las gasolineras devueltas y se comprueba que la lista esta vacia
+        //Obtiene la lista de cada objeto Gasolinera después de aplicar el filtro
+        vista = (ListView) mActivityTestRule.getActivity().findViewById(R.id.listViewGasolineras);
+
+        comparacion_max = Double.MAX_VALUE;
+        comparacion_min = 1.200;
+
+        //Se recorren las gasolineras devueltas y se comprueba que gasolina95 y gasoleoA estan en el rango del filtro
         for(int i=0;i<vista.getAdapter().getCount();i++){
             gasolinera = (Gasolinera) vista.getAdapter().getItem(i);
+            gasolineras.add(gasolinera);
 
-            if (vista.getAdapter()!=null) {
-                if (vista.getAdapter().getCount() > 0) {
-                    // listView not empty
-                    fail("Error, la lista debería estar vacía");
-                } else {
-                    // listView  empty
+            onData(anything()).inAdapterView(withId(R.id.listViewGasolineras)).atPosition(i).onChildView(withId(R.id.textViewGasolina95)).check(matches(withText(" " + String.valueOf(gasolinera.getGasolina95() + "€"))));
 
-                }
-            }
+            //Se comprueba que el precio de la gasolinera en la interfaz esta en el rango de valores
+            onData(anything()).inAdapterView(withId(R.id.listViewGasolineras)).atPosition(i).onChildView(withId(R.id.textViewGasolina95)).check(matches(new TextViewValueMatcher()));
         }
 
         //CASO 6
 
         //Hace click e introduce un precio mínimo y máximo vacio
-        ViewInteraction evento9 = onView(withId(R.id.idPrecioMin));
+        ViewInteraction evento11 = onView(withId(R.id.idPrecioMin));
         evento5.perform(click());
         evento5.perform(replaceText(""));
 
         //Hace click e introduce un precio máximo
-        ViewInteraction evento10 = onView(withId(R.id.idPrecioMax));
+        ViewInteraction evento12 = onView(withId(R.id.idPrecioMax));
         evento8.perform(click());
         evento8.perform(replaceText(""));
         closeSoftKeyboard();
@@ -191,20 +213,18 @@ public class FiltrarPrecioUITest {
         //Pulsa el boton filtrar
         onView(withId(R.id.botonFiltrarPrecio)).perform(click());
 
-        //Se recorren las gasolineras devueltas y se comprueba que la lista esta vacia
-        for(int i=0;i<vista.getAdapter().getCount();i++){
-            gasolinera = (Gasolinera) vista.getAdapter().getItem(i);
+        //Obtiene la lista de cada objeto Gasolinera después de aplicar el filtro
+        vista = (ListView) mActivityTestRule.getActivity().findViewById(R.id.listViewGasolineras);
 
-            if (vista.getAdapter()!=null) {
-                if (vista.getAdapter().getCount() > 0) {
-                    // listView not empty
-                    fail("Error, la lista debería estar vacía");
-                } else {
-                    // listView  empty
-                }
+        //Se comprueba que la lista esta vacio
+        if (vista.getAdapter()!=null) {
+            if (vista.getAdapter().getCount() > 0) {
+                // listView not empty
+                fail("Error, la lista debería estar vacía");
+            } else {
+                // listView  empty
             }
         }
-
     }
 
     public class TextViewValueMatcher extends TypeSafeMatcher<View> {
@@ -213,7 +233,7 @@ public class FiltrarPrecioUITest {
             TextView textView = (TextView) item;
             String value = textView.getText().toString();
             value = value.replace("€","");
-            boolean matching = Double.parseDouble(value)<=1.200 && Double.parseDouble(value)>=1.1;
+            boolean matching = Double.parseDouble(value)<=comparacion_max && Double.parseDouble(value)>=comparacion_min;
             return matching;
         }
 
