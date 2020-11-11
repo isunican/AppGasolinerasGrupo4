@@ -166,7 +166,6 @@ public class MainActivity extends AppCompatActivity implements
             notificaDatoNoValido();
         }
 
-
     }
 
     private void notificaDatoNoValido() {
@@ -174,7 +173,6 @@ public class MainActivity extends AppCompatActivity implements
         toast = Toast.makeText(getApplicationContext(), "Datos introducidos invalidos, introduzca parámetros correctos", Toast.LENGTH_LONG);
         toast.show();
     }
-
 
     /**
      * Menú action bar
@@ -205,8 +203,12 @@ public class MainActivity extends AppCompatActivity implements
         if (item.getItemId() == R.id.itemActualizar) {
             mSwipeRefreshLayout.setRefreshing(true);
             new CargaDatosGasolinerasTask(this).execute();
-        } else if (item.getItemId() == R.id.itemInfo) {
+        } if (item.getItemId() == R.id.itemInfo) {
             Intent myIntent = new Intent(MainActivity.this, InfoActivity.class);
+            MainActivity.this.startActivity(myIntent);
+        }
+        if (item.getItemId() == R.id.itemVehiculos) {
+            Intent myIntent = new Intent(MainActivity.this, VehiclesActivity.class);
             MainActivity.this.startActivity(myIntent);
         }
         return true;
@@ -381,9 +383,6 @@ public class MainActivity extends AppCompatActivity implements
                     default:
                 }
             }
-
-
-
 
             /*
              * Define el manejo de los eventos de click sobre elementos de la lista
