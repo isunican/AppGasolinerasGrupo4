@@ -18,11 +18,14 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 
 import com.isunican.proyectobase.R;
+import com.isunican.proyectobase.model.Gasolinera;
 import com.isunican.proyectobase.model.Vehiculo;
 import com.isunican.proyectobase.presenter.PresenterVehiculos;
 
@@ -41,6 +44,8 @@ public class VehiclesActivity extends AppCompatActivity implements
     // Barra de progreso circular para mostar progeso de carga
     ProgressBar progressBar;
 
+    // Swipe and refresh (para recargar la lista con un swipe)
+    SwipeRefreshLayout mSwipeRefreshLayout;
 
     /**
      * onCreate
@@ -69,6 +74,16 @@ public class VehiclesActivity extends AppCompatActivity implements
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setIcon(R.drawable.por_defecto_mod);
 
+        // Swipe and refresh
+        // Al hacer swipe en la lista, lanza la tarea asíncrona de carga de datos
+        mSwipeRefreshLayout = findViewById(R.id.swiperefresh);
+        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                new VehiclesActivity.CargaDatosVehiculosTask(VehiclesActivity.this).execute();
+            }
+        });
+
         // Al terminar de inicializar todas las variables
         // se lanza una tarea para cargar los datos de los vehiculos
         // Esto se ha de hacer en segundo plano definiendo una tarea asíncrona
@@ -94,16 +109,41 @@ public class VehiclesActivity extends AppCompatActivity implements
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-
+        //No se espera de momento realizar ninguna accion. Cuando se incluya el boton de añadir
+        // vehiculo aqui habra que implementarlo
     }
 
+    private void cargaGasolineras(List<Vehiculo> vehiculos) {
+        Toast toast;
+        // Definimos el array adapter
+        adapter = new VehiclesActivity.VehiculoArrayAdapter(this,0, vehiculos);
+
+        // Obtenemos la vista de la lista
+        listViewVehiculos = findViewById(R.id.listViewGasolineras);
+
+        // Cargamos los datos en la lista
+        if (!presenterVehiculos.getVehiculos().isEmpty()) {
+            // datos obtenidos con exito
+            listViewVehiculos.setAdapter(adapter);
+            toast = Toast.makeText(getApplicationContext(), getResources().getString(R.string.datos_exito), Toast.LENGTH_LONG);
+        } else {
+            // los datos estan siendo actualizados en el servidor, por lo que no son actualmente accesibles
+            // sucede en torno a las :00 y :30 de cada hora
+            toast = Toast.makeText(getApplicationContext(), getResources().getString(R.string.datos_no_accesibles), Toast.LENGTH_LONG);
+        }
+
+        // Muestra el mensaje del resultado de la operación en un toast
+        if (toast != null) {
+            toast.show();
+        }
+    }
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
-
+        //De momento no hace nada
     }
 
     /**
-     * CargaDatosVehiclesGasolinerasTask
+     * CargaDatosVehiculosTask
      * <p>
      * Tarea asincrona para obtener los datos de los vehiculos
      * en segundo plano.
@@ -207,12 +247,16 @@ public class VehiclesActivity extends AppCompatActivity implements
 
         Adaptador para inyectar los datos de los vehiculos
         en el listview del layout de vehiculos de la aplicacion
+        @param opciones
+        0: Introduce combustible gasolina
+        1: Introduce combustible gasoleo
     ------------------------------------------------------------------
     */
     class VehiculoArrayAdapter extends ArrayAdapter<Vehiculo> {
 
         private Context context;
         private List<Vehiculo> listaVehiculos;
+
 
         // Constructor
         public VehiculoArrayAdapter(Context context, int resource, List<Vehiculo> objects) {
@@ -232,63 +276,20 @@ public class VehiclesActivity extends AppCompatActivity implements
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
             View view = inflater.inflate(R.layout.item_vehiculo, null);
-            /*
+
             // Asocia las variables de dicho layout
-            ImageView marca = view.findViewById(R.id.imageViewLogo);
-            TextView modelo = view.findViewById(R.id.textViewRotulo);
-            TextView matricula = view.findViewById(R.id.textViewDireccion);
-            TextView gasoleoA = view.findViewById(R.id.textViewGasoleoA);
-            TextView gasolina95 = view.findViewById(R.id.textViewGasolina95);
+            ImageView marca = view.findViewById(R.id.logoMarca);
+            TextView modelo = view.findViewById(R.id.modelo);
+            TextView matricula = view.findViewById(R.id.matricula);
+            TextView combustible = view.findViewById(R.id.combustible);
 
             // Y carga los datos del item
-            rotulo.setText(gasolinera.getRotulo());
-            direccion.setText(gasolinera.getDireccion());
-            TextView viewGasoleo;
-            TextView viewGasolina;
+            modelo.setText(vehiculo.getMarca());
+            matricula.setText(vehiculo.getMatricula());
+            combustible.setText(vehiculo.getCombustible());
 
-            viewGasoleo = view.findViewById(R.id.textViewGasoleoALabel);
-            viewGasolina = view.findViewById(R.id.textViewGasolina95Label);
-
-            TextView viewGasoleoEspacio;
-            TextView viewGasolinaEspacio;
-
-            viewGasoleoEspacio = view.findViewById(R.id.textViewGasoleoA);
-            viewGasolinaEspacio = view.findViewById(R.id.textViewGasolina95);
-
-            switch (opciones) {
-
-                case 0:
-                    gasoleoA.setText(" " + gasolinera.getGasoleoA() + getResources().getString(R.string.moneda));
-                    gasolina95.setText(" " + gasolinera.getGasolina95() + getResources().getString(R.string.moneda));
-                    viewGasoleo.setVisibility(View.VISIBLE);
-                    viewGasolina.setVisibility(View.VISIBLE);
-
-                    viewGasoleoEspacio.setVisibility(View.VISIBLE);
-                    viewGasolinaEspacio.setVisibility(View.VISIBLE);
-                    break;
-
-                case 1:
-                    gasoleoA.setText(" " + gasolinera.getGasoleoA() + getResources().getString(R.string.moneda));
-                    viewGasoleo.setVisibility(View.VISIBLE);
-                    viewGasolina.setVisibility(View.GONE);
-
-                    viewGasoleoEspacio.setVisibility(View.VISIBLE);
-                    viewGasolinaEspacio.setVisibility(View.GONE);
-                    break;
-
-                case 2:
-                    gasolina95.setText(" " + gasolinera.getGasolina95() + getResources().getString(R.string.moneda));
-                    viewGasoleo.setVisibility(View.GONE);
-                    viewGasolina.setVisibility(View.VISIBLE);
-
-                    viewGasoleoEspacio.setVisibility(View.GONE);
-                    viewGasolinaEspacio.setVisibility(View.VISIBLE);
-                    break;
-                default:
-
-            }
             // carga icono
-            cargaIcono(gasolinera, logo);
+            cargaIcono(vehiculo, marca);
 
             // Si las dimensiones de la pantalla son menores
             // reducimos el texto de las etiquetas para que se vea correctamente
@@ -306,10 +307,10 @@ public class VehiclesActivity extends AppCompatActivity implements
                 tmp = view.findViewById(R.id.textViewGasolina95);
                 tmp.setTextSize(11);
             }
-            */
+
             return view;
         }
-        /*
+
         private void cargaIcono(Vehiculo vehiculo, ImageView logo) {
             String rotuleImageID = vehiculo.getMarca().toLowerCase();
 
@@ -324,7 +325,7 @@ public class VehiclesActivity extends AppCompatActivity implements
             }
             logo.setImageResource(imageID);
         }
-        */
+
 
     }
 }
