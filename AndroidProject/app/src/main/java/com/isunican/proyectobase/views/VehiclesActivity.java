@@ -44,8 +44,6 @@ public class VehiclesActivity extends AppCompatActivity implements
     // Barra de progreso circular para mostar progeso de carga
     ProgressBar progressBar;
 
-    // Swipe and refresh (para recargar la lista con un swipe)
-    SwipeRefreshLayout mSwipeRefreshLayout;
 
     /**
      * onCreate
@@ -58,7 +56,7 @@ public class VehiclesActivity extends AppCompatActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_vehicle);
-
+        /*
         presenterVehiculos = new PresenterVehiculos();
 
 
@@ -74,20 +72,11 @@ public class VehiclesActivity extends AppCompatActivity implements
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setIcon(R.drawable.por_defecto_mod);
 
-        // Swipe and refresh
-        // Al hacer swipe en la lista, lanza la tarea asíncrona de carga de datos
-        mSwipeRefreshLayout = findViewById(R.id.swiperefresh);
-        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                new VehiclesActivity.CargaDatosVehiculosTask(VehiclesActivity.this).execute();
-            }
-        });
-
         // Al terminar de inicializar todas las variables
         // se lanza una tarea para cargar los datos de los vehiculos
         // Esto se ha de hacer en segundo plano definiendo una tarea asíncrona
         new CargaDatosVehiculosTask(this).execute();
+        */
     }
 
     /**
@@ -113,6 +102,7 @@ public class VehiclesActivity extends AppCompatActivity implements
         // vehiculo aqui habra que implementarlo
     }
 
+    /*
     private void cargaGasolineras(List<Vehiculo> vehiculos) {
         Toast toast;
         // Definimos el array adapter
@@ -137,6 +127,9 @@ public class VehiclesActivity extends AppCompatActivity implements
             toast.show();
         }
     }
+
+    */
+
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
         //De momento no hace nada
@@ -228,7 +221,6 @@ public class VehiclesActivity extends AppCompatActivity implements
              */
             listViewVehiculos.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 public void onItemClick(AdapterView<?> a, View v, int position, long id) {
-
                     /* Obtengo el elemento directamente de su posicion,
                      * ya que es la misma que ocupa en la lista
                      */
@@ -284,7 +276,7 @@ public class VehiclesActivity extends AppCompatActivity implements
             TextView combustible = view.findViewById(R.id.combustible);
 
             // Y carga los datos del item
-            modelo.setText(vehiculo.getMarca());
+            modelo.setText(vehiculo.getModelo());
             matricula.setText(vehiculo.getMatricula());
             combustible.setText(vehiculo.getCombustible());
 
@@ -294,8 +286,9 @@ public class VehiclesActivity extends AppCompatActivity implements
             // Si las dimensiones de la pantalla son menores
             // reducimos el texto de las etiquetas para que se vea correctamente
             DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
+            /*
             if (displayMetrics.widthPixels < 720) {
-                TextView tv = view.findViewById(R.id.textViewGasoleoALabel);
+                TextView tv = view.findViewById(R.id.logoMarca);
                 RelativeLayout.LayoutParams params = ((RelativeLayout.LayoutParams) tv.getLayoutParams());
                 params.setMargins(15, 0, 0, 0);
                 tv.setTextSize(11);
@@ -306,9 +299,11 @@ public class VehiclesActivity extends AppCompatActivity implements
                 tmp.setTextSize(11);
                 tmp = view.findViewById(R.id.textViewGasolina95);
                 tmp.setTextSize(11);
-            }
 
+            }
+             */
             return view;
+
         }
 
         private void cargaIcono(Vehiculo vehiculo, ImageView logo) {
@@ -325,8 +320,6 @@ public class VehiclesActivity extends AppCompatActivity implements
             }
             logo.setImageResource(imageID);
         }
-
-
     }
 }
 
