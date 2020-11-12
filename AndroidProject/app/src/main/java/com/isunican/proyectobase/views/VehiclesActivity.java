@@ -195,7 +195,6 @@ public class VehiclesActivity extends AppCompatActivity implements
                     Intent myIntent = new Intent(VehiclesActivity.this, DetailActivity.class);
                     myIntent.putExtra(getResources().getString(R.string.pasoDatosGasolinera), presenterVehiculos.getVehiculos().get(position));
                     VehiclesActivity.this.startActivity(myIntent);
-
                 }
             });
         }
