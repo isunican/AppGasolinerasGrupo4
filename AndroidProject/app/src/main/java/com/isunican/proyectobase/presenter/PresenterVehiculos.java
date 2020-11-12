@@ -19,6 +19,7 @@ public class PresenterVehiculos {
      */
     public PresenterVehiculos() {
         vehiculos = new ArrayList<>();
+        this.cargaDatosDummy();
     }
 
     public List<Vehiculo> getVehiculos() {
@@ -40,7 +41,9 @@ public class PresenterVehiculos {
      * @return boolean Devuelve true si se han podido cargar los datos
      */
     public boolean cargaDatosVehiculos() {
-        return cargaDatosLocales("fichero");
+        // De momento vamos a hacer que cargue la lista ya creada pero la idea es que lo cargue
+        // desde un fichero JSON
+        return cargaDatosDummy();
     }
 
     /**

@@ -56,10 +56,11 @@ public class VehiclesActivity extends AppCompatActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_vehicle);
-        /*
+
         presenterVehiculos = new PresenterVehiculos();
+        cargaVehiculos(presenterVehiculos.getVehiculos());
 
-
+        /*
         // Barra de progreso
         // https://materialdoc.com/components/progress/
         progressBar = new ProgressBar(VehiclesActivity.this, null, android.R.attr.progressBarStyleLarge);
@@ -79,22 +80,6 @@ public class VehiclesActivity extends AppCompatActivity implements
         */
     }
 
-    /**
-     * Menú action bar
-     * <p>
-     * Redefine métodos para el uso de un menú de tipo action bar.
-     * <p>
-     * onCreateOptionsMenu
-     * Carga las opciones del menú a partir del fichero de recursos menu/menu.xml
-     * <p>
-     * onOptionsItemSelected
-     * Define las respuestas a las distintas opciones del menú
-     */
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu, menu);
-        return true;
-    }
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -102,20 +87,19 @@ public class VehiclesActivity extends AppCompatActivity implements
         // vehiculo aqui habra que implementarlo
     }
 
-    /*
-    private void cargaGasolineras(List<Vehiculo> vehiculos) {
+    private void cargaVehiculos(List<Vehiculo> vehiculos) {
         Toast toast;
         // Definimos el array adapter
         adapter = new VehiclesActivity.VehiculoArrayAdapter(this,0, vehiculos);
 
         // Obtenemos la vista de la lista
-        listViewVehiculos = findViewById(R.id.listViewGasolineras);
+        listViewVehiculos = findViewById(R.id.listViewVehiculos);
 
         // Cargamos los datos en la lista
         if (!presenterVehiculos.getVehiculos().isEmpty()) {
             // datos obtenidos con exito
             listViewVehiculos.setAdapter(adapter);
-            toast = Toast.makeText(getApplicationContext(), getResources().getString(R.string.datos_exito), Toast.LENGTH_LONG);
+            toast = Toast.makeText(getApplicationContext(), getResources().getString(R.string.Carga_vehiculos), Toast.LENGTH_LONG);
         } else {
             // los datos estan siendo actualizados en el servidor, por lo que no son actualmente accesibles
             // sucede en torno a las :00 y :30 de cada hora
@@ -128,11 +112,13 @@ public class VehiclesActivity extends AppCompatActivity implements
         }
     }
 
-    */
-
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
         //De momento no hace nada
+    }
+
+    public void myClickHandler(View view) {
+       cargaVehiculos(presenterVehiculos.getVehiculos());
     }
 
     /**
@@ -225,7 +211,7 @@ public class VehiclesActivity extends AppCompatActivity implements
                      * ya que es la misma que ocupa en la lista
                      */
                     Intent myIntent = new Intent(VehiclesActivity.this, DetailActivity.class);
-                    myIntent.putExtra(getResources().getString(R.string.pasoDatosGasolinera), presenterVehiculos.getVehiculos().get(position));
+                    myIntent.putExtra(getResources().getString(R.string.pasoDatosVehiculo), presenterVehiculos.getVehiculos().get(position));
                     VehiclesActivity.this.startActivity(myIntent);
                 }
             });
@@ -271,9 +257,9 @@ public class VehiclesActivity extends AppCompatActivity implements
 
             // Asocia las variables de dicho layout
             ImageView marca = view.findViewById(R.id.logoMarca);
-            TextView modelo = view.findViewById(R.id.modelo);
-            TextView matricula = view.findViewById(R.id.matricula);
-            TextView combustible = view.findViewById(R.id.combustible);
+            TextView modelo = view.findViewById(R.id.TextModelo);
+            TextView matricula = view.findViewById(R.id.textMatricula);
+            TextView combustible = view.findViewById(R.id.textCombustible);
 
             // Y carga los datos del item
             modelo.setText(vehiculo.getModelo());
@@ -286,6 +272,7 @@ public class VehiclesActivity extends AppCompatActivity implements
             // Si las dimensiones de la pantalla son menores
             // reducimos el texto de las etiquetas para que se vea correctamente
             DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
+
             /*
             if (displayMetrics.widthPixels < 720) {
                 TextView tv = view.findViewById(R.id.logoMarca);
@@ -301,9 +288,8 @@ public class VehiclesActivity extends AppCompatActivity implements
                 tmp.setTextSize(11);
 
             }
-             */
+            */
             return view;
-
         }
 
         private void cargaIcono(Vehiculo vehiculo, ImageView logo) {
