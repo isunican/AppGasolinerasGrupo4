@@ -1,9 +1,11 @@
 package com.isunican.proyectobase.views;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
@@ -11,12 +13,17 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -43,6 +50,12 @@ public class VehiclesActivity extends AppCompatActivity implements
 
     // Barra de progreso circular para mostar progeso de carga
     ProgressBar progressBar;
+
+    // Elementos del formulario para anhadir vehiculo
+    Button  btn_cancelar, btn_aceptar;
+    ImageButton btn_anhadirVehiculo;
+    EditText txt_Marca, txt_Modelo, txt_Matricula;
+    Spinner spiner_tipo_combustible;
 
 
     /**
@@ -81,8 +94,75 @@ public class VehiclesActivity extends AppCompatActivity implements
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        //No se espera de momento realizar ninguna accion. Cuando se incluya el boton de añadir
-        // vehiculo aqui habra que implementarlo
+        //No se espera de momento realizar ninguna accion. Sirve para los spinner
+
+    }
+
+
+    public void myClickHandler(View view) {
+        System.out.println("BOTON");
+        btn_anhadirVehiculo = findViewById(R.id.imageButton2);
+        btn_aceptar = findViewById(R.id.idBotonAceptar);
+        btn_cancelar = findViewById(R.id.idBotonCancelar);
+
+        btn_anhadirVehiculo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showDialog();
+            }
+        });
+    }
+
+    private void showDialog(){
+        AlertDialog.Builder alert;
+
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
+            alert = new AlertDialog.Builder(this, android.R.style.Theme_Material_Dialog_Alert);
+        }
+        else{
+            alert = new AlertDialog.Builder(this);
+        }
+
+        LayoutInflater inflater = getLayoutInflater();
+        View view = inflater.inflate(R.layout.activity_alert_dialog, null);
+        txt_Marca = view.findViewById(R.id.idIntroduceMarca);
+        txt_Modelo = view.findViewById(R.id.idIntroduceModelo);
+        txt_Matricula = view.findViewById(R.id.idIntroduceMatricula);
+        btn_aceptar = view.findViewById(R.id.idBotonAceptar);
+        btn_cancelar = view.findViewById(R.id.idBotonCancelar);
+        //Anhadir el spinner
+
+        alert.setView(view);
+
+        alert.setCancelable(false);
+
+        final AlertDialog dialog = alert.create();
+        dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+        dialog.show();
+
+        btn_aceptar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String mar = txt_Marca.getText().toString();
+                String model = txt_Modelo.getText().toString();
+                String matric = txt_Matricula.getText().toString();
+                Vehiculo vehiculo = new Vehiculo(1 ,mar, model, matric, "gasolina");
+                presenterVehiculos.getVehiculos().add(vehiculo);
+                Toast.makeText(getApplicationContext(), "Datos añadidos", Toast.LENGTH_LONG).show();
+                dialog.dismiss();
+                cargaVehiculos(presenterVehiculos.getVehiculos());
+            }
+        });
+
+        btn_cancelar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getApplicationContext(), "Datos eliminados", Toast.LENGTH_LONG).show();
+                dialog.dismiss();
+            }
+        });
+
+
     }
 
     private void cargaVehiculos(List<Vehiculo> vehiculos) {
@@ -115,9 +195,6 @@ public class VehiclesActivity extends AppCompatActivity implements
         //De momento no hace nada
     }
 
-    public void myClickHandler(View view) {
-       cargaVehiculos(presenterVehiculos.getVehiculos());
-    }
 
     /**
      * CargaDatosVehiculosTask
