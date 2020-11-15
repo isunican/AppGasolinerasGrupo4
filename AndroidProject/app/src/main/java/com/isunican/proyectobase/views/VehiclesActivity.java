@@ -56,7 +56,6 @@ public class VehiclesActivity extends AppCompatActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_vehicle);
-
         presenterVehiculos = new PresenterVehiculos();
         cargaVehiculos(presenterVehiculos.getVehiculos());
 
@@ -80,7 +79,6 @@ public class VehiclesActivity extends AppCompatActivity implements
         */
     }
 
-
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         //No se espera de momento realizar ninguna accion. Cuando se incluya el boton de añadir
@@ -90,7 +88,7 @@ public class VehiclesActivity extends AppCompatActivity implements
     private void cargaVehiculos(List<Vehiculo> vehiculos) {
         Toast toast;
         // Definimos el array adapter
-        adapter = new VehiclesActivity.VehiculoArrayAdapter(this,0, vehiculos);
+        adapter = new VehiculoArrayAdapter(this,0, vehiculos);
 
         // Obtenemos la vista de la lista
         listViewVehiculos = findViewById(R.id.listViewVehiculos);
@@ -272,7 +270,6 @@ public class VehiclesActivity extends AppCompatActivity implements
             // Si las dimensiones de la pantalla son menores
             // reducimos el texto de las etiquetas para que se vea correctamente
             DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
-
             /*
             if (displayMetrics.widthPixels < 720) {
                 TextView tv = view.findViewById(R.id.logoMarca);
