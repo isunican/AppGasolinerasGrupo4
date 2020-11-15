@@ -300,9 +300,6 @@ public class VehiclesActivity extends AppCompatActivity implements
 
         Adaptador para inyectar los datos de los vehiculos
         en el listview del layout de vehiculos de la aplicacion
-        @param opciones
-        0: Introduce combustible gasolina
-        1: Introduce combustible gasoleo
     ------------------------------------------------------------------
     */
     class VehiculoArrayAdapter extends ArrayAdapter<Vehiculo> {
