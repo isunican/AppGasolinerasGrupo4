@@ -8,6 +8,7 @@ import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import static org.junit.Assert.*;
 
@@ -80,26 +81,26 @@ public class PresenterGasolinerasTest {
     @Test
     public void filtrarCombustibleGasolinaTest()
     {
-        // Caso valido UT.1a
+        // Caso valido UT.3a
         assertEquals(gasolinerasGasolina, PresenterGasolineras.filtrarCombustibleGasolina(gasolinerasCompleto));
 
-        // Caso valido UT.1b
+        // Caso valido UT.3b
         assertEquals(gasolinerasVacias, PresenterGasolineras.filtrarCombustibleGasolina(gasolinerasGasoleo));
 
-        // Caso valido UT.1c
+        // Caso valido UT.3c
         assertEquals(gasolinerasVacias, PresenterGasolineras.filtrarCombustibleGasolina(gasolinerasVacias));
     }
 
     @Test
     public void filtrarCombustibleGasoleoTest()
     {
-        // Caso valido UT.2a
+        // Caso valido UT.4a
         assertEquals(gasolinerasGasoleo, PresenterGasolineras.filtrarCombustibleGasoleo(gasolinerasCompleto));
 
-        // Caso valido UT.2b
+        // Caso valido UT.4b
         assertEquals(gasolinerasVacias, PresenterGasolineras.filtrarCombustibleGasoleo(gasolinerasGasolina));
 
-        // Caso valido UT.2c
+        // Caso valido UT.4c
         assertEquals(gasolinerasVacias, PresenterGasolineras.filtrarCombustibleGasoleo(gasolinerasVacias));
     }
 
@@ -184,7 +185,6 @@ public class PresenterGasolinerasTest {
         } catch (PresenterGasolineras.DatoNoValido e){
 
         };
-
     }
 }
 
