@@ -1,0 +1,11 @@
+
+{
+java:S2293"YReplace the type specification in this constructor call with the diamond operator ("<>").(ÿÐ…³üÿÿÿÿ8Û¸°¼Ý.
+±
+java:S1130Q"“Remove the declaration of thrown exception 'com.isunican.proyectobase.presenter.PresenterVehiculos$MatriculaNoValida' which is a runtime exception.(åø±¥8Û¸°¼Ý.
+¬
+java:S1130Q"ŽRemove the declaration of thrown exception 'com.isunican.proyectobase.presenter.PresenterVehiculos$DatoNoValido' which is a runtime exception.(åø±¥8Û¸°¼Ý.
+°
+java:S1130Q"’Remove the declaration of thrown exception 'com.isunican.proyectobase.presenter.PresenterVehiculos$VehiculoYaExiste' which is a runtime exception.(åø±¥8Û¸°¼Ý.
+Š
+java:S1319"mThe return type of this method should be an interface such as "Map" rather than the implementation "HashMap".(Æªëæ8Û¸°¼Ý.
