@@ -13,7 +13,6 @@ import android.os.Parcelable;
 
 public class Vehiculo implements Parcelable {
 
-    private int ideess;
     private String marca;
     private String modelo;
     private String matricula;
@@ -23,16 +22,12 @@ public class Vehiculo implements Parcelable {
      *Constructor, getters y setters
      */
 
-    public Vehiculo(int ideess, String marca, String modelo, String matricula, String combustible){
-        this.ideess = ideess;
+    public Vehiculo( String marca, String modelo, String matricula, String combustible){
         this.marca = marca;
         this.modelo = modelo;
         this.matricula = matricula;
         this.combustible = combustible;
     }
-
-    public int getIdeess() {return ideess;}
-    public void setIdeess(int ideess) {this.ideess = ideess;}
 
     public String getMarca() {return marca;}
     public void setMarca(String marca) {this.marca = marca;}
@@ -59,7 +54,6 @@ public class Vehiculo implements Parcelable {
      * Vehiculo v = getIntent().getExtras().getParcelable("id")
      */
     protected Vehiculo(Parcel in) {
-        ideess = in.readInt();
         marca = in.readString();
         modelo = in.readString();
         matricula = in.readString();
@@ -73,7 +67,6 @@ public class Vehiculo implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(ideess);
         dest.writeString(marca);
         dest.writeString(modelo);
         dest.writeString(matricula);
