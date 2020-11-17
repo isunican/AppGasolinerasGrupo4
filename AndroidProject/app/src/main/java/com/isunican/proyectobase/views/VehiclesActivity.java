@@ -1,15 +1,11 @@
 package com.isunican.proyectobase.views;
-import android.app.Activity;
+
 import android.app.AlertDialog;
 import android.content.Context;
-import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -17,23 +13,22 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
-
 import com.isunican.proyectobase.R;
-import com.isunican.proyectobase.model.Gasolinera;
 import com.isunican.proyectobase.model.Vehiculo;
-import com.isunican.proyectobase.presenter.PresenterGasolineras;
 import com.isunican.proyectobase.presenter.PresenterVehiculos;
 
+import java.util.ArrayList;
 import java.util.List;
+
+
+
 
 public class VehiclesActivity extends AppCompatActivity implements
         AdapterView.OnItemSelectedListener {
@@ -49,6 +44,7 @@ public class VehiclesActivity extends AppCompatActivity implements
     // Vista de lista y adaptador para cargar datos en ella
     ListView listViewVehiculos;
     ArrayAdapter<Vehiculo> adapter;
+    List<Vehiculo>vehiculos;
 
     // Creacion del PresenterVehiculos
     PresenterVehiculos presenterVehiculos;
@@ -57,55 +53,41 @@ public class VehiclesActivity extends AppCompatActivity implements
     ProgressBar progressBar;
 
     // Elementos del formulario para anhadir vehiculo
-    Button  btn_cancelar, btn_aceptar;
-    ImageButton btn_anhadirVehiculo;
-    EditText txt_Marca, txt_Modelo, txt_Matricula;
-    Spinner spiner_tipo_combustible;
-
-
+    Button  btnCancelar;
+    Button  btnAceptar;
+    EditText txtMarca;
+    EditText txtModelo;
+    EditText txtMatricula;
+    Spinner spinerTipoCombustible;
 
     /**
      * onCreate
      * <p>
      * Crea los elementos que conforman la actividad
      *
-     * @param savedInstanceState
+     * @param savedInstanceState parametro
      */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_vehicle);
         presenterVehiculos = new PresenterVehiculos();
-        cargaVehiculos(presenterVehiculos.getVehiculos());
+        vehiculos = new ArrayList<>(presenterVehiculos.getVehiculos().values());
+        cargaVehiculos(vehiculos);
     }
-
 
     /**
      * Permite seleccionar el combustible del vehiculo que se va a anhadir.
      *
-     * @param arg0
-     * @param arg1
-     * @param position
-     * @param id
+     * @param arg0 adapter
+     * @param arg1 view
+     * @param position int
+     * @param id long
      */
     @Override
     public void onItemSelected(AdapterView<?> arg0, View arg1, int position, long id) {
         combustibleActual = combustibles[position];
     }
-
-    /*
-    public void myClickHandlerAnhadir(View view) {
-        System.out.println("BOTON");
-        btn_anhadirVehiculo = findViewById(R.id.imageButton2);
-        btn_anhadirVehiculo.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                anhadirVehiculo();
-            }
-        });
-    }
-
-     */
 
     public void anhadirVehiculo(View v){
         AlertDialog.Builder alert;
@@ -127,44 +109,54 @@ public class VehiclesActivity extends AppCompatActivity implements
         dialog.show();
 
         //Cogemos el spinner
-        spiner_tipo_combustible = (Spinner) view.findViewById(R.id.idSpinnerCombustible);
-        spiner_tipo_combustible.setOnItemSelectedListener(this);
+        spinerTipoCombustible = (Spinner) view.findViewById(R.id.idSpinnerCombustible);
+        spinerTipoCombustible.setOnItemSelectedListener(this);
 
         //Creamos el arrayAdapter con la lista del spinner
         ArrayAdapter<String> aa = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, combustibles);
         aa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
         //Colocamos los datos en el spinner
-        spiner_tipo_combustible.setAdapter(aa);
+        spinerTipoCombustible.setAdapter(aa);
 
-        txt_Marca = view.findViewById(R.id.idIntroduceMarca);
-        txt_Modelo = view.findViewById(R.id.idIntroduceModelo);
-        txt_Matricula = view.findViewById(R.id.idIntroduceMatricula);
-        btn_aceptar = view.findViewById(R.id.idBotonAceptar);
-        btn_cancelar = view.findViewById(R.id.idBotonCancelar);
+        txtMarca = view.findViewById(R.id.idIntroduceMarca);
+        txtModelo = view.findViewById(R.id.idIntroduceModelo);
+        txtMatricula = view.findViewById(R.id.idIntroduceMatricula);
+        btnAceptar = view.findViewById(R.id.idBotonAceptar);
+        btnCancelar = view.findViewById(R.id.idBotonCancelar);
 
-        btn_aceptar.setOnClickListener(new View.OnClickListener() {
+        btnAceptar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String mar = txt_Marca.getText().toString();
-                String model = txt_Modelo.getText().toString();
-                String matric = txt_Matricula.getText().toString();
+                String mar = txtMarca.getText().toString();
+                String model = txtModelo.getText().toString();
+                String matric = txtMatricula.getText().toString();
+                String matricu = matric.toUpperCase();
+                Vehiculo vehiculo = new Vehiculo(mar, model, matricu, combustibleActual);
+                try {
+                    presenterVehiculos.anhadirVehiculo(vehiculo);
+                    vehiculos.add(vehiculo);
+                    Toast.makeText(getApplicationContext(), "Datos añadidos", Toast.LENGTH_LONG).show();
+                    dialog.dismiss();
 
-                Vehiculo vehiculo = new Vehiculo(1 ,mar, model, matric, combustibleActual);
-                //vehiculo.escribeVehiculo();
-                //Leer json para mostrar lista
+                } catch (PresenterVehiculos.DatoNoValido e) {
+                    notificaDatoNoValido();
+                }
 
-                presenterVehiculos.getVehiculos().add(vehiculo);
+                catch (PresenterVehiculos.MatriculaNoValida e) {
+                    notificaFormatoMatriculaNoValida();
+                }
 
-                //Llamada al metodo de escritura en JSON
-                Toast.makeText(getApplicationContext(), "Datos añadidos", Toast.LENGTH_LONG).show();
-                dialog.dismiss();
-                //Llamada para escribir en el json
-                cargaVehiculos(presenterVehiculos.getVehiculos());
+                catch (PresenterVehiculos.VehiculoYaExiste e) {
+                    notificaVehiculoExiste();
+                }
+
+                //Muestra la list view actualizada con el ultimo vehiculo
+                cargaVehiculos(vehiculos);
             }
         });
 
-        btn_cancelar.setOnClickListener(new View.OnClickListener() {
+        btnCancelar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Toast.makeText(getApplicationContext(), "Datos eliminados", Toast.LENGTH_LONG).show();
@@ -191,6 +183,33 @@ public class VehiclesActivity extends AppCompatActivity implements
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
         //De momento no hace nada
+    }
+
+    /**
+     * Muestra mensaje de error
+     */
+    private void notificaDatoNoValido() {
+        Toast toast;
+        toast = Toast.makeText(getApplicationContext(), "Rellene todos los campos", Toast.LENGTH_LONG);
+        toast.show();
+    }
+
+    /**
+     * Muestra mensaje de error
+     */
+    private void notificaVehiculoExiste() {
+        Toast toast;
+        toast = Toast.makeText(getApplicationContext(), "Matricula introducida ya existe", Toast.LENGTH_LONG);
+        toast.show();
+    }
+
+    /**
+     * Muestra mensaje de error
+     */
+    private void notificaFormatoMatriculaNoValida() {
+        Toast toast;
+        toast = Toast.makeText(getApplicationContext(), "Formato de matricula incorrecto, formato 9999XXX", Toast.LENGTH_LONG);
+        toast.show();
     }
 
     /*
@@ -242,8 +261,9 @@ public class VehiclesActivity extends AppCompatActivity implements
 
             // Si las dimensiones de la pantalla son menores
             // reducimos el texto de las etiquetas para que se vea correctamente
-            DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
             /*
+            DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
+
             if (displayMetrics.widthPixels < 720) {
                 TextView tv = view.findViewById(R.id.logoMarca);
                 RelativeLayout.LayoutParams params = ((RelativeLayout.LayoutParams) tv.getLayoutParams());
