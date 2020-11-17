@@ -83,6 +83,6 @@ public class AnhadirVehiculoUITest {
             //Se hace click en el spinner
             onView(withId(R.id.idBotonAceptar)).perform(click());
 
-          
+
         }
     }
