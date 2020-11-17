@@ -19,32 +19,52 @@ public class Vehiculo implements Parcelable {
     private String combustible;
 
     /**
-     *Constructor, getters y setters
+     * Constructor, getters y setters
      */
 
-    public Vehiculo( String marca, String modelo, String matricula, String combustible){
+    public Vehiculo(String marca, String modelo, String matricula, String combustible) {
         this.marca = marca;
         this.modelo = modelo;
         this.matricula = matricula;
         this.combustible = combustible;
     }
 
-    public String getMarca() {return marca;}
-    public void setMarca(String marca) {this.marca = marca;}
+    public String getMarca() {
+        return marca;
+    }
 
-    public String getModelo() {return modelo;}
-    public void setModelo(String modelo) {this.modelo = modelo;}
+    public void setMarca(String marca) {
+        this.marca = marca;
+    }
 
-    public String getMatricula() {return matricula;}
-    public void setMatricula(String matricula) {this.matricula = matricula;}
+    public String getModelo() {
+        return modelo;
+    }
 
-    public String getCombustible() {return combustible;}
-    public void setCombustible(String combustible) {this.combustible = combustible;}
+    public void setModelo(String modelo) {
+        this.modelo = modelo;
+    }
+
+    public String getMatricula() {
+        return matricula;
+    }
+
+    public void setMatricula(String matricula) {
+        this.matricula = matricula;
+    }
+
+    public String getCombustible() {
+        return combustible;
+    }
+
+    public void setCombustible(String combustible) {
+        this.combustible = combustible;
+    }
 
 
     /**
      * interfaz Parcelable
-     *
+     * <p>
      * MÃ©todos necesarios para implementar la interfaz Parcelable
      * que nos permitirÃ¡ pasar objetos del tipo Vehiculo
      * directamente entre actividades utilizando intents
@@ -85,5 +105,25 @@ public class Vehiculo implements Parcelable {
             return new Vehiculo[size];
         }
     };
+
+
+    @Override
+    public boolean equals(Object o) {
+        Vehiculo v = (Vehiculo) o;
+        boolean equal = true;
+
+        //Si cualquiera de sus atributos es distinto, el vehiculo será distinto
+        if (!this.marca.equals(v.getMarca())) {
+            equal = false;
+        } else if (!this.modelo.equals(v.getModelo())) {
+            equal = false;
+        } else if (!this.combustible.equals(v.getCombustible())) {
+            equal = false;
+        } else if (!this.matricula.equals(v.getMatricula())) {
+            equal = false;
+        }
+
+        return equal;
+    }
 }
 
