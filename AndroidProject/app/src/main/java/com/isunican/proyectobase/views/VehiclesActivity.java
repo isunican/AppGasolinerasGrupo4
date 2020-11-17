@@ -91,13 +91,12 @@ public class VehiclesActivity extends AppCompatActivity implements
     @Override
     public void onItemSelected(AdapterView<?> arg0, View arg1, int position, long id) {
         combustibleActual = combustibles[position];
-        Toast.makeText(getApplicationContext(), combustibles[position], Toast.LENGTH_LONG).show();
     }
 
-    public void myClickHandler(View view) {
+    /*
+    public void myClickHandlerAnhadir(View view) {
         System.out.println("BOTON");
         btn_anhadirVehiculo = findViewById(R.id.imageButton2);
-
         btn_anhadirVehiculo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -106,7 +105,9 @@ public class VehiclesActivity extends AppCompatActivity implements
         });
     }
 
-    private void anhadirVehiculo(){
+     */
+
+    public void anhadirVehiculo(View v){
         AlertDialog.Builder alert;
 
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
@@ -184,16 +185,6 @@ public class VehiclesActivity extends AppCompatActivity implements
         if (!presenterVehiculos.getVehiculos().isEmpty()) {
             // datos obtenidos con exito
             listViewVehiculos.setAdapter(adapter);
-            toast = Toast.makeText(getApplicationContext(), getResources().getString(R.string.Carga_vehiculos), Toast.LENGTH_LONG);
-        } else {
-            // los datos estan siendo actualizados en el servidor, por lo que no son actualmente accesibles
-            // sucede en torno a las :00 y :30 de cada hora
-            toast = Toast.makeText(getApplicationContext(), getResources().getString(R.string.datos_no_accesibles), Toast.LENGTH_LONG);
-        }
-
-        // Muestra el mensaje del resultado de la operación en un toast
-        if (toast != null) {
-            toast.show();
         }
     }
 
@@ -273,13 +264,14 @@ public class VehiclesActivity extends AppCompatActivity implements
 
         private void cargaIcono(Vehiculo vehiculo, ImageView logo) {
             String rotuleImageID = vehiculo.getMarca().toLowerCase();
+
             // Tengo que protegerme ante el caso en el que el rotulo solo tiene digitos.
             // En ese caso getIdentifier devuelve esos digitos en vez de 0.
             int imageID = context.getResources().getIdentifier(rotuleImageID,
                     "drawable", context.getPackageName());
 
             if (imageID == 0 || TextUtils.isDigitsOnly(rotuleImageID)) {
-                imageID = context.getResources().getIdentifier(getResources().getString(R.string.pordefecto),
+                imageID = context.getResources().getIdentifier(getResources().getString(R.string.coche),
                         "drawable", context.getPackageName());
             }
             logo.setImageResource(imageID);
