@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PresenterVehiculos {
-    private List<Vehiculo> vehiculos;
+    private static List<Vehiculo> vehiculos;
 
     //Base de datos de donde se obtiene los vehiculos
     public static final String URL_GASOLINERAS_CANTABRIA = "https://sedeaplicaciones.minetur.gob.es/ServiciosRESTCarburantes/PreciosCarburantes/EstacionesTerrestres/FiltroCCAA/06";
@@ -22,7 +22,7 @@ public class PresenterVehiculos {
         this.cargaDatosDummy();
     }
 
-    public List<Vehiculo> getVehiculos() {
+    public static List<Vehiculo> getVehiculos() {
         return vehiculos;
     }
 
