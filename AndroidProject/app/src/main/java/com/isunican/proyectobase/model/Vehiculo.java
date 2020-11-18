@@ -85,5 +85,15 @@ public class Vehiculo implements Parcelable {
             return new Vehiculo[size];
         }
     };
+
+    @Override
+    public String toString(){
+        //Se eliminan los espacios
+        String tmpMarca = marca.replaceAll("\\s+", "");
+        String tmpModelo = modelo.replaceAll("\\s+", "");
+        String tmpMatricula = matricula.replaceAll("\\s+", "");
+        String tmpCombustible = combustible.replaceAll("\\s+", "");
+        return("Marca:" + tmpMarca + "-" + "Modelo:" + tmpModelo + "-" + "Matricula:"+ tmpMatricula + "-" + "Combustible:" + tmpCombustible + "-");
+    }
 }
 

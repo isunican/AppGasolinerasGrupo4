@@ -1,7 +1,19 @@
 package com.isunican.proyectobase.presenter;
 
+import android.content.Context;
+import android.util.Log;
+
 import com.isunican.proyectobase.model.Vehiculo;
+
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -21,7 +33,12 @@ public class PresenterVehiculos {
         this.cargaDatosDummy();
     }
 
-    public HashMap<String, Vehiculo> getVehiculos() {
+    /**
+     * Actualiza y retorna el mapa con los vehiculos
+     * @return
+     */
+    public HashMap<String, Vehiculo> getVehiculos(Context context) {
+        cargaDatosVehiculos(context);
         return vehiculos;
     }
 
@@ -29,20 +46,12 @@ public class PresenterVehiculos {
     /**
      * cargaDatosVehiculos
      * <p>
-     * Carga los datos de las gasolineras en la lista de gasolineras de la clase.
-     * Para ello llama a métodos de carga de datos internos de la clase ListaGasolineras.
-     * En este caso realiza una carga de datos remotos dada una URL
-     * <p>
-     * Habría que mejorar el método para que permita pasar un parámetro
-     * con los datos a cargar (id de la ciudad, comunidad autónoma, etc.)
+     * Carga los datos de los vehiculos almacenados en la base de datos
      *
-     * @param
-     * @return boolean Devuelve true si se han podido cargar los datos
      */
-    public boolean cargaDatosVehiculos() {
-        // De momento vamos a hacer que cargue la lista ya creada pero la idea es que lo cargue
-        // desde un fichero JSON
-        return cargaDatosDummy();
+    public boolean cargaDatosVehiculos(Context context) {
+        String db = consultaDB(context);
+        return obtieneMapa(db);
     }
 
     /**
@@ -62,23 +71,9 @@ public class PresenterVehiculos {
     }
 
     /**
-     * cargaDatosLocales
-     * <p>
-     * A partir de la dirección de un fichero JSON pasado como parámetro:
-     * Parsea la información para obtener una lista de gasolineras.
-     * Finalmente, dicha lista queda almacenada en la clase.
-     *
-     // * @param String Nombre del fichero
-     * @return boolean Devuelve true si se han podido cargar los datos
-     */
-    public boolean cargaDatosLocales(String fichero) {
-        return (fichero != null);
-    }
-
-    /**
      * Metodo que añade el vehiculo al fichero y al arrayList de vehiculos
      */
-    public void anhadirVehiculo(Vehiculo v) throws DatoNoValido, VehiculoYaExiste, MatriculaNoValida{
+    public void anhadirVehiculo(Vehiculo v, Context context) throws DatoNoValido, VehiculoYaExiste, MatriculaNoValida{
         //Metodos para guardar vehiculo en el fichero asi como comprobar las matricuals y demas.
         String marca = v.getMarca();
         String modelo = v.getModelo();
@@ -98,11 +93,152 @@ public class PresenterVehiculos {
             throw new VehiculoYaExiste();
         }
 
-
         // Lanza excepcion si la matricula no es valida
         if(!mat.matches()){
             throw new MatriculaNoValida();
         }
+        escribeVehiculo(v.toString(), context);
         vehiculos.put(matricula, v);
+    }
+
+    /**
+     * Escribe el vehículo pasado como parámetro en la base de datos
+     */
+    private void escribeVehiculo(String vehiculo, Context context){
+        try{
+            FileWriter outputStreamWriter = new FileWriter (context.getFileStreamPath("vehiculos.txt"), true);
+            outputStreamWriter.write(vehiculo);
+            outputStreamWriter.close();
+        }catch (IOException e){
+            Log.e("Excepción","Fallo al escribir en la base de datos");
+        }
+    }
+
+    /**
+     * Retorna false si el fichero estaba vacio y true si tenia contenido
+     * @param db
+     * @return
+     */
+    private boolean obtieneMapa(String db){
+        HashMap<String, Vehiculo> lista = new HashMap<String, Vehiculo>();
+        String marca="";
+        String modelo="";
+        String matricula="";
+        String combustible="";
+        System.out.println(db);
+        char[] charDB = db.toCharArray();
+        if(charDB.length==0){
+            vehiculos = new HashMap<String, Vehiculo>();
+            return false;
+        }
+
+        String tmp;
+        int cont=0;
+        System.out.println(charDB.length);
+        while(cont < charDB.length-1){
+
+            // Se reinicializan las variables para que no se acumulen los datos
+            marca = "";
+            modelo = "";
+            matricula = "";
+            combustible = "";
+
+            tmp=Character.toString(charDB[cont]);
+            //Busca la marca de cada vehiculo
+            while(!tmp.matches(":")){
+                cont++;
+                tmp=Character.toString(charDB[cont]);
+            }
+            cont++;
+            tmp=Character.toString(charDB[cont]);
+            while(!tmp.matches("-")){
+                marca = marca.concat(tmp);
+                cont++;
+                tmp=Character.toString(charDB[cont]);
+            }
+
+            //Busca el modelo de cada vehiculo
+            while(!tmp.matches(":")){
+                cont++;
+                tmp=Character.toString(charDB[cont]);
+            }
+            cont++;
+            tmp=Character.toString(charDB[cont]);
+            while(!tmp.matches("-")){
+                modelo = modelo.concat(tmp);
+                cont++;
+                tmp=Character.toString(charDB[cont]);
+            }
+
+            //Busca la matricula de cada vehiculo
+            while(!tmp.matches(":")){
+                cont++;
+                tmp=Character.toString(charDB[cont]);
+            }
+            cont++;
+            tmp=Character.toString(charDB[cont]);
+            while(!tmp.matches("-")){
+                matricula = matricula.concat(tmp);
+                cont++;
+                tmp=Character.toString(charDB[cont]);
+            }
+
+            //Busca el tipo de combustible de cada vehiculo
+            while(!tmp.matches(":")){
+                cont++;
+                tmp=Character.toString(charDB[cont]);
+            }
+
+            cont++;
+            tmp=Character.toString(charDB[cont]);
+
+            while(!tmp.matches("-")){
+                combustible = combustible.concat(tmp);
+                cont++;
+                tmp=Character.toString(charDB[cont]);
+
+                if(combustible.equals("Gasolina95") || combustible.equals("GasoleoA")){
+                    tmp = "-";
+                    System.out.println(cont);
+                }
+
+                if(cont > charDB.length){
+                    cont = charDB.length;
+                }
+            }
+            lista.put( matricula, new Vehiculo(marca, modelo, matricula, combustible));
+        }
+        vehiculos = lista;
+        return true;
+    }
+
+    /**
+     * Devuelve el contenido de la base de datos como un String
+     * @return
+     */
+    private String consultaDB(Context context){
+        String ret = " ";
+        try{
+            InputStream inputStream = context.openFileInput("vehiculos.txt");
+            if ( inputStream != null ) {
+                InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
+                BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+                String receiveString = "";
+                StringBuilder stringBuilder = new StringBuilder();
+
+                while ( (receiveString = bufferedReader.readLine()) != null ) {
+                    stringBuilder.append("\n").append(receiveString);
+                }
+
+                inputStream.close();
+                ret = stringBuilder.toString();
+            }
+        }
+        catch (FileNotFoundException e) {
+            Log.e("login activity", "No se ha encontrado el fichero: " + e.toString());
+        } catch (IOException e) {
+            Log.e("login activity", "No se ha podido leer el fichero " + e.toString());
+        }
+        return ret;
     }
 }

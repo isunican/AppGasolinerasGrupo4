@@ -5,6 +5,7 @@ import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,13 +25,22 @@ import com.isunican.proyectobase.R;
 import com.isunican.proyectobase.model.Vehiculo;
 import com.isunican.proyectobase.presenter.PresenterVehiculos;
 
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.text.CharacterIterator;
+import java.text.StringCharacterIterator;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.InputMismatchException;
 import java.util.List;
+import java.util.Map;
 
 
-/**
- * 
- */
 public class VehiclesActivity extends AppCompatActivity implements
         AdapterView.OnItemSelectedListener {
 
@@ -73,8 +83,8 @@ public class VehiclesActivity extends AppCompatActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_vehicle);
         presenterVehiculos = new PresenterVehiculos();
-        vehiculos = new ArrayList<>(presenterVehiculos.getVehiculos().values());
-        cargaVehiculos(vehiculos);
+        vehiculos = new ArrayList<>(presenterVehiculos.getVehiculos(VehiclesActivity.this).values());
+        formatoLista(vehiculos);
     }
 
     /**
@@ -135,10 +145,15 @@ public class VehiclesActivity extends AppCompatActivity implements
                 String matricu = matric.toUpperCase();
                 Vehiculo vehiculo = new Vehiculo(mar, model, matricu, combustibleActual);
                 try {
-                    presenterVehiculos.anhadirVehiculo(vehiculo);
-                    vehiculos.add(vehiculo);
+                    presenterVehiculos.anhadirVehiculo(vehiculo, VehiclesActivity.this);
+                    //vehiculos.add(vehiculo);
                     Toast.makeText(getApplicationContext(), "Datos añadidos", Toast.LENGTH_LONG).show();
                     dialog.dismiss();
+
+                    //Muestra la list view actualizada con el ultimo vehiculo
+                    vehiculos=new ArrayList<>(presenterVehiculos.getVehiculos(VehiclesActivity.this).values());
+                    //System.out.println(vehiculos.get(0).toString());
+                    formatoLista(vehiculos);
 
                 } catch (PresenterVehiculos.DatoNoValido e) {
                     notificaDatoNoValido();
@@ -152,8 +167,6 @@ public class VehiclesActivity extends AppCompatActivity implements
                     notificaVehiculoExiste();
                 }
 
-                //Muestra la list view actualizada con el ultimo vehiculo
-                cargaVehiculos(vehiculos);
             }
         });
 
@@ -166,7 +179,7 @@ public class VehiclesActivity extends AppCompatActivity implements
         });
     }
 
-    private void cargaVehiculos(List<Vehiculo> vehiculos) {
+    private void formatoLista(List<Vehiculo> vehiculos) {
         Toast toast;
         // Definimos el array adapter
         adapter = new VehiculoArrayAdapter(this,0, vehiculos);
@@ -175,7 +188,7 @@ public class VehiclesActivity extends AppCompatActivity implements
         listViewVehiculos = findViewById(R.id.listViewVehiculos);
 
         // Cargamos los datos en la lista
-        if (!presenterVehiculos.getVehiculos().isEmpty()) {
+        if (!presenterVehiculos.getVehiculos(VehiclesActivity.this).isEmpty()) {
             // datos obtenidos con exito
             listViewVehiculos.setAdapter(adapter);
         }

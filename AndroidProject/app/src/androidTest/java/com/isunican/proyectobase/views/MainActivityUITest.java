@@ -53,6 +53,5 @@ public class MainActivityUITest {
         onView(withId(R.id.idCarretera)).check(matches(withText(gasolinera.getDireccion())));
         onView(withId(R.id.idLocalidad)).check(matches(withText(gasolinera.getLocalidad())));
         onView(withId(R.id.idProvincia)).check(matches(withText(gasolinera.getProvincia())));
-
     }
 }
