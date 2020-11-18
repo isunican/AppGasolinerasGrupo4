@@ -15,7 +15,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
-
 import java.util.List;
 
 import android.view.LayoutInflater;
@@ -166,7 +165,6 @@ public class MainActivity extends AppCompatActivity implements
             notificaDatoNoValido();
         }
 
-
     }
 
     private void notificaDatoNoValido() {
@@ -174,7 +172,6 @@ public class MainActivity extends AppCompatActivity implements
         toast = Toast.makeText(getApplicationContext(), "Datos introducidos invalidos, introduzca parámetros correctos", Toast.LENGTH_LONG);
         toast.show();
     }
-
 
     /**
      * Menú action bar
@@ -205,8 +202,13 @@ public class MainActivity extends AppCompatActivity implements
         if (item.getItemId() == R.id.itemActualizar) {
             mSwipeRefreshLayout.setRefreshing(true);
             new CargaDatosGasolinerasTask(this).execute();
-        } else if (item.getItemId() == R.id.itemInfo) {
+        }
+        if (item.getItemId() == R.id.itemInfo) {
             Intent myIntent = new Intent(MainActivity.this, InfoActivity.class);
+            MainActivity.this.startActivity(myIntent);
+        }
+        if (item.getItemId() == R.id.itemVehiculos) {
+            Intent myIntent = new Intent(MainActivity.this, VehiclesActivity.class);
             MainActivity.this.startActivity(myIntent);
         }
         return true;
@@ -228,7 +230,6 @@ public class MainActivity extends AppCompatActivity implements
     public void onItemSelected(AdapterView<?> arg0, View arg1, int position, long id) {
 
         combustibleActual = combustibles[position];
-        Toast.makeText(getApplicationContext(), combustibles[position], Toast.LENGTH_LONG).show();
         List<Gasolinera> gasolineras;
         switch (combustibles[position]) {
             case GASOLINA95:
@@ -381,9 +382,6 @@ public class MainActivity extends AppCompatActivity implements
                     default:
                 }
             }
-
-
-
 
             /*
              * Define el manejo de los eventos de click sobre elementos de la lista
