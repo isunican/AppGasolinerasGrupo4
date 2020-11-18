@@ -28,8 +28,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-
-
+/**
+ * 
+ */
 public class VehiclesActivity extends AppCompatActivity implements
         AdapterView.OnItemSelectedListener {
 
