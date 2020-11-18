@@ -118,19 +118,23 @@ public class Vehiculo implements Parcelable {
 
     @Override
     public boolean equals(Object o) {
-        Vehiculo v = (Vehiculo) o;
-        boolean equal = true;
-
-        //Si cualquiera de sus atributos es distinto, el vehiculo será distinto
-        if (!this.marca.equals(v.getMarca())) {
-            equal = false;
-        } else if (!this.modelo.equals(v.getModelo())) {
-            equal = false;
-        } else if (!this.combustible.equals(v.getCombustible())) {
-            equal = false;
-        } else if (!this.matricula.equals(v.getMatricula())) {
-            equal = false;
+        if (o == null){
+            return false;
         }
+
+        if (this.getClass() != o.getClass()){
+            return false;
+        }
+
+        boolean equal = true;
+        Vehiculo v = (Vehiculo) o;
+
+            //Si cualquiera de sus atributos es distinto, el vehiculo será distinto
+            if (!this.marca.equals(v.getMarca()) || !this.modelo.equals(v.getModelo()) ||
+                    !this.combustible.equals(v.getCombustible()) || !this.matricula.equals(v.getMatricula())) {
+                equal = false;
+            }
+
         return equal;
     }
 }

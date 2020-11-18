@@ -11,7 +11,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -37,7 +36,7 @@ public class PresenterVehiculos {
      * Actualiza y retorna el mapa con los vehiculos
      * @return
      */
-    public HashMap<String, Vehiculo> getVehiculos(Context context) {
+    public Map<String, Vehiculo> getVehiculos(Context context) {
         cargaDatosVehiculos(context);
         return vehiculos;
     }
@@ -73,7 +72,7 @@ public class PresenterVehiculos {
     /**
      * Metodo que añade el vehiculo al fichero y al arrayList de vehiculos
      */
-    public void anhadirVehiculo(Vehiculo v, Context context) throws DatoNoValido, VehiculoYaExiste, MatriculaNoValida{
+    public void anhadirVehiculo(Vehiculo v, Context context) {
         //Metodos para guardar vehiculo en el fichero asi como comprobar las matricuals y demas.
         String marca = v.getMarca();
         String modelo = v.getModelo();
@@ -120,7 +119,7 @@ public class PresenterVehiculos {
      * @return
      */
     private boolean obtieneMapa(String db){
-        HashMap<String, Vehiculo> lista = new HashMap<String, Vehiculo>();
+        HashMap<String, Vehiculo> lista = new HashMap<>();
         String marca="";
         String modelo="";
         String matricula="";

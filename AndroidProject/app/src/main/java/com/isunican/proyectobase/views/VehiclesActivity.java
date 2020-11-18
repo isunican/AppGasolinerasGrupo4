@@ -5,7 +5,6 @@ import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,20 +24,10 @@ import com.isunican.proyectobase.R;
 import com.isunican.proyectobase.model.Vehiculo;
 import com.isunican.proyectobase.presenter.PresenterVehiculos;
 
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.text.CharacterIterator;
-import java.text.StringCharacterIterator;
+
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.InputMismatchException;
 import java.util.List;
-import java.util.Map;
+
 
 
 public class VehiclesActivity extends AppCompatActivity implements
@@ -110,6 +99,7 @@ public class VehiclesActivity extends AppCompatActivity implements
             alert = new AlertDialog.Builder(this);
         }
         LayoutInflater inflater = getLayoutInflater();
+        v.getId();
         View view = inflater.inflate(R.layout.activity_alert_dialog, null);
         alert.setView(view);
 
@@ -146,13 +136,13 @@ public class VehiclesActivity extends AppCompatActivity implements
                 Vehiculo vehiculo = new Vehiculo(mar, model, matricu, combustibleActual);
                 try {
                     presenterVehiculos.anhadirVehiculo(vehiculo, VehiclesActivity.this);
-                    //vehiculos.add(vehiculo);
+
                     Toast.makeText(getApplicationContext(), "Datos añadidos", Toast.LENGTH_LONG).show();
                     dialog.dismiss();
 
                     //Muestra la list view actualizada con el ultimo vehiculo
                     vehiculos=new ArrayList<>(presenterVehiculos.getVehiculos(VehiclesActivity.this).values());
-                    //System.out.println(vehiculos.get(0).toString());
+
                     formatoLista(vehiculos);
 
                 } catch (PresenterVehiculos.DatoNoValido e) {
@@ -180,7 +170,6 @@ public class VehiclesActivity extends AppCompatActivity implements
     }
 
     private void formatoLista(List<Vehiculo> vehiculos) {
-        Toast toast;
         // Definimos el array adapter
         adapter = new VehiculoArrayAdapter(this,0, vehiculos);
 

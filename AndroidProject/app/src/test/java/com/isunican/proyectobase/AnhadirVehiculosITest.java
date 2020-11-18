@@ -7,9 +7,6 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-<<<<<<< HEAD
-
-=======
 import com.isunican.proyectobase.model.Vehiculo;
 import com.isunican.proyectobase.presenter.PresenterGasolineras;
 import com.isunican.proyectobase.presenter.PresenterVehiculos;
@@ -18,15 +15,13 @@ import java.util.List;
 
 
 
-
-
->>>>>>> 3be4b2d7e8d8b5d28af0fef5e7926d32134c36af
 public class AnhadirVehiculosITest {
 
+    PresenterVehiculos presenter = new PresenterVehiculos();
         //Declaración de los vehículos
         private Vehiculo vehiculoMatriculaDistinta;
         private Vehiculo vehiculoMatriculaIgual;
-        List<Vehiculo> vehiculosPrueba=PresenterVehiculos.getVehiculos();
+        List<Vehiculo> vehiculosPrueba=presenter.getVehiculos();
 
         @Before
         public void setUp() throws Exception{
@@ -35,6 +30,7 @@ public class AnhadirVehiculosITest {
             vehiculoMatriculaIgual=new Vehiculo(2, "BMW", "M3", "1234BBB", "Gasolina");
         }
 
+        @Test
         public void matriculaUnicaTest2(){
             //Caso válido IT.1
             try{

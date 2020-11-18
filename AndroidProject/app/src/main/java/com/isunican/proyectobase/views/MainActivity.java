@@ -15,8 +15,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
-
-import java.io.FileNotFoundException;
 import java.util.List;
 
 import android.view.LayoutInflater;
@@ -204,7 +202,8 @@ public class MainActivity extends AppCompatActivity implements
         if (item.getItemId() == R.id.itemActualizar) {
             mSwipeRefreshLayout.setRefreshing(true);
             new CargaDatosGasolinerasTask(this).execute();
-        } if (item.getItemId() == R.id.itemInfo) {
+        }
+        if (item.getItemId() == R.id.itemInfo) {
             Intent myIntent = new Intent(MainActivity.this, InfoActivity.class);
             MainActivity.this.startActivity(myIntent);
         }

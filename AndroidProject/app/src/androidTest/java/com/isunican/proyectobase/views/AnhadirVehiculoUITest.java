@@ -37,6 +37,7 @@ import static org.hamcrest.Matchers.endsWith;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 @RunWith(AndroidJUnit4.class)
@@ -124,8 +125,7 @@ public class AnhadirVehiculoUITest {
             List<Vehiculo> vehiculos = new ArrayList<Vehiculo>();
             cargaListaVehiculos(vista, vehiculos);
 
-            assertTrue(vehiculos.equals(vehiculosIniciales));
-
+            assertEquals(vehiculos,vehiculosIniciales );
             //Comprobamos que el formulario se ha reseteado.
 
             onView(withId(R.id.imageButton2)).perform(click());
