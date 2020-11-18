@@ -15,6 +15,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
+
+import java.util.ArrayList;
 import java.util.List;
 
 import android.view.LayoutInflater;
@@ -129,31 +131,48 @@ public class MainActivity extends AppCompatActivity implements
 
     @SuppressWarnings("Necesario parametro")
     public void myClickHandler(View view) {
+        List<Gasolinera> gasolinerasFiltradas;
         precioMin = findViewById(R.id.idPrecioMin);
         precioMax = findViewById(R.id.idPrecioMax);
 
         String min = precioMin.getText().toString();
         String max = precioMax.getText().toString();
 
-        if (!min.equals("") && !max.equals("")) {
-
-            double pMin = Double.parseDouble(min);
-            double pMax = Double.parseDouble(max);
+        double numMin;
+        double numMax;
 
 
-            List<Gasolinera> gasolinerasFiltradas;
+        //En el caso de que ambos campos no sean vacíos.
+        if (!(min.equals("") && max.equals(""))){
+
+            //Si el minimo esta vacio
+            if(min.equals("")){
+                numMin = 0;
+                numMax = Double.parseDouble(max);
+
+            //Si el maximo esta vacio
+            }else if(max.equals("")){
+                numMax = Double.MAX_VALUE;
+                numMin = Double.parseDouble(min);
+            }
+            //Si ninguno es vacio
+            else{
+                numMax = Double.parseDouble(max);
+                numMin = Double.parseDouble(min);
+            }
+
 
             try {
                 switch (combustibleActual) {
                     case GASOLINA95:
                         gasolinerasFiltradas = PresenterGasolineras.filtrarCombustibleGasolina(presenterGasolineras.getGasolineras());
-                        gasolinerasFiltradas = PresenterGasolineras.filtraPrecioGasolina(gasolinerasFiltradas, pMin, pMax);
+                        gasolinerasFiltradas = PresenterGasolineras.filtraPrecioGasolina(gasolinerasFiltradas, numMin, numMax);
                         cargaGasolineras(gasolinerasFiltradas, 2);
                         break;
 
                     case GASOLEOA:
                         gasolinerasFiltradas = PresenterGasolineras.filtrarCombustibleGasoleo(presenterGasolineras.getGasolineras());
-                        gasolinerasFiltradas = PresenterGasolineras.filtraPrecioGasoleo(gasolinerasFiltradas, pMin, pMax);
+                        gasolinerasFiltradas = PresenterGasolineras.filtraPrecioGasoleo(gasolinerasFiltradas, numMin, numMax);
                         cargaGasolineras(gasolinerasFiltradas, 1);
                         break;
                     default:
@@ -162,7 +181,8 @@ public class MainActivity extends AppCompatActivity implements
                 notificaDatoNoValido();
             }
         } else {
-            notificaDatoNoValido();
+            gasolinerasFiltradas = new ArrayList<Gasolinera>();
+            cargaGasolineras(gasolinerasFiltradas, 1);
         }
 
     }
