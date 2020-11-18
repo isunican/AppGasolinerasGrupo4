@@ -7,13 +7,12 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
 import com.isunican.proyectobase.model.Vehiculo;
 import com.isunican.proyectobase.presenter.PresenterGasolineras;
 import com.isunican.proyectobase.presenter.PresenterVehiculos;
 
 import java.util.List;
-
-
 
 public class AnhadirVehiculosITest {
 /*
