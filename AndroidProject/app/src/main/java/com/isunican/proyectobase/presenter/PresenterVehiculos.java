@@ -1,28 +1,27 @@
 package com.isunican.proyectobase.presenter;
 
-
 import com.isunican.proyectobase.model.Vehiculo;
-import com.isunican.proyectobase.utilities.ParserJSONGasolineras;
-
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class PresenterVehiculos {
-    private static List<Vehiculo> vehiculos;
+    private HashMap<String, Vehiculo> vehiculos;
 
     //Base de datos de donde se obtiene los vehiculos
-    public static final String URL_GASOLINERAS_CANTABRIA = "https://sedeaplicaciones.minetur.gob.es/ServiciosRESTCarburantes/PreciosCarburantes/EstacionesTerrestres/FiltroCCAA/06";
     public static class DatoNoValido extends RuntimeException {}
+    public static class VehiculoYaExiste extends RuntimeException {}
+    public static class MatriculaNoValida extends RuntimeException {}
 
     /**
      * Constructor, getters y setters
      */
     public PresenterVehiculos() {
-        vehiculos = new ArrayList<>();
+        vehiculos = new HashMap<String, Vehiculo>();
         this.cargaDatosDummy();
     }
 
-    public static List<Vehiculo> getVehiculos() {
+    public HashMap<String, Vehiculo> getVehiculos() {
         return vehiculos;
     }
 
@@ -56,9 +55,9 @@ public class PresenterVehiculos {
      * @return boolean
      */
     public boolean cargaDatosDummy() {
-        this.vehiculos.add(new Vehiculo(1, "Renault", "Clio", "1234AAA", "Gasolina"));
-        this.vehiculos.add(new Vehiculo(2, "BMW", "M3", "1234BBB", "Gasolina"));
-        this.vehiculos.add(new Vehiculo(3, "Ford", "Fiesta", "1234CCC", "Gasoleo"));
+        this.vehiculos.put("1234AAA", new Vehiculo("Renault", "Clio", "1234AAA", "Gasolina"));
+        this.vehiculos.put("1234BBB", new Vehiculo("BMW", "M3", "1234BBB", "Gasolina"));
+        this.vehiculos.put("1234CCC", new Vehiculo("Ford", "Fiesta", "1234CCC", "Gasoleo"));
         return true;
     }
 
@@ -75,4 +74,35 @@ public class PresenterVehiculos {
     public boolean cargaDatosLocales(String fichero) {
         return (fichero != null);
     }
+
+    /**
+     * Metodo que añade el vehiculo al fichero y al arrayList de vehiculos
+     */
+    public void anhadirVehiculo(Vehiculo v) throws DatoNoValido, VehiculoYaExiste, MatriculaNoValida{
+        //Metodos para guardar vehiculo en el fichero asi como comprobar las matricuals y demas.
+        String marca = v.getMarca();
+        String modelo = v.getModelo();
+        String matricula = v.getMatricula();
+
+        //Formato de matricula
+        Pattern patron = Pattern.compile("[0-9]{4}+[A-Z]{3}");
+        Matcher mat = patron.matcher(matricula);
+
+        // Lanza excepcion si uno de los campos estan vacios
+        if(marca.equals("") || modelo.equals("") || matricula.equals("")){
+            throw new DatoNoValido();
+        }
+
+        // Lanza excepcion si el vehiculo ya existe
+        if(vehiculos.get(matricula) != null){
+            throw new VehiculoYaExiste();
+        }
+
+
+        // Lanza excepcion si la matricula no es valida
+        if(!mat.matches()){
+            throw new MatriculaNoValida();
+        }
+        vehiculos.put(matricula, v);
+    }//a
 }
