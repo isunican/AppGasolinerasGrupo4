@@ -6,18 +6,15 @@ import android.widget.ListView;
 import androidx.test.core.app.ApplicationProvider;
 import androidx.test.espresso.Espresso;
 import androidx.test.espresso.ViewInteraction;
+import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.rule.ActivityTestRule;
-
-//import static android.support.test.espresso.Espresso.onView;
-//import static android.support.test.espresso.matcher.ViewMatchers.withText;
-//import static android.support.test.espresso.matcher.RootMatchers.withDecorView;
-//import static android.support.test.espresso.assertion.ViewAssertions.matches;
 
 import com.isunican.proyectobase.R;
 import com.isunican.proyectobase.model.Vehiculo;
 
 import org.junit.Rule;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,20 +26,27 @@ import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.replaceText;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.RootMatchers.isPlatformPopup;
+import static androidx.test.espresso.matcher.RootMatchers.withDecorView;
+import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withSpinnerText;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.endsWith;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.not;
 import static org.junit.Assert.assertTrue;
 
-
+@RunWith(AndroidJUnit4.class)
 public class AnhadirVehiculoUITest {
 
         @Rule
         public ActivityTestRule<MainActivity> mActivityTestRule = new ActivityTestRule<>(MainActivity.class);
+
+        @Rule
+        public ActivityTestRule<VehiclesActivity> mActivityTestRuleVehicle = new ActivityTestRule<>(VehiclesActivity.class);
 
         @Test
         public void useAppContext() {
@@ -57,7 +61,8 @@ public class AnhadirVehiculoUITest {
 
             //Obtiene la lista de cada objeto Gasolinera después de aplicar el filtro
 
-            //ListView vista = (ListView) mActivityTestRule.getActivity().findViewById(R.id.listViewVehiculos);
+
+            ListView vista = (ListView) mActivityTestRuleVehicle.getActivity().findViewById(R.id.listViewVehiculos);
 
 
             //CASO UIT.1
@@ -74,10 +79,10 @@ public class AnhadirVehiculoUITest {
             //Se recorren la lista de vehiculos de la app y se meten en la lista
             Vehiculo vehiculo = new Vehiculo("Ford","Focus","1234ABC","Gasolina95");
 
-           // List<Vehiculo> vehiculosIniciales = new ArrayList<Vehiculo>();
-            //cargaListaVehiculos(vista, vehiculosIniciales);
-            //Comprobamos que el vehiculo se ha añadido correctamente.
-            //assertTrue(vehiculosIniciales.contains(vehiculo));
+           List<Vehiculo> vehiculosIniciales = new ArrayList<Vehiculo>();
+            cargaListaVehiculos(vista, vehiculosIniciales);
+           //Comprobamos que el vehiculo se ha añadido correctamente.
+            assertTrue(vehiculosIniciales.contains(vehiculo));
 
             //CASO UIT.2
             marca = "";
@@ -85,27 +90,51 @@ public class AnhadirVehiculoUITest {
             matricula= "5678ABC";
             escribeDatosVehiculo(marca, modelo, matricula, combustible);
             onView(withId(R.id.idBotonAceptar)).perform(click());
+
+            /*
+            try {
+                Thread.sleep(5000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+            //Comprobamos que el toast se ha mostrado correctamente
+            String toast_text = "Rellene todos los campos";
+            onView(withText(toast_text)).
+                    inRoot(withDecorView(not(is(mActivityTestRuleVehicle.getActivity().getWindow().getDecorView())))).
+                    check(matches(isDisplayed()));
+
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
             onView(withId(R.id.idBotonCancelar)).perform(click());
 
 
-            //Comprobamos que el toast se ha mostrado correctamente.
-            //MyNameActivity activity = activityTestRule.getActivity();
-            //onView(withText(R.string.toast_text)).
-            //        inRoot(withDecorView(not(is(activity.getWindow().getDecorView())))).
-            //        check(matches(isDisplayed()));
-
+        */
+            onView(withId(R.id.idBotonCancelar)).perform(click());
             //CASO UIT.3
             matricula= "1234ABC";
             escribeDatosVehiculo(marca, modelo, matricula, combustible);
             onView(withId(R.id.idBotonCancelar)).perform(click());
 
             //Comprobamos que no se ha añadido ningun vehiculo.
-            //List<Vehiculo> vehiculos = new ArrayList<Vehiculo>();
-            //cargaListaVehiculos(vista, vehiculos);
+            List<Vehiculo> vehiculos = new ArrayList<Vehiculo>();
+            cargaListaVehiculos(vista, vehiculos);
 
-            //assertTrue(vehiculos.equals(vehiculosIniciales));
+            assertTrue(vehiculos.equals(vehiculosIniciales));
 
+            //Comprobamos que el formulario se ha reseteado.
 
+            onView(withId(R.id.imageButton2)).perform(click());
+
+            onView(withId(R.id.idIntroduceMarca)).check(matches(withText("")));
+            onView(withId(R.id.idIntroduceModelo)).check(matches(withText("")));
+            onView(withId(R.id.idIntroduceMatricula)).check(matches(withText("")));
+
+            onView(withId(R.id.idBotonCancelar)).perform(click());
             //CASO UIT.4
             marca = "BMW";
             modelo ="X1";
@@ -116,6 +145,7 @@ public class AnhadirVehiculoUITest {
 
             //Comprobamos que se muestra un mensaje diciendo que la matricula se encuentra en el sistema
 
+            
         }
 
     private void cargaListaVehiculos(ListView vista, List<Vehiculo> vehiculosIniciales) {
@@ -126,6 +156,7 @@ public class AnhadirVehiculoUITest {
     }
 
     private void escribeDatosVehiculo(String marca, String modelo, String matricula, String combustible){
+
         onView(withId(R.id.imageButton2)).perform(click());
         //Hace click en la primera gasolinera e introduce un precio mínimo
         ViewInteraction evento1 = onView(withId(R.id.idIntroduceMarca));
@@ -152,5 +183,6 @@ public class AnhadirVehiculoUITest {
                 is(combustible))).inRoot(isPlatformPopup()).perform(click());
         //Se comprueba que el texto del spinner es el adecuado
         onView(withId(R.id.idSpinnerCombustible)).check(matches(withSpinnerText(containsString(combustible))));
+
     }
 }
