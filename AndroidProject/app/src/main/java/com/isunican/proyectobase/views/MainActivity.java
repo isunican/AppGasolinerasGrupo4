@@ -231,7 +231,6 @@ public class MainActivity extends AppCompatActivity implements
     public void onItemSelected(AdapterView<?> arg0, View arg1, int position, long id) {
 
         combustibleActual = combustibles[position];
-        Toast.makeText(getApplicationContext(), combustibles[position], Toast.LENGTH_LONG).show();
         List<Gasolinera> gasolineras;
         switch (combustibles[position]) {
             case GASOLINA95:
