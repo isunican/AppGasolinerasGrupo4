@@ -13,11 +13,13 @@ import static org.junit.Assert.fail;
 public class PresenterVehiculosTest {
 
     //Declaracion de distintos vehiculos con diferentes datos que se estableceran posteriormente
-    private Vehiculo vehiculoA;
-    private Vehiculo vehiculoB;
-    private Vehiculo vehiculoC;
+    private Vehiculo vehiculoValidoA;
+    private Vehiculo vehiculoMatriculaNoValida;
+    private Vehiculo vehiculoValidoB;
     private Vehiculo vehiculoConDatoNulo;
     private Vehiculo vehiculoNulo;
+    private Vehiculo vehiculoConOtroCarburante;
+
     private PresenterVehiculos presenterVehiculos;
 
 
@@ -25,34 +27,35 @@ public class PresenterVehiculosTest {
     public void setUp() throws Exception{
 
         //Inicializacion de los vehiculos
-        vehiculoA = new Vehiculo("Ford", "Fiesta","1234ABC","gasolina95");
-        vehiculoB = new Vehiculo("Opel", "Corsa","ESTODAERROR","gasolina95");
-        vehiculoC =  new Vehiculo("Toyota", "Corolla", "1086AEH", "gasoleoA");
+        vehiculoValidoA = new Vehiculo("Ford", "Fiesta","1234ABC","gasolina95");
+        vehiculoMatriculaNoValida = new Vehiculo("Opel", "Corsa","ESTODAERROR","gasolina95");
+        vehiculoValidoB =  new Vehiculo("Toyota", "Corolla", "1086AEH", "gasoleoA");
         vehiculoConDatoNulo =  new Vehiculo("Subaru", null,"2501ERR","gasoleoA");
+        vehiculoConDatoNulo =  new Vehiculo("Seat", "Leon","2552ERR","gasolinaFalsa");
+
         vehiculoNulo = null;
     }
 
     @Test
     public void anhadirVehiculoTest()
     {
-        /*
         //Caso UT.1a
         try{
-            presenterVehiculos.anhadirVehiculo(vehiculoA);
+            presenterVehiculos.anhadirVehiculo(vehiculoValidoA);
         } catch(Exception e){
             fail();
         }
 
         //Caso UT.1b
         try{
-            presenterVehiculos.anhadirVehiculo(vehiculoC);
+            presenterVehiculos.anhadirVehiculo(vehiculoValidoB);
         } catch(Exception e){
             fail();
         }
 
         //Caso UT.1c
         try{
-            presenterVehiculos.anhadirVehiculo(vehiculoA);
+            presenterVehiculos.anhadirVehiculo(vehiculoValidoA);
             fail();
         } catch(PresenterVehiculos.VehiculoYaExiste v){
 
@@ -60,7 +63,7 @@ public class PresenterVehiculosTest {
 
         //Caso UT.1d
         try {
-            presenterVehiculos.anhadirVehiculo(vehiculoB);
+            presenterVehiculos.anhadirVehiculo(vehiculoMatriculaNoValida);
             fail();
         } catch(PresenterVehiculos.MatriculaNoValida m){
 
@@ -72,7 +75,22 @@ public class PresenterVehiculosTest {
         } catch(PresenterVehiculos.DatoNoValido d){
 
         }
-        */
+
+        //Caso UT.1f
+        try{
+            presenterVehiculos.anhadirVehiculo(vehiculoConDatoNulo);
+            fail();
+        } catch(PresenterVehiculos.VehiculoNulo d){
+
+        }
+
+        //Caso UT.1g
+        try{
+            presenterVehiculos.anhadirVehiculo(vehiculoConOtroCarburante);
+            fail();
+        } catch(PresenterVehiculos.CombustibleNoValido d){
+
+        }
     }
 
     @Test

@@ -11,6 +11,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -23,6 +24,9 @@ public class PresenterVehiculos {
     public static class DatoNoValido extends RuntimeException {}
     public static class VehiculoYaExiste extends RuntimeException {}
     public static class MatriculaNoValida extends RuntimeException {}
+    public static class VehiculoNulo extends RuntimeException {}
+    public static class CombustibleNoValido extends RuntimeException {}
+
 
     /**
      * Constructor, getters y setters
@@ -36,7 +40,7 @@ public class PresenterVehiculos {
      * Actualiza y retorna el mapa con los vehiculos
      * @return
      */
-    public Map<String, Vehiculo> getVehiculos(Context context) {
+    public HashMap<String, Vehiculo> getVehiculos(Context context) {
         cargaDatosVehiculos(context);
         return vehiculos;
     }
@@ -72,7 +76,7 @@ public class PresenterVehiculos {
     /**
      * Metodo que añade el vehiculo al fichero y al arrayList de vehiculos
      */
-    public void anhadirVehiculo(Vehiculo v, Context context) {
+    public void anhadirVehiculo(Vehiculo v, Context context) throws DatoNoValido, VehiculoYaExiste, MatriculaNoValida, VehiculoNulo, CombustibleNoValido{
         //Metodos para guardar vehiculo en el fichero asi como comprobar las matricuals y demas.
         String marca = v.getMarca();
         String modelo = v.getModelo();
@@ -90,6 +94,17 @@ public class PresenterVehiculos {
         // Lanza excepcion si el vehiculo ya existe
         if(vehiculos.get(matricula) != null){
             throw new VehiculoYaExiste();
+        }
+
+
+        // Lanza excepcion si el combustible no es valido
+        if(!v.getCombustible().equals("gasolina95") || !v.getCombustible().equals("gasoleoA")) {
+            throw new CombustibleNoValido();
+        }
+
+        // Lanza excepcion si el vehiculo es nulo
+        if(v.equals(null) ) {
+            throw new VehiculoNulo();
         }
 
         // Lanza excepcion si la matricula no es valida
@@ -119,7 +134,7 @@ public class PresenterVehiculos {
      * @return
      */
     private boolean obtieneMapa(String db){
-        HashMap<String, Vehiculo> lista = new HashMap<>();
+        HashMap<String, Vehiculo> lista = new HashMap<String, Vehiculo>();
         String marca="";
         String modelo="";
         String matricula="";
