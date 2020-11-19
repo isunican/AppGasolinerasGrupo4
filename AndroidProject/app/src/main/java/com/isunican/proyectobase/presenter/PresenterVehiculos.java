@@ -78,7 +78,14 @@ public class PresenterVehiculos {
      * Metodo que añade el vehiculo al fichero y al arrayList de vehiculos
      */
     public void anhadirVehiculo(Vehiculo v) {
-       if(v.getMarca().equals(null) || v.getMatricula().equals(null) || v.getModelo().equals(null)){
+
+        // Lanza excepcion si el vehiculo es nulo
+        if(v == null){
+            throw new VehiculoNulo();
+        }
+
+        //Lanza excepcion si algun dato es nulo
+        if(v.getMarca() == null || v.getMatricula() == null || v.getModelo() == null){
            throw new DatoNulo();
        }
 
@@ -111,10 +118,8 @@ public class PresenterVehiculos {
             throw new CombustibleNoValido();
         }
 
-        // Lanza excepcion si el vehiculo es nulo
-        if(v.equals(null)){
-            throw new VehiculoNulo();
-        }
+
+        vehiculos.put(v.getMatricula(), v);
     }
 
 
@@ -123,7 +128,6 @@ public class PresenterVehiculos {
      */
     public void escribeVehiculo(String vehiculo, Context context, Vehiculo v){
 
-
         try{
             FileWriter outputStreamWriter = new FileWriter (context.getFileStreamPath("vehiculos.txt"), true);
             outputStreamWriter.write(vehiculo);
@@ -131,7 +135,6 @@ public class PresenterVehiculos {
         }catch (IOException e){
             Log.e("Excepción","Fallo al escribir en la base de datos");
         }
-        vehiculos.put(v.getMatricula(), v);
     }
 
     /**
