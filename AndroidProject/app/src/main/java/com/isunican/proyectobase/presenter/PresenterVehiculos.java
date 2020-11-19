@@ -23,6 +23,8 @@ public class PresenterVehiculos {
     public static class DatoNoValido extends RuntimeException {}
     public static class VehiculoYaExiste extends RuntimeException {}
     public static class MatriculaNoValida extends RuntimeException {}
+    public static class CombustibleNoValido extends RuntimeException {}
+    public static class VehiculoNulo extends RuntimeException {}
 
     /**
      * Constructor, getters y setters
@@ -73,10 +75,11 @@ public class PresenterVehiculos {
      * Metodo que añade el vehiculo al fichero y al arrayList de vehiculos
      */
     public void anhadirVehiculo(Vehiculo v, Context context) {
-        //Metodos para guardar vehiculo en el fichero asi como comprobar las matricuals y demas.
+        //Metodos para guardar vehiculo en el fichero asi como comprobar las matriculas y demas.
         String marca = v.getMarca();
         String modelo = v.getModelo();
         String matricula = v.getMatricula();
+        String combustible = v.getCombustible();
 
         //Formato de matricula
         Pattern patron = Pattern.compile("[0-9]{4}+[A-Z]{3}");
@@ -95,6 +98,16 @@ public class PresenterVehiculos {
         // Lanza excepcion si la matricula no es valida
         if(!mat.matches()){
             throw new MatriculaNoValida();
+        }
+
+        // Lanza excepcion si el combustible pasado no es GasoleoA o Gasolina95
+        if(!combustible.equals("Gasolina95") && !combustible.equals("GasoleoA")){
+            throw new CombustibleNoValido();
+        }
+
+        // Lanza excepcion si el vehiculo es nulo
+        if(v.equals(null)){
+            throw new VehiculoNulo();
         }
         escribeVehiculo(v.toString(), context);
         vehiculos.put(matricula, v);
