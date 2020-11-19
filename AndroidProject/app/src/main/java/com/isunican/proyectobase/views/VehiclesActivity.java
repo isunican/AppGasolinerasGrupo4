@@ -136,7 +136,7 @@ public class VehiclesActivity extends AppCompatActivity implements
                 Vehiculo vehiculo = new Vehiculo(mar, model, matricu, combustibleActual);
                 try {
                     presenterVehiculos.anhadirVehiculo(vehiculo);
-                    presenterVehiculos.escribeVehiculo(vehiculo.toString(), VehiclesActivity.this, vehiculo);
+                    presenterVehiculos.escribeVehiculo(vehiculo.toString(), VehiclesActivity.this);
 
                     Toast.makeText(getApplicationContext(), "Datos añadidos", Toast.LENGTH_LONG).show();
                     dialog.dismiss();
@@ -295,26 +295,6 @@ public class VehiclesActivity extends AppCompatActivity implements
             // carga icono
             cargaIcono(vehiculo, marca);
 
-            // Si las dimensiones de la pantalla son menores
-            // reducimos el texto de las etiquetas para que se vea correctamente
-            /*
-            DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
-
-            if (displayMetrics.widthPixels < 720) {
-                TextView tv = view.findViewById(R.id.logoMarca);
-                RelativeLayout.LayoutParams params = ((RelativeLayout.LayoutParams) tv.getLayoutParams());
-                params.setMargins(15, 0, 0, 0);
-                tv.setTextSize(11);
-                TextView tmp;
-                tmp = view.findViewById(R.id.textViewGasolina95Label);
-                tmp.setTextSize(11);
-                tmp = view.findViewById(R.id.textViewGasoleoA);
-                tmp.setTextSize(11);
-                tmp = view.findViewById(R.id.textViewGasolina95);
-                tmp.setTextSize(11);
-
-            }
-            */
             return view;
         }
 
