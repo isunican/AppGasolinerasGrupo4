@@ -194,6 +194,10 @@ public class VehiclesActivity extends AppCompatActivity implements
         }
     }
 
+    public PresenterVehiculos getPresenterVehiculos(){
+        return presenterVehiculos;
+    }
+
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
         //De momento no hace nada

@@ -26,6 +26,8 @@ public class PresenterVehiculos {
     public static class MatriculaNoValida extends RuntimeException {}
     public static class CombustibleNoValido extends RuntimeException {}
     public static class VehiculoNulo extends RuntimeException {}
+    public static class DatoNulo extends RuntimeException {}
+
 
     /**
      * Constructor, getters y setters
@@ -76,6 +78,10 @@ public class PresenterVehiculos {
      * Metodo que añade el vehiculo al fichero y al arrayList de vehiculos
      */
     public void anhadirVehiculo(Vehiculo v) {
+       if(v.getMarca().equals(null) || v.getMatricula().equals(null) || v.getModelo().equals(null)){
+           throw new DatoNulo();
+       }
+
         //Metodos para guardar vehiculo en el fichero asi como comprobar las matricuals y demas.
         String marca = v.getMarca();
         String modelo = v.getModelo();
