@@ -52,7 +52,7 @@ public class AnhadirVehiculoUITest {
         @Test
         public void useAppContext() {
             Context context = ApplicationProvider.getApplicationContext();
-
+            context.deleteFile("vehiculos.txt");
             // Open the overflow menu OR open the options menu,
             // depending on if the device has a hardware or software overflow menu button.
             openActionBarOverflowOrOptionsMenu(context);
@@ -91,31 +91,8 @@ public class AnhadirVehiculoUITest {
             matricula= "5678ABC";
             escribeDatosVehiculo(marca, modelo, matricula, combustible);
             onView(withId(R.id.idBotonAceptar)).perform(click());
-
-            /*
-            try {
-                Thread.sleep(5000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-
-            //Comprobamos que el toast se ha mostrado correctamente
-            String toast_text = "Rellene todos los campos";
-            onView(withText(toast_text)).
-                    inRoot(withDecorView(not(is(mActivityTestRuleVehicle.getActivity().getWindow().getDecorView())))).
-                    check(matches(isDisplayed()));
-
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-
             onView(withId(R.id.idBotonCancelar)).perform(click());
 
-
-        */
-            onView(withId(R.id.idBotonCancelar)).perform(click());
             //CASO UIT.3
             matricula= "1234ABC";
             escribeDatosVehiculo(marca, modelo, matricula, combustible);
@@ -143,9 +120,7 @@ public class AnhadirVehiculoUITest {
             escribeDatosVehiculo(marca, modelo, matricula, combustible);
             onView(withId(R.id.idBotonAceptar)).perform(click());
 
-            //Comprobamos que se muestra un mensaje diciendo que la matricula se encuentra en el sistema
-
-            
+            context.deleteFile("vehiculos.txt");
         }
 
     private void cargaListaVehiculos(ListView vista, List<Vehiculo> vehiculosIniciales) {
