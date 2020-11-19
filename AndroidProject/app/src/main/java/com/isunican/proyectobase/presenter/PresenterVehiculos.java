@@ -4,6 +4,7 @@ import android.content.Context;
 import android.util.Log;
 
 import com.isunican.proyectobase.model.Vehiculo;
+import com.isunican.proyectobase.views.VehiclesActivity;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -72,7 +73,7 @@ public class PresenterVehiculos {
     /**
      * Metodo que añade el vehiculo al fichero y al arrayList de vehiculos
      */
-    public void anhadirVehiculo(Vehiculo v, Context context) {
+    public void anhadirVehiculo(Vehiculo v) {
         //Metodos para guardar vehiculo en el fichero asi como comprobar las matricuals y demas.
         String marca = v.getMarca();
         String modelo = v.getModelo();
@@ -93,17 +94,18 @@ public class PresenterVehiculos {
         }
 
         // Lanza excepcion si la matricula no es valida
-        if(!mat.matches()){
+        if(!mat.matches()) {
             throw new MatriculaNoValida();
         }
-        escribeVehiculo(v.toString(), context);
-        vehiculos.put(matricula, v);
     }
+
 
     /**
      * Escribe el vehículo pasado como parámetro en la base de datos
      */
-    private void escribeVehiculo(String vehiculo, Context context){
+    public void escribeVehiculo(String vehiculo, Context context, Vehiculo v){
+
+
         try{
             FileWriter outputStreamWriter = new FileWriter (context.getFileStreamPath("vehiculos.txt"), true);
             outputStreamWriter.write(vehiculo);
@@ -111,6 +113,7 @@ public class PresenterVehiculos {
         }catch (IOException e){
             Log.e("Excepción","Fallo al escribir en la base de datos");
         }
+        vehiculos.put(v.getMatricula(), v);
     }
 
     /**

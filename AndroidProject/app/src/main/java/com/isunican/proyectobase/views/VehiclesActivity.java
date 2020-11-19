@@ -135,7 +135,8 @@ public class VehiclesActivity extends AppCompatActivity implements
                 String matricu = matric.toUpperCase();
                 Vehiculo vehiculo = new Vehiculo(mar, model, matricu, combustibleActual);
                 try {
-                    presenterVehiculos.anhadirVehiculo(vehiculo, VehiclesActivity.this);
+                    presenterVehiculos.anhadirVehiculo(vehiculo);
+                    presenterVehiculos.escribeVehiculo(vehiculo.toString(), VehiclesActivity.this, vehiculo);
 
                     Toast.makeText(getApplicationContext(), "Datos añadidos", Toast.LENGTH_LONG).show();
                     dialog.dismiss();
