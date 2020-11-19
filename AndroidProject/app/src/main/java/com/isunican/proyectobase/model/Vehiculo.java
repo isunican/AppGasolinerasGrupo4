@@ -137,5 +137,15 @@ public class Vehiculo implements Parcelable {
 
         return equal;
     }
+
+    @Override
+    public int hashCode(){
+        int num = matricula.hashCode();
+        num += modelo.hashCode();
+        num += marca.hashCode();
+        num += combustible.hashCode();
+
+        return num;
+    }
 }
 

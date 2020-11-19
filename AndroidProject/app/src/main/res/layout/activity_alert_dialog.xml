@@ -115,7 +115,7 @@
         android:layout_alignParentRight="true"
         android:layout_gravity="end"
         android:layout_marginTop="36dp"
-        android:layout_marginRight="70dp"
+        android:layout_marginRight="50dp"
         android:gravity="top" />
 
     <Button
@@ -123,8 +123,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/idTipoCombustible"
+        android:layout_marginLeft="200dp"
         android:layout_marginTop="50dp"
-        android:layout_marginLeft="225dp"
         android:text="Cancelar" />
 
     <Button
