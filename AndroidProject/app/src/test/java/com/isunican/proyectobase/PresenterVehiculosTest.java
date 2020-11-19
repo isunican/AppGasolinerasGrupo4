@@ -20,6 +20,8 @@ import static org.junit.Assert.fail;
 
 @RunWith(RobolectricTestRunner.class)
 @Config(sdk = Build.VERSION_CODES.O_MR1)
+
+
 public class PresenterVehiculosTest {
 
     //Declaracion de distintos vehiculos con diferentes datos que se estableceran posteriormente
@@ -44,15 +46,19 @@ public class PresenterVehiculosTest {
         vehiculoConOtroCarburante =  new Vehiculo("Seat", "Leon","1337OOO","GasolinaFalsa");
 
         vehiculoNulo = null;
+
+
     }
 
     @Test
     public void anhadirVehiculoTest()
     {
+
         VehiclesActivity activity = Robolectric.buildActivity(VehiclesActivity.class).create().resume().get();
         //Context context = ApplicationProvider.getApplicationContext();
         Context context = RuntimeEnvironment.systemContext;
         presenterVehiculos = activity.getPresenterVehiculos();
+
 
         //Caso UT.1a
         try{
@@ -116,6 +122,7 @@ public class PresenterVehiculosTest {
         } catch(PresenterVehiculos.DatoNoValido d){
 
         }
+
     }
 
     @Test
