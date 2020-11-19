@@ -52,10 +52,10 @@ public class AnhadirVehiculoUITest {
         @Test
         public void useAppContext() {
             Context context = ApplicationProvider.getApplicationContext();
-
+            context.deleteFile("vehiculos.txt");
             // Open the overflow menu OR open the options menu,
             // depending on if the device has a hardware or software overflow menu button.
-             openActionBarOverflowOrOptionsMenu(context);
+            openActionBarOverflowOrOptionsMenu(context);
 
             // Click the item.
             onView(withText("Vehiculos")).perform(click());
@@ -75,6 +75,8 @@ public class AnhadirVehiculoUITest {
             escribeDatosVehiculo(marca, modelo, matricula, combustible);
             onView(withId(R.id.idBotonAceptar)).perform(click());
 
+
+
             //Se recorren la lista de vehiculos de la app y se meten en la lista
             Vehiculo vehiculo = new Vehiculo("Ford","Focus","1234ABC","Gasolina95");
 
@@ -89,11 +91,8 @@ public class AnhadirVehiculoUITest {
             matricula= "5678ABC";
             escribeDatosVehiculo(marca, modelo, matricula, combustible);
             onView(withId(R.id.idBotonAceptar)).perform(click());
-
             onView(withId(R.id.idBotonCancelar)).perform(click());
 
-
-            onView(withId(R.id.idBotonCancelar)).perform(click());
             //CASO UIT.3
             matricula= "1234ABC";
             escribeDatosVehiculo(marca, modelo, matricula, combustible);
@@ -121,6 +120,7 @@ public class AnhadirVehiculoUITest {
             escribeDatosVehiculo(marca, modelo, matricula, combustible);
             onView(withId(R.id.idBotonAceptar)).perform(click());
 
+            context.deleteFile("vehiculos.txt");
         }
 
     private void cargaListaVehiculos(ListView vista, List<Vehiculo> vehiculosIniciales) {

@@ -7,15 +7,16 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-
 import com.isunican.proyectobase.model.Vehiculo;
 import com.isunican.proyectobase.presenter.PresenterGasolineras;
 import com.isunican.proyectobase.presenter.PresenterVehiculos;
 
 import java.util.List;
 
-public class AnhadirVehiculosITest {
 
+
+public class AnhadirVehiculosITest {
+/*
     PresenterVehiculos presenter = new PresenterVehiculos();
         //Declaración de los vehículos
         private Vehiculo vehiculoMatriculaDistinta;
@@ -46,4 +47,5 @@ public class AnhadirVehiculosITest {
             } catch (Exception e){
             };
         }
+        */
 }
