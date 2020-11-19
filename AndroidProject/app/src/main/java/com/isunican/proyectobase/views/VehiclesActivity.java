@@ -135,7 +135,8 @@ public class VehiclesActivity extends AppCompatActivity implements
                 String matricu = matric.toUpperCase();
                 Vehiculo vehiculo = new Vehiculo(mar, model, matricu, combustibleActual);
                 try {
-                    presenterVehiculos.anhadirVehiculo(vehiculo, VehiclesActivity.this);
+                    presenterVehiculos.anhadirVehiculo(vehiculo);
+                    presenterVehiculos.escribeVehiculo(vehiculo.toString(), VehiclesActivity.this, vehiculo);
 
                     Toast.makeText(getApplicationContext(), "Datos añadidos", Toast.LENGTH_LONG).show();
                     dialog.dismiss();
@@ -153,9 +154,19 @@ public class VehiclesActivity extends AppCompatActivity implements
                     notificaFormatoMatriculaNoValida();
                 }
 
-                catch (PresenterVehiculos.VehiculoYaExiste e) {
+                catch (PresenterVehiculos.VehiculoNulo e) {
                     notificaVehiculoExiste();
                 }
+
+                catch (PresenterVehiculos.CombustibleNoValido e) {
+                    notificaCombustibleNoValido();
+                }
+
+                catch (PresenterVehiculos.VehiculoYaExiste e) {
+                    notificaVehiculoNulo();
+                }
+
+
 
             }
         });
@@ -212,6 +223,24 @@ public class VehiclesActivity extends AppCompatActivity implements
     private void notificaFormatoMatriculaNoValida() {
         Toast toast;
         toast = Toast.makeText(getApplicationContext(), "Formato de matricula incorrecto, formato 9999XXX", Toast.LENGTH_LONG);
+        toast.show();
+    }
+
+    /**
+     * Muestra mensaje de error
+     */
+    private void notificaVehiculoNulo() {
+        Toast toast;
+        toast = Toast.makeText(getApplicationContext(), "Vehiculo nulo", Toast.LENGTH_LONG);
+        toast.show();
+    }
+
+    /**
+     * Muestra mensaje de error
+     */
+    private void notificaCombustibleNoValido() {
+        Toast toast;
+        toast = Toast.makeText(getApplicationContext(), "Combustible introducido no valido", Toast.LENGTH_LONG);
         toast.show();
     }
 

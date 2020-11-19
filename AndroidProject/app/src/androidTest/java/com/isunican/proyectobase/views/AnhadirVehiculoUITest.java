@@ -43,8 +43,8 @@ import static org.junit.Assert.assertTrue;
 @RunWith(AndroidJUnit4.class)
 public class AnhadirVehiculoUITest {
 
-        @Rule
-        public ActivityTestRule<MainActivity> mActivityTestRule = new ActivityTestRule<>(MainActivity.class);
+        //@Rule
+        //public ActivityTestRule<MainActivity> mActivityTestRule = new ActivityTestRule<>(MainActivity.class);
 
         @Rule
         public ActivityTestRule<VehiclesActivity> mActivityTestRuleVehicle = new ActivityTestRule<>(VehiclesActivity.class);
@@ -55,10 +55,10 @@ public class AnhadirVehiculoUITest {
             context.deleteFile("vehiculos.txt");
             // Open the overflow menu OR open the options menu,
             // depending on if the device has a hardware or software overflow menu button.
-            openActionBarOverflowOrOptionsMenu(context);
+            //openActionBarOverflowOrOptionsMenu(context);
 
             // Click the item.
-            onView(withText("Vehiculos")).perform(click());
+            //onView(withText("Vehiculos")).perform(click());
 
             //Obtiene la lista de cada objeto Gasolinera después de aplicar el filtro
 
