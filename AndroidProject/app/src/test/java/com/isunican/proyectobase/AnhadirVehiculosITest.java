@@ -15,7 +15,7 @@ import com.isunican.proyectobase.presenter.PresenterVehiculos;
 import java.util.List;
 
 public class AnhadirVehiculosITest {
-/*
+
     PresenterVehiculos presenter = new PresenterVehiculos();
         //Declaración de los vehículos
         private Vehiculo vehiculoMatriculaDistinta;
@@ -46,5 +46,4 @@ public class AnhadirVehiculosITest {
             } catch (Exception e){
             };
         }
-        */
 }

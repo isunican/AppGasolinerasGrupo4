@@ -37,9 +37,7 @@ import static org.hamcrest.Matchers.endsWith;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
-
 import static org.junit.Assert.assertEquals;
-
 import static org.junit.Assert.assertTrue;
 
 @RunWith(AndroidJUnit4.class)
@@ -57,7 +55,7 @@ public class AnhadirVehiculoUITest {
 
             // Open the overflow menu OR open the options menu,
             // depending on if the device has a hardware or software overflow menu button.
-            openActionBarOverflowOrOptionsMenu(context);
+             openActionBarOverflowOrOptionsMenu(context);
 
             // Click the item.
             onView(withText("Vehiculos")).perform(click());
@@ -77,8 +75,6 @@ public class AnhadirVehiculoUITest {
             escribeDatosVehiculo(marca, modelo, matricula, combustible);
             onView(withId(R.id.idBotonAceptar)).perform(click());
 
-
-
             //Se recorren la lista de vehiculos de la app y se meten en la lista
             Vehiculo vehiculo = new Vehiculo("Ford","Focus","1234ABC","Gasolina95");
 
@@ -94,34 +90,9 @@ public class AnhadirVehiculoUITest {
             escribeDatosVehiculo(marca, modelo, matricula, combustible);
             onView(withId(R.id.idBotonAceptar)).perform(click());
 
-            /*
-            try {
-                Thread.sleep(5000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-
-            //Comprobamos que el toast se ha mostrado correctamente
-            String toast_text = "Rellene todos los campos";
-            onView(withText(toast_text)).
-                    inRoot(withDecorView(not(is(mActivityTestRuleVehicle.getActivity().getWindow().getDecorView())))).
-                    check(matches(isDisplayed()));
-
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-
             onView(withId(R.id.idBotonCancelar)).perform(click());
 
 
-
-
-            onView(withId(R.id.idBotonCancelar)).perform(click());
-
-
-        */
             onView(withId(R.id.idBotonCancelar)).perform(click());
             //CASO UIT.3
             matricula= "1234ABC";
@@ -132,12 +103,7 @@ public class AnhadirVehiculoUITest {
             List<Vehiculo> vehiculos = new ArrayList<Vehiculo>();
             cargaListaVehiculos(vista, vehiculos);
 
-
-            assertTrue(vehiculos.equals(vehiculosIniciales));
-
-
             assertEquals(vehiculos,vehiculosIniciales );
-
             //Comprobamos que el formulario se ha reseteado.
 
             onView(withId(R.id.imageButton2)).perform(click());
@@ -155,9 +121,6 @@ public class AnhadirVehiculoUITest {
             escribeDatosVehiculo(marca, modelo, matricula, combustible);
             onView(withId(R.id.idBotonAceptar)).perform(click());
 
-            //Comprobamos que se muestra un mensaje diciendo que la matricula se encuentra en el sistema
-
-            
         }
 
     private void cargaListaVehiculos(ListView vista, List<Vehiculo> vehiculosIniciales) {
