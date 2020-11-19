@@ -24,12 +24,17 @@
 
             <ImageButton
                 android:id="@+id/imageButton2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="340dp"
-                android:layout_weight="1"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="0.5"
                 android:onClick="anhadirVehiculo"
                 app:srcCompat="@android:drawable/ic_input_add" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="0.2"
+                android:orientation="horizontal"></LinearLayout>
         </LinearLayout>
 
         <LinearLayout
