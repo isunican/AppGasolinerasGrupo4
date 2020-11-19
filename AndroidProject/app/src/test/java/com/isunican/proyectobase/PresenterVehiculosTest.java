@@ -42,7 +42,6 @@ public class PresenterVehiculosTest {
         vehiculoConDatoNulo =  new Vehiculo("Subaru", null,"2501ERR","GasoleoA");
         vehiculoConDatoVacio =  new Vehiculo("", "Multipla","0000ABC","GasoleoA");
         vehiculoConOtroCarburante =  new Vehiculo("Seat", "Leon","1337OOO","GasolinaFalsa");
-
         vehiculoNulo = null;
     }
 
@@ -50,14 +49,12 @@ public class PresenterVehiculosTest {
     public void anhadirVehiculoTest()
     {
         VehiclesActivity activity = Robolectric.buildActivity(VehiclesActivity.class).create().resume().get();
-        //Context context = ApplicationProvider.getApplicationContext();
         Context context = RuntimeEnvironment.systemContext;
         presenterVehiculos = activity.getPresenterVehiculos();
 
         //Caso UT.1a
         try{
             presenterVehiculos.anhadirVehiculo(vehiculoValidoA);
-            presenterVehiculos.escribeVehiculo(vehiculoValidoA.toString(),context,vehiculoValidoA);
         } catch(Exception e){
             fail();
         }
@@ -116,11 +113,5 @@ public class PresenterVehiculosTest {
         } catch(PresenterVehiculos.DatoNoValido d){
 
         }
-    }
-
-    @Test
-    public void cargarVehiculosTest()
-    {
-
     }
 }
