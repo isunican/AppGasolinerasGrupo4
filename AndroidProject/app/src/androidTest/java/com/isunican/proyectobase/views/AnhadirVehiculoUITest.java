@@ -50,7 +50,7 @@ public class AnhadirVehiculoUITest {
         public ActivityTestRule<VehiclesActivity> mActivityTestRuleVehicle = new ActivityTestRule<>(VehiclesActivity.class);
 
         @Test
-        public void useAppContext() {
+        public void anhadirVehiculoTest() {
             Context context = ApplicationProvider.getApplicationContext();
             context.deleteFile("vehiculos.txt");
             // Open the overflow menu OR open the options menu,
