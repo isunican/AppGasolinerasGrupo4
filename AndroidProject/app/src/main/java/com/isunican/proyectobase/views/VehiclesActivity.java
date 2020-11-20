@@ -316,8 +316,5 @@ public class VehiclesActivity extends AppCompatActivity implements
             logo.setImageResource(imageID);
         }
     }
-    public PresenterVehiculos getPresenter(){
-        return presenterVehiculos;
-    }
 }
 
