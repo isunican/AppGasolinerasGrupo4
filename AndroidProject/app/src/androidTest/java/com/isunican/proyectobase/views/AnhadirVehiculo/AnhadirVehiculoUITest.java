@@ -1,4 +1,4 @@
-package com.isunican.proyectobase.views;
+package com.isunican.proyectobase.views.AnhadirVehiculo;
 
 import android.content.Context;
 import android.widget.ListView;
@@ -11,6 +11,7 @@ import androidx.test.rule.ActivityTestRule;
 
 import com.isunican.proyectobase.R;
 import com.isunican.proyectobase.model.Vehiculo;
+import com.isunican.proyectobase.views.VehiclesActivity;
 
 import org.junit.Rule;
 import org.junit.Test;

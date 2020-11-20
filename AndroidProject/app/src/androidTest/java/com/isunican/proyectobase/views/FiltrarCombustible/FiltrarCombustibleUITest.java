@@ -1,4 +1,4 @@
-package com.isunican.proyectobase.views;
+package com.isunican.proyectobase.views.FiltrarCombustible;
 
 import androidx.test.rule.ActivityTestRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
@@ -7,6 +7,7 @@ import android.widget.ListView;
 
 import com.isunican.proyectobase.model.Gasolinera;
 import com.isunican.proyectobase.R;
+import com.isunican.proyectobase.views.MainActivity;
 
 import org.junit.Rule;
 import org.junit.Test;
