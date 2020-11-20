@@ -248,6 +248,9 @@ public class VehiclesActivity extends AppCompatActivity implements
         toast.show();
     }
 
+    public PresenterVehiculos getPresenter(){
+        return presenterVehiculos;
+    }
     /*
     ------------------------------------------------------------------
         VehiculosArrayAdapter
