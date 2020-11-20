@@ -53,7 +53,6 @@ public class AnhadirVehiculosITest {
         vehiculoMatriculaIgual=new Vehiculo("Volkswagen", "Golf Mk2", "1234BCA", "Gasolina95");
         vehiculoAnhadido=new Vehiculo("Honda", "Civic", "1234BCA", "Gasolina95");
         presenter.anhadirVehiculo(vehiculoAnhadido);
-        presenter.escribeVehiculo(vehiculoAnhadido.toString(),context);
     }
 
     @Test
@@ -62,8 +61,6 @@ public class AnhadirVehiculosITest {
         //Caso válido IT.1
         try{
             presenter.anhadirVehiculo(vehiculoMatriculaDistinta);
-            presenter.escribeVehiculo(vehiculoMatriculaDistinta.toString(),context);
-
         } catch (PresenterVehiculos.VehiculoYaExiste e){
             fail();
         };
@@ -71,7 +68,6 @@ public class AnhadirVehiculosITest {
         //Caso no válido IT.2
         try{
             presenter.anhadirVehiculo(vehiculoMatriculaIgual);
-            presenter.escribeVehiculo(vehiculoMatriculaIgual.toString(),context);
             fail();
         } catch (PresenterVehiculos.VehiculoYaExiste e){
 
