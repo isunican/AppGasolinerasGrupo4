@@ -248,6 +248,9 @@ public class VehiclesActivity extends AppCompatActivity implements
         toast.show();
     }
 
+    public PresenterVehiculos getPresenter(){
+        return presenterVehiculos;
+    }
     /*
     ------------------------------------------------------------------
         VehiculosArrayAdapter
@@ -312,9 +315,6 @@ public class VehiclesActivity extends AppCompatActivity implements
             }
             logo.setImageResource(imageID);
         }
-    }
-    public PresenterVehiculos getPresenter(){
-        return presenterVehiculos;
     }
 }
 
