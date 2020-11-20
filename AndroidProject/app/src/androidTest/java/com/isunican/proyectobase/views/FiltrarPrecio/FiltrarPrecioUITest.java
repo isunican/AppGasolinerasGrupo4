@@ -1,4 +1,4 @@
-package com.isunican.proyectobase.views;
+package com.isunican.proyectobase.views.FiltrarPrecio;
 
 import androidx.test.espresso.ViewInteraction;
 import androidx.test.rule.ActivityTestRule;
@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import com.isunican.proyectobase.model.Gasolinera;
 import com.isunican.proyectobase.R;
+import com.isunican.proyectobase.views.MainActivity;
 
 import org.hamcrest.Description;
 import org.hamcrest.TypeSafeMatcher;
