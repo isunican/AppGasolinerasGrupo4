@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_vehicle"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorWhite"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:windowSoftInputMode="adjustResize|stateHidden"
+    tools:context=".views.VehiclesActivity">
+
+    <TextView
+        android:id="@+id/idDatosVehiculo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="25dp"
+        android:text="Datos del vehículo"
+        android:textColor="@color/colorPrimary"
+        android:textSize="20dp" />
+
+    <TextView
+        android:id="@+id/idMarca"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/idDatosVehiculo"
+        android:layout_marginTop="25dp"
+        android:hint="Marca: "
+        android:textColor="@color/colorWhite"
+        android:textColorHint="@color/colorPrimary"
+        android:textSize="18dp" />
+
+    <EditText
+        android:id="@+id/idIntroduceMarca"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/idDatosVehiculo"
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="15dp"
+        android:layout_marginRight="17dp"
+        android:lines="1"
+        android:maxLines="1"
+        android:textColor="@color/colorPrimaryDark"
+        android:textSize="18dp" />
+
+    <TextView
+        android:id="@+id/idModelo"
+        android:layout_width="102dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/idMarca"
+        android:layout_marginTop="25dp"
+        android:hint="Modelo: "
+        android:textColor="@color/colorWhite"
+        android:textColorHint="@color/colorPrimary"
+        android:textSize="18dp" />
+
+    <EditText
+        android:id="@+id/idIntroduceModelo"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/idMarca"
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="15dp"
+        android:layout_marginRight="17dp"
+        android:lines="1"
+        android:maxLines="1"
+        android:textColor="@color/colorPrimaryDark"
+        android:textSize="18dp" />
+
+    <TextView
+        android:id="@+id/idMatricula"
+        android:layout_width="101dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/idModelo"
+        android:layout_marginTop="25dp"
+        android:hint="Matricula: "
+        android:textColor="@color/colorWhite"
+        android:textColorHint="@color/colorPrimary"
+        android:textSize="18dp" />
+
+    <EditText
+        android:id="@+id/idIntroduceMatricula"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/idModelo"
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="15dp"
+        android:layout_marginRight="17dp"
+        android:lines="1"
+        android:maxLines="1"
+        android:textColor="@color/colorPrimaryDark"
+        android:textSize="18dp" />
+
+    <TextView
+        android:id="@+id/idTipoCombustible"
+        android:layout_width="114dp"
+        android:layout_height="52dp"
+        android:layout_below="@+id/idMatricula"
+        android:layout_marginTop="25dp"
+        android:hint="Tipo de combustible: "
+        android:textColor="@color/colorWhite"
+        android:textColorHint="@color/colorPrimary"
+        android:textSize="18dp" />
+
+    <Spinner
+        android:id="@+id/idSpinnerCombustible"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/idMatricula"
+        android:layout_alignParentRight="true"
+        android:layout_gravity="end"
+        android:layout_marginTop="36dp"
+        android:layout_marginRight="50dp"
+        android:gravity="top" />
+
+    <Button
+        android:id="@+id/idBotonCancelar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/idTipoCombustible"
+        android:layout_marginLeft="200dp"
+        android:layout_marginTop="50dp"
+        android:text="Cancelar" />
+
+    <Button
+        android:id="@+id/idBotonAceptar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/idTipoCombustible"
+        android:layout_marginTop="50dp"
+        android:layout_marginLeft="75dp"
+        android:text="Aceptar"/>
+</RelativeLayout>
+
+
+
+

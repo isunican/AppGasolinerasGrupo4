@@ -20,6 +20,7 @@
         </activity>
         <activity android:name=".views.InfoActivity"></activity>
         <activity android:name=".views.DetailActivity"></activity>
+        <activity android:name=".views.VehiclesActivity"></activity>
     </application>
 
 </manifest>

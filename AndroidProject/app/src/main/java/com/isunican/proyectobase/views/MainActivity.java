@@ -16,6 +16,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import android.view.LayoutInflater;
@@ -130,31 +131,48 @@ public class MainActivity extends AppCompatActivity implements
 
     @SuppressWarnings("Necesario parametro")
     public void myClickHandler(View view) {
+        List<Gasolinera> gasolinerasFiltradas;
         precioMin = findViewById(R.id.idPrecioMin);
         precioMax = findViewById(R.id.idPrecioMax);
 
         String min = precioMin.getText().toString();
         String max = precioMax.getText().toString();
 
-        if (!min.equals("") && !max.equals("")) {
-
-            double pMin = Double.parseDouble(min);
-            double pMax = Double.parseDouble(max);
+        double numMin;
+        double numMax;
 
 
-            List<Gasolinera> gasolinerasFiltradas;
+        //En el caso de que ambos campos no sean vacíos.
+        if (!(min.equals("") && max.equals(""))){
+
+            //Si el minimo esta vacio
+            if(min.equals("")){
+                numMin = 0;
+                numMax = Double.parseDouble(max);
+
+            //Si el maximo esta vacio
+            }else if(max.equals("")){
+                numMax = Double.MAX_VALUE;
+                numMin = Double.parseDouble(min);
+            }
+            //Si ninguno es vacio
+            else{
+                numMax = Double.parseDouble(max);
+                numMin = Double.parseDouble(min);
+            }
+
 
             try {
                 switch (combustibleActual) {
                     case GASOLINA95:
                         gasolinerasFiltradas = PresenterGasolineras.filtrarCombustibleGasolina(presenterGasolineras.getGasolineras());
-                        gasolinerasFiltradas = PresenterGasolineras.filtraPrecioGasolina(gasolinerasFiltradas, pMin, pMax);
+                        gasolinerasFiltradas = PresenterGasolineras.filtraPrecioGasolina(gasolinerasFiltradas, numMin, numMax);
                         cargaGasolineras(gasolinerasFiltradas, 2);
                         break;
 
                     case GASOLEOA:
                         gasolinerasFiltradas = PresenterGasolineras.filtrarCombustibleGasoleo(presenterGasolineras.getGasolineras());
-                        gasolinerasFiltradas = PresenterGasolineras.filtraPrecioGasoleo(gasolinerasFiltradas, pMin, pMax);
+                        gasolinerasFiltradas = PresenterGasolineras.filtraPrecioGasoleo(gasolinerasFiltradas, numMin, numMax);
                         cargaGasolineras(gasolinerasFiltradas, 1);
                         break;
                     default:
@@ -163,9 +181,9 @@ public class MainActivity extends AppCompatActivity implements
                 notificaDatoNoValido();
             }
         } else {
-            notificaDatoNoValido();
+            gasolinerasFiltradas = new ArrayList<Gasolinera>();
+            cargaGasolineras(gasolinerasFiltradas, 1);
         }
-
 
     }
 
@@ -174,7 +192,6 @@ public class MainActivity extends AppCompatActivity implements
         toast = Toast.makeText(getApplicationContext(), "Datos introducidos invalidos, introduzca parámetros correctos", Toast.LENGTH_LONG);
         toast.show();
     }
-
 
     /**
      * Menú action bar
@@ -205,8 +222,13 @@ public class MainActivity extends AppCompatActivity implements
         if (item.getItemId() == R.id.itemActualizar) {
             mSwipeRefreshLayout.setRefreshing(true);
             new CargaDatosGasolinerasTask(this).execute();
-        } else if (item.getItemId() == R.id.itemInfo) {
+        }
+        if (item.getItemId() == R.id.itemInfo) {
             Intent myIntent = new Intent(MainActivity.this, InfoActivity.class);
+            MainActivity.this.startActivity(myIntent);
+        }
+        if (item.getItemId() == R.id.itemVehiculos) {
+            Intent myIntent = new Intent(MainActivity.this, VehiclesActivity.class);
             MainActivity.this.startActivity(myIntent);
         }
         return true;
@@ -228,7 +250,6 @@ public class MainActivity extends AppCompatActivity implements
     public void onItemSelected(AdapterView<?> arg0, View arg1, int position, long id) {
 
         combustibleActual = combustibles[position];
-        Toast.makeText(getApplicationContext(), combustibles[position], Toast.LENGTH_LONG).show();
         List<Gasolinera> gasolineras;
         switch (combustibles[position]) {
             case GASOLINA95:
@@ -381,9 +402,6 @@ public class MainActivity extends AppCompatActivity implements
                     default:
                 }
             }
-
-
-
 
             /*
              * Define el manejo de los eventos de click sobre elementos de la lista
