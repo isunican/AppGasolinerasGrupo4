@@ -39,6 +39,9 @@ public class PresenterVehiculos {
     public static class DatoNulo extends RuntimeException {
     }
 
+    public static class CaracterEspecial extends RuntimeException {
+    }
+
 
     /**
      * Constructor, getters y setters
@@ -124,13 +127,33 @@ public class PresenterVehiculos {
         if (!mat.matches()) {
             throw new MatriculaNoValida();
         }
+
         // Lanza excepcion si el combustible pasado no es GasoleoA o Gasolina95
         if (!combustible.equals("Gasolina95") && !combustible.equals("GasoleoA")) {
             throw new CombustibleNoValido();
         }
+
+        // Lanza excepcion si se escribe algun caracter especial
+        char caracterEspecial;
+        for(int i = 0; i < marca.length(); i++){
+            caracterEspecial = marca.charAt(i);
+            if(caracterEspecial < 48  || caracterEspecial > 57 &&
+                caracterEspecial < 65 || caracterEspecial > 90 &&
+                caracterEspecial < 97 || caracterEspecial > 122){
+                throw new CaracterEspecial();
+            }
+        }
+        for(int i = 0; i < modelo.length(); i++){
+            caracterEspecial = modelo.charAt(i);
+            if(caracterEspecial < 48  || caracterEspecial > 57 &&
+                    caracterEspecial < 65 || caracterEspecial > 90 &&
+                    caracterEspecial < 97 || caracterEspecial > 122){
+                throw new CaracterEspecial();
+            }
+        }
+        
         vehiculos.put(v.getMatricula(), v);
     }
-
 
     /**
      * Escribe el vehículo pasado como parámetro en la base de datos

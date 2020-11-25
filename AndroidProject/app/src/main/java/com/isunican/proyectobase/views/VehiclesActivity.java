@@ -166,6 +166,9 @@ public class VehiclesActivity extends AppCompatActivity implements
                     notificaVehiculoNulo();
                 }
 
+                catch (PresenterVehiculos.CaracterEspecial e) {
+                    notificaCaracterEspecial();
+                }
 
 
             }
@@ -245,6 +248,15 @@ public class VehiclesActivity extends AppCompatActivity implements
     private void notificaCombustibleNoValido() {
         Toast toast;
         toast = Toast.makeText(getApplicationContext(), "Combustible introducido no valido", Toast.LENGTH_LONG);
+        toast.show();
+    }
+
+    /**
+     * Muestra mensaje de error
+     */
+    private void notificaCaracterEspecial() {
+        Toast toast;
+        toast = Toast.makeText(getApplicationContext(), "No se admiten caracteres especiales", Toast.LENGTH_LONG);
         toast.show();
     }
 
