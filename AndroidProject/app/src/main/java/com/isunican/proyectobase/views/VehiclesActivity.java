@@ -23,8 +23,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.isunican.proyectobase.R;
 import com.isunican.proyectobase.model.Vehiculo;
 import com.isunican.proyectobase.presenter.PresenterVehiculos;
-
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -166,10 +164,6 @@ public class VehiclesActivity extends AppCompatActivity implements
                     notificaVehiculoExiste();
                 }
 
-                catch (PresenterVehiculos.VocalesEnMatricula e){
-                    notificaMatriculaConVocales();
-                }
-
                 catch (PresenterVehiculos.CaracterEspecial e) {
                     notificaCaracterEspecial();
                 }
@@ -253,15 +247,6 @@ public class VehiclesActivity extends AppCompatActivity implements
         Toast toast;
         toast = Toast.makeText(getApplicationContext(), "Combustible introducido no valido", Toast.LENGTH_LONG);
         toast.show();
-    }
-
-    /**
-     * Muestra mensaje de error
-     */
-    private void notificaMatriculaConVocales() {
-        Toast toast;
-        toast = Toast.makeText(getApplicationContext(), "Las letras de la matricula no pueden ser vocales", Toast.LENGTH_LONG);
-		        toast.show();
     }
 
     private void notificaCaracterEspecial() {
