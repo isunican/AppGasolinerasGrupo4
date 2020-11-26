@@ -2,6 +2,8 @@ package com.isunican.proyectobase.views;
 
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.Intent;
+import android.nfc.Tag;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -13,13 +15,17 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import androidx.appcompat.app.AppCompatActivity;
+
 import com.isunican.proyectobase.R;
 import com.isunican.proyectobase.model.Vehiculo;
 import com.isunican.proyectobase.presenter.PresenterVehiculos;
@@ -27,7 +33,6 @@ import com.isunican.proyectobase.presenter.PresenterVehiculos;
 
 import java.util.ArrayList;
 import java.util.List;
-
 
 
 public class VehiclesActivity extends AppCompatActivity implements
@@ -44,7 +49,7 @@ public class VehiclesActivity extends AppCompatActivity implements
     // Vista de lista y adaptador para cargar datos en ella
     ListView listViewVehiculos;
     ArrayAdapter<Vehiculo> adapter;
-    List<Vehiculo>vehiculos;
+    List<Vehiculo> vehiculos;
 
     // Creacion del PresenterVehiculos
     PresenterVehiculos presenterVehiculos;
@@ -53,12 +58,23 @@ public class VehiclesActivity extends AppCompatActivity implements
     ProgressBar progressBar;
 
     // Elementos del formulario para anhadir vehiculo
-    Button  btnCancelar;
-    Button  btnAceptar;
+    Button btnCancelar;
+    Button btnAceptar;
+
+
     EditText txtMarca;
     EditText txtModelo;
     EditText txtMatricula;
     Spinner spinerTipoCombustible;
+
+
+    LinearLayout layoutVehiculos;
+    int cambioBoton = 1;
+    int unicaSeleccion = 0;
+    ImageView botonSeleccionado;
+    TextView textoMatricula;
+    String matriculaUnica;
+    Vehiculo vehiculoSeleccionado;
 
     /**
      * onCreate
@@ -79,23 +95,22 @@ public class VehiclesActivity extends AppCompatActivity implements
     /**
      * Permite seleccionar el combustible del vehiculo que se va a anhadir.
      *
-     * @param arg0 adapter
-     * @param arg1 view
+     * @param arg0     adapter
+     * @param arg1     view
      * @param position int
-     * @param id long
+     * @param id       long
      */
     @Override
     public void onItemSelected(AdapterView<?> arg0, View arg1, int position, long id) {
         combustibleActual = combustibles[position];
     }
 
-    public void anhadirVehiculo(View v){
+    public void anhadirVehiculo(View v) {
         AlertDialog.Builder alert;
 
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             alert = new AlertDialog.Builder(this, android.R.style.Theme_Material_Dialog_Alert);
-        }
-        else{
+        } else {
             alert = new AlertDialog.Builder(this);
         }
         LayoutInflater inflater = getLayoutInflater();
@@ -142,31 +157,20 @@ public class VehiclesActivity extends AppCompatActivity implements
                     dialog.dismiss();
 
                     //Muestra la list view actualizada con el ultimo vehiculo
-                    vehiculos=new ArrayList<>(presenterVehiculos.getVehiculos(VehiclesActivity.this).values());
+                    vehiculos = new ArrayList<>(presenterVehiculos.getVehiculos(VehiclesActivity.this).values());
 
                     formatoLista(vehiculos);
-
                 } catch (PresenterVehiculos.DatoNoValido e) {
                     notificaDatoNoValido();
-                }
-
-                catch (PresenterVehiculos.MatriculaNoValida e) {
+                } catch (PresenterVehiculos.MatriculaNoValida e) {
                     notificaFormatoMatriculaNoValida();
-                }
-
-                catch (PresenterVehiculos.VehiculoNulo e) {
+                } catch (PresenterVehiculos.VehiculoNulo e) {
                     notificaVehiculoExiste();
-                }
-
-                catch (PresenterVehiculos.CombustibleNoValido e) {
+                } catch (PresenterVehiculos.CombustibleNoValido e) {
                     notificaCombustibleNoValido();
-                }
-
-                catch (PresenterVehiculos.VehiculoYaExiste e) {
+                } catch (PresenterVehiculos.VehiculoYaExiste e) {
                     notificaVehiculoNulo();
                 }
-
-
 
             }
         });
@@ -180,9 +184,36 @@ public class VehiclesActivity extends AppCompatActivity implements
         });
     }
 
+    public void seleccionarVehiculo(View v) {
+        layoutVehiculos = v.findViewById(R.id.layoutVehiculo);
+        layoutVehiculos.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                    textoMatricula = (TextView) layoutVehiculos.findViewById(R.id.textMatricula);
+                    String matricula = textoMatricula.getText().toString();
+                    presenterVehiculos.seleccionarVehiculo(matricula);
+                    botonSeleccionado = v.findViewById(R.id.vehiculoSeleccionado);
+                    cambiaEstadoBoton(botonSeleccionado, cambioBoton);
+
+            }
+        });
+    }
+
+    private void cambiaEstadoBoton(ImageView imgView, int n) {
+        if (cambioBoton == 1) {
+            imgView.setImageResource(R.drawable.boton1);
+            Toast.makeText(getApplicationContext(), "Vehiculo Seleccionado", Toast.LENGTH_SHORT).show();
+            cambioBoton = 0;
+        } else {
+            imgView.setImageResource(R.drawable.boton2);
+            Toast.makeText(getApplicationContext(), "Vehiculo deja de estar seleccionado", Toast.LENGTH_SHORT).show();
+            cambioBoton = 1;
+
+        }
+    }
+
     private void formatoLista(List<Vehiculo> vehiculos) {
         // Definimos el array adapter
-        adapter = new VehiculoArrayAdapter(this,0, vehiculos);
+        adapter = new VehiculoArrayAdapter(this, 0, vehiculos);
 
         // Obtenemos la vista de la lista
         listViewVehiculos = findViewById(R.id.listViewVehiculos);
@@ -194,7 +225,7 @@ public class VehiclesActivity extends AppCompatActivity implements
         }
     }
 
-    public PresenterVehiculos getPresenterVehiculos(){
+    public PresenterVehiculos getPresenterVehiculos() {
         return presenterVehiculos;
     }
 
@@ -248,9 +279,19 @@ public class VehiclesActivity extends AppCompatActivity implements
         toast.show();
     }
 
-    public PresenterVehiculos getPresenter(){
+    /**
+     * Muestra mensaje de error
+     */
+    private void notificaVehiculoSeleccionado() {
+        Toast toast;
+        toast = Toast.makeText(getApplicationContext(), "Solo puedes tener un vehiculo asignado", Toast.LENGTH_SHORT);
+        toast.show();
+    }
+
+    public PresenterVehiculos getPresenter() {
         return presenterVehiculos;
     }
+
     /*
     ------------------------------------------------------------------
         VehiculosArrayAdapter
@@ -289,14 +330,17 @@ public class VehiclesActivity extends AppCompatActivity implements
             TextView modelo = view.findViewById(R.id.TextModelo);
             TextView matricula = view.findViewById(R.id.textMatricula);
             TextView combustible = view.findViewById(R.id.textCombustible);
+            ImageView botonSeleccion = view.findViewById(R.id.vehiculoSeleccionado);
 
             // Y carga los datos del item
             modelo.setText(vehiculo.getModelo());
             matricula.setText(vehiculo.getMatricula());
             combustible.setText(vehiculo.getCombustible());
+            botonSeleccion.setImageResource(R.drawable.boton2);
 
             // carga icono
             cargaIcono(vehiculo, marca);
+
 
             return view;
         }
@@ -315,6 +359,8 @@ public class VehiclesActivity extends AppCompatActivity implements
             }
             logo.setImageResource(imageID);
         }
+
     }
 }
+
 
