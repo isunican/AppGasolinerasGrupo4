@@ -23,8 +23,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.isunican.proyectobase.R;
 import com.isunican.proyectobase.model.Vehiculo;
 import com.isunican.proyectobase.presenter.PresenterVehiculos;
-
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -155,7 +153,7 @@ public class VehiclesActivity extends AppCompatActivity implements
                 }
 
                 catch (PresenterVehiculos.VehiculoNulo e) {
-                    notificaVehiculoExiste();
+                    notificaVehiculoNulo();
                 }
 
                 catch (PresenterVehiculos.CombustibleNoValido e) {
@@ -163,9 +161,12 @@ public class VehiclesActivity extends AppCompatActivity implements
                 }
 
                 catch (PresenterVehiculos.VehiculoYaExiste e) {
-                    notificaVehiculoNulo();
+                    notificaVehiculoExiste();
                 }
 
+                catch (PresenterVehiculos.CaracterEspecial e) {
+                    notificaCaracterEspecial();
+                }
 
 
             }
@@ -245,6 +246,12 @@ public class VehiclesActivity extends AppCompatActivity implements
     private void notificaCombustibleNoValido() {
         Toast toast;
         toast = Toast.makeText(getApplicationContext(), "Combustible introducido no valido", Toast.LENGTH_LONG);
+        toast.show();
+    }
+
+    private void notificaCaracterEspecial() {
+        Toast toast;
+        toast = Toast.makeText(getApplicationContext(), "No se admiten caracteres especiales", Toast.LENGTH_LONG);
         toast.show();
     }
 
