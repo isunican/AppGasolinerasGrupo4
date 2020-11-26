@@ -249,7 +249,7 @@ public class VehiclesActivity extends AppCompatActivity implements
         Toast toast;
         toast = Toast.makeText(getApplicationContext(), "Combustible introducido no valido", Toast.LENGTH_LONG);
         toast.show();
-    }
+    
 
     /**
      * Muestra mensaje de error
