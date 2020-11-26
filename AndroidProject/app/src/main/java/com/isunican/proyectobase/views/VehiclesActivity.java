@@ -169,6 +169,12 @@ public class VehiclesActivity extends AppCompatActivity implements
                 catch (PresenterVehiculos.VocalesEnMatricula e){
                     notificaMatriculaConVocales();
                 }
+
+                catch (PresenterVehiculos.CaracterEspecial e) {
+                    notificaCaracterEspecial();
+                }
+
+
             }
         });
 
@@ -255,6 +261,10 @@ public class VehiclesActivity extends AppCompatActivity implements
     private void notificaMatriculaConVocales() {
         Toast toast;
         toast = Toast.makeText(getApplicationContext(), "Las letras de la matricula no pueden ser vocales", Toast.LENGTH_LONG);
+
+    private void notificaCaracterEspecial() {
+        Toast toast;
+        toast = Toast.makeText(getApplicationContext(), "No se admiten caracteres especiales", Toast.LENGTH_LONG);
         toast.show();
     }
 
