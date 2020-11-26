@@ -155,7 +155,7 @@ public class VehiclesActivity extends AppCompatActivity implements
                 }
 
                 catch (PresenterVehiculos.VehiculoNulo e) {
-                    notificaVehiculoExiste();
+                    notificaVehiculoNulo();
                 }
 
                 catch (PresenterVehiculos.CombustibleNoValido e) {
@@ -163,11 +163,12 @@ public class VehiclesActivity extends AppCompatActivity implements
                 }
 
                 catch (PresenterVehiculos.VehiculoYaExiste e) {
-                    notificaVehiculoNulo();
+                    notificaVehiculoExiste();
                 }
 
-
-
+                catch (PresenterVehiculos.VocalesEnMatricula e){
+                    notificaMatriculaConVocales();
+                }
             }
         });
 
@@ -245,6 +246,15 @@ public class VehiclesActivity extends AppCompatActivity implements
     private void notificaCombustibleNoValido() {
         Toast toast;
         toast = Toast.makeText(getApplicationContext(), "Combustible introducido no valido", Toast.LENGTH_LONG);
+        toast.show();
+    }
+
+    /**
+     * Muestra mensaje de error
+     */
+    private void notificaMatriculaConVocales() {
+        Toast toast;
+        toast = Toast.makeText(getApplicationContext(), "Las letras de la matricula no pueden ser vocales", Toast.LENGTH_LONG);
         toast.show();
     }
 

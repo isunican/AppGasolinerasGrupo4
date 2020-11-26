@@ -32,18 +32,20 @@ public class PresenterVehiculosTest {
     private Vehiculo vehiculoConDatoVacio;
     private Vehiculo vehiculoConOtroCarburante;
     private Vehiculo vehiculoNulo;
+    private Vehiculo vehiculoConVocal;
     PresenterVehiculos presenterVehiculos;
 
     @Before
     public void setUp() throws Exception{
 
         //Inicializacion de los vehiculos
-        vehiculoValidoA = new Vehiculo("Ford", "Fiesta","1234ABC","Gasolina95");
-        vehiculoMatriculaNoValida = new Vehiculo("Opel", "Corsa","ESTODAERROR","Gasolina95");
-        vehiculoValidoB =  new Vehiculo("Toyota", "Corolla", "1086AEH", "GasoleoA");
-        vehiculoConDatoNulo =  new Vehiculo("Subaru", null,"2501ERR","GasoleoA");
-        vehiculoConDatoVacio =  new Vehiculo("", "Multipla","0000ABC","GasoleoA");
-        vehiculoConOtroCarburante =  new Vehiculo("Seat", "Leon","1337OOO","GasolinaFalsa");
+        vehiculoValidoA = new Vehiculo("Ford", "Fiesta","1234BBC","Gasolina95");
+        vehiculoMatriculaNoValida = new Vehiculo("Opel", "Corsa","JVDLHQW","Gasolina95");
+        vehiculoValidoB =  new Vehiculo("Toyota", "Corolla", "1086KKH", "GasoleoA");
+        vehiculoConDatoNulo =  new Vehiculo("Subaru", null,"2501RRR","GasoleoA");
+        vehiculoConDatoVacio =  new Vehiculo("", "Multipla","0000QBC","GasoleoA");
+        vehiculoConOtroCarburante =  new Vehiculo("Seat", "Leon","1337WWW","GasolinaFalsa");
+        vehiculoConVocal =  new Vehiculo("Seat", "Leon","1337AAA","GasolinaFalsa");
         vehiculoNulo = null;
 
 
@@ -117,6 +119,14 @@ public class PresenterVehiculosTest {
             presenterVehiculos.anhadirVehiculo(vehiculoConDatoVacio);
             fail();
         } catch(PresenterVehiculos.DatoNoValido d){
+
+        }
+
+        //Caso UT.1i
+        try{
+            presenterVehiculos.anhadirVehiculo(vehiculoConVocal);
+            fail();
+        } catch(PresenterVehiculos.VocalesEnMatricula d){
 
         }
 
