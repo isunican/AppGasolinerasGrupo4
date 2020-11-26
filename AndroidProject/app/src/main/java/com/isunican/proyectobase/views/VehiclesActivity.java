@@ -155,7 +155,7 @@ public class VehiclesActivity extends AppCompatActivity implements
                 }
 
                 catch (PresenterVehiculos.VehiculoNulo e) {
-                    notificaVehiculoExiste();
+                    notificaVehiculoNulo();
                 }
 
                 catch (PresenterVehiculos.CombustibleNoValido e) {
@@ -163,7 +163,11 @@ public class VehiclesActivity extends AppCompatActivity implements
                 }
 
                 catch (PresenterVehiculos.VehiculoYaExiste e) {
-                    notificaVehiculoNulo();
+                    notificaVehiculoExiste();
+                }
+
+                catch (PresenterVehiculos.VocalesEnMatricula e){
+                    notificaMatriculaConVocales();
                 }
 
                 catch (PresenterVehiculos.CaracterEspecial e) {
@@ -254,6 +258,12 @@ public class VehiclesActivity extends AppCompatActivity implements
     /**
      * Muestra mensaje de error
      */
+    private void notificaMatriculaConVocales() {
+        Toast toast;
+        toast = Toast.makeText(getApplicationContext(), "Las letras de la matricula no pueden ser vocales", Toast.LENGTH_LONG);
+		        toast.show();
+    }
+
     private void notificaCaracterEspecial() {
         Toast toast;
         toast = Toast.makeText(getApplicationContext(), "No se admiten caracteres especiales", Toast.LENGTH_LONG);
