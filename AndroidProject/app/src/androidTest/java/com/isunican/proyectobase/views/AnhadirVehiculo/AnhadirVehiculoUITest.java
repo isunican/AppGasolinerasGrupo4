@@ -70,7 +70,7 @@ public class AnhadirVehiculoUITest {
             //CASO UIT.1
             String marca = "Ford";
             String modelo = "Focus";
-            String matricula = "1234ABC";
+            String matricula = "1234BBC";
             String combustible = "Gasolina95";
 
             escribeDatosVehiculo(marca, modelo, matricula, combustible);
@@ -79,7 +79,7 @@ public class AnhadirVehiculoUITest {
 
 
             //Se recorren la lista de vehiculos de la app y se meten en la lista
-            Vehiculo vehiculo = new Vehiculo("Ford","Focus","1234ABC","Gasolina95");
+            Vehiculo vehiculo = new Vehiculo("Ford","Focus","1234BBC","Gasolina95");
 
            List<Vehiculo> vehiculosIniciales = new ArrayList<Vehiculo>();
             cargaListaVehiculos(vista, vehiculosIniciales);
@@ -89,23 +89,27 @@ public class AnhadirVehiculoUITest {
             //CASO UIT.2
             marca = "";
             modelo ="";
-            matricula= "5678ABC";
+            matricula= "5678BBC";
             escribeDatosVehiculo(marca, modelo, matricula, combustible);
             onView(withId(R.id.idBotonAceptar)).perform(click());
-            onView(withId(R.id.idBotonCancelar)).perform(click());
-
-            //CASO UIT.3
-            matricula= "1234ABC";
-            escribeDatosVehiculo(marca, modelo, matricula, combustible);
             onView(withId(R.id.idBotonCancelar)).perform(click());
 
             //Comprobamos que no se ha añadido ningun vehiculo.
             List<Vehiculo> vehiculos = new ArrayList<Vehiculo>();
             cargaListaVehiculos(vista, vehiculos);
-
             assertEquals(vehiculos,vehiculosIniciales );
-            //Comprobamos que el formulario se ha reseteado.
 
+            //CASO UIT.3
+            matricula= "1234BBC";
+            escribeDatosVehiculo(marca, modelo, matricula, combustible);
+            onView(withId(R.id.idBotonCancelar)).perform(click());
+
+            //Comprobamos que no se ha añadido ningun vehiculo.
+            vehiculos = new ArrayList<Vehiculo>();
+            cargaListaVehiculos(vista, vehiculos);
+            assertEquals(vehiculos,vehiculosIniciales );
+
+            //Comprobamos que el formulario se ha reseteado.
             onView(withId(R.id.imageButton2)).perform(click());
 
             onView(withId(R.id.idIntroduceMarca)).check(matches(withText("")));
@@ -113,14 +117,75 @@ public class AnhadirVehiculoUITest {
             onView(withId(R.id.idIntroduceMatricula)).check(matches(withText("")));
 
             onView(withId(R.id.idBotonCancelar)).perform(click());
+
             //CASO UIT.4
             marca = "BMW";
             modelo ="X1";
-            matricula= "1234ABC";
+            matricula= "1234BBC";
             combustible = "GasoleoA";
             escribeDatosVehiculo(marca, modelo, matricula, combustible);
             onView(withId(R.id.idBotonAceptar)).perform(click());
+            onView(withId(R.id.idBotonCancelar)).perform(click());
 
+            //Comprobamos que no se ha añadido ningun vehiculo.
+            vehiculos = new ArrayList<Vehiculo>();
+            cargaListaVehiculos(vista, vehiculos);
+            assertEquals(vehiculos,vehiculosIniciales );
+
+            //CASO UIT.5
+            //marca = "Seat";
+            //modelo ="Leon";
+            //matricula= "1111VVA";
+            //escribeDatosVehiculo(marca, modelo, matricula, combustible);
+            //onView(withId(R.id.idBotonAceptar)).perform(click());
+            //onView(withId(R.id.idBotonCancelar)).perform(click());
+
+            //Comprobamos que no se ha añadido ningun vehiculo.
+            //vehiculos = new ArrayList<Vehiculo>();
+            //cargaListaVehiculos(vista, vehiculos);
+            //assertEquals(vehiculos,vehiculosIniciales );
+
+            //CASO UIT.6
+            marca = "Se@t";
+            modelo ="!´!";
+            matricula= "2222VVV";
+            escribeDatosVehiculo(marca, modelo, matricula, combustible);
+            onView(withId(R.id.idBotonAceptar)).perform(click());
+            onView(withId(R.id.idBotonCancelar)).perform(click());
+
+            //Comprobamos que no se ha añadido ningun vehiculo.
+            vehiculos = new ArrayList<Vehiculo>();
+            cargaListaVehiculos(vista, vehiculos);
+            assertEquals(vehiculos,vehiculosIniciales);
+
+            //CASO UIT.7
+            marca = "Chevrolet";
+            modelo ="----";
+            matricula= "3333VVV";
+            escribeDatosVehiculo(marca, modelo, matricula, combustible);
+            onView(withId(R.id.idBotonAceptar)).perform(click());
+            onView(withId(R.id.idBotonCancelar)).perform(click());
+
+            //Comprobamos que no se ha añadido ningun vehiculo.
+            vehiculos = new ArrayList<Vehiculo>();
+            cargaListaVehiculos(vista, vehiculos);
+            assertEquals(vehiculos,vehiculosIniciales);
+
+            //CASO UIT.8
+            marca = "::::";
+            modelo ="Golf";
+            matricula= "4444VVV";
+            escribeDatosVehiculo(marca, modelo, matricula, combustible);
+            onView(withId(R.id.idBotonAceptar)).perform(click());
+            onView(withId(R.id.idBotonCancelar)).perform(click());
+
+            //Comprobamos que no se ha añadido ningun vehiculo.
+            vehiculos = new ArrayList<Vehiculo>();
+            cargaListaVehiculos(vista, vehiculos);
+            assertEquals(vehiculos,vehiculosIniciales);
+
+
+            //borramos la lista
             context.deleteFile("vehiculos.txt");
         }
 
