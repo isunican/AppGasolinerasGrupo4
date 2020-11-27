@@ -46,6 +46,7 @@ public class PresenterVehiculos {
     }
 
 
+
     /**
      * Constructor, getters y setters
      */
@@ -178,6 +179,15 @@ public class PresenterVehiculos {
         }
         
         vehiculos.put(v.getMatricula(), v);
+    }
+
+    /**
+     * Metodo que selecciona un vehiculo y cambia el filtro de tipo de combustible
+     * en funcion dle utilizado por el vehiculo seleccionado
+     */
+    public Vehiculo seleccionarVehiculo(String matricula){
+            Vehiculo seleccionado=vehiculos.get(matricula);
+            return seleccionado;
     }
 
     /**
