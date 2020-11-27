@@ -28,6 +28,8 @@ import com.isunican.proyectobase.model.Vehiculo;
 import com.isunican.proyectobase.presenter.PresenterVehiculos;
 
 
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -184,34 +186,27 @@ public class VehiclesActivity extends AppCompatActivity implements
         layoutVehiculos = v.findViewById(R.id.layoutVehiculo);
         layoutVehiculos.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
+
                 TextView textoMatriculaTemp = (TextView) layoutVehiculos.findViewById(R.id.textMatricula);
                 Vehiculo vehiculoTemp = presenterVehiculos.seleccionarVehiculo(textoMatriculaTemp.getText().toString());
-                if(!seleccionado){
-                    vehiculoSeleccionado = presenterVehiculos.seleccionarVehiculo(textoMatriculaTemp.getText().toString());
-                    botonSeleccionado = v.findViewById(R.id.vehiculoSeleccionado);
-                    botonSeleccionado.setImageResource(R.drawable.boton1);
-                    //Toast.makeText(getApplicationContext(), "Vehiculo Seleccionado", Toast.LENGTH_SHORT).show();
-                    seleccionado = true;
-                    vehiculoSeleccionado = vehiculoTemp;
-                    Toast.makeText(getApplicationContext(), "Vehiculo Seleccionado", Toast.LENGTH_SHORT).show();
 
-                } else {
+                if(seleccionado && vehiculoTemp.equals(vehiculoSeleccionado)){
                     botonSeleccionado.setImageResource(R.drawable.boton2);
                     Toast.makeText(getApplicationContext(), "Vehiculo quitado de la selección", Toast.LENGTH_SHORT).show();
-                    textoMatricula = (TextView) layoutVehiculos.findViewById(R.id.textMatricula);
-                    String matricula = textoMatricula.getText().toString();
                     seleccionado = false;
-                    if(vehiculoSeleccionado.equals(presenterVehiculos.seleccionarVehiculo(textoMatriculaTemp.getText().toString()))){
-                        vehiculoSeleccionado = vehiculoTemp;
-                        botonSeleccionado = v.findViewById(R.id.vehiculoSeleccionado);
-                        botonSeleccionado.setImageResource(R.drawable.boton1);
-                        seleccionado = true;
-                        Toast.makeText(getApplicationContext(), "Vehiculo Seleccionado", Toast.LENGTH_SHORT).show();
-                    }
+                } else if(seleccionado && !vehiculoTemp.equals(vehiculoSeleccionado)) {
+                    botonSeleccionado.setImageResource(R.drawable.boton2);
+                    botonSeleccionado = v.findViewById(R.id.vehiculoSeleccionado);
+                    botonSeleccionado.setImageResource(R.drawable.boton1);
+                    Toast.makeText(getApplicationContext(), "Vehiculo quitado de la selección", Toast.LENGTH_SHORT).show();
+                    seleccionado = true;
+                } else {
+                    botonSeleccionado = v.findViewById(R.id.vehiculoSeleccionado);
+                    botonSeleccionado.setImageResource(R.drawable.boton1);
+                    Toast.makeText(getApplicationContext(), "Vehiculo seleccionado", Toast.LENGTH_SHORT).show();
+                    seleccionado = true;
                 }
-
-
-
+                vehiculoSeleccionado = vehiculoTemp;
             }
         });
     }
