@@ -163,13 +163,12 @@ public class VehiclesActivity extends AppCompatActivity implements
                 } catch (PresenterVehiculos.MatriculaNoValida e) {
                     notificaFormatoMatriculaNoValida();
                 } catch (PresenterVehiculos.VehiculoNulo e) {
-                    notificaVehiculoExiste();
+                    notificaVehiculoNulo();
                 } catch (PresenterVehiculos.CombustibleNoValido e) {
                     notificaCombustibleNoValido();
                 } catch (PresenterVehiculos.VehiculoYaExiste e) {
-                    notificaVehiculoNulo();
+                    notificaVehiculoExiste();
                 }
-
             }
         });
 
@@ -183,33 +182,33 @@ public class VehiclesActivity extends AppCompatActivity implements
     }
 
     public void seleccionarVehiculo(View v) {
-        layoutVehiculos = v.findViewById(R.id.layoutVehiculo);
-        layoutVehiculos.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
 
-                TextView textoMatriculaTemp = (TextView) layoutVehiculos.findViewById(R.id.textMatricula);
-                Vehiculo vehiculoTemp = presenterVehiculos.seleccionarVehiculo(textoMatriculaTemp.getText().toString());
+        //TextView textoMatriculaTemp = (TextView) layoutVehiculos.findViewById(R.id.textMatricula);
+        //Vehiculo vehiculoTemp = presenterVehiculos.seleccionarVehiculo(textoMatriculaTemp.getText().toString());
 
-                if(seleccionado && vehiculoTemp.equals(vehiculoSeleccionado)){
-                    botonSeleccionado.setImageResource(R.drawable.boton2);
-                    Toast.makeText(getApplicationContext(), "Vehiculo quitado de la selección", Toast.LENGTH_SHORT).show();
-                    seleccionado = false;
-                } else if(seleccionado && !vehiculoTemp.equals(vehiculoSeleccionado)) {
-                    botonSeleccionado.setImageResource(R.drawable.boton2);
-                    botonSeleccionado = v.findViewById(R.id.vehiculoSeleccionado);
-                    botonSeleccionado.setImageResource(R.drawable.boton1);
-                    Toast.makeText(getApplicationContext(), "Vehiculo quitado de la selección", Toast.LENGTH_SHORT).show();
-                    seleccionado = true;
-                } else {
-                    botonSeleccionado = v.findViewById(R.id.vehiculoSeleccionado);
-                    botonSeleccionado.setImageResource(R.drawable.boton1);
-                    Toast.makeText(getApplicationContext(), "Vehiculo seleccionado", Toast.LENGTH_SHORT).show();
-                    seleccionado = true;
-                }
-                vehiculoSeleccionado = vehiculoTemp;
-            }
-        });
+        if (seleccionado && botonSeleccionado.equals(v.findViewById(R.id.vehiculoSeleccionado))) {
+            System.out.println("Vehiculo seleccionado igual");
+            botonSeleccionado = v.findViewById(R.id.vehiculoSeleccionado);
+            botonSeleccionado.setImageResource(R.drawable.boton2);
+            Toast.makeText(getApplicationContext(), "Vehiculo quitado de la selección", Toast.LENGTH_SHORT).show();
+            seleccionado = false;
+        } else if (seleccionado) {
+            System.out.println("Vehiculo seleccionado distinto");
+            botonSeleccionado.setImageResource(R.drawable.boton2);
+            botonSeleccionado = v.findViewById(R.id.vehiculoSeleccionado);
+            botonSeleccionado.setImageResource(R.drawable.boton1);
+            Toast.makeText(getApplicationContext(), "Vehiculo quitado de la selección", Toast.LENGTH_SHORT).show();
+            seleccionado = true;
+        } else {
+            System.out.println("Vehiculo no seleccionado");
+            botonSeleccionado = v.findViewById(R.id.vehiculoSeleccionado);
+            botonSeleccionado.setImageResource(R.drawable.boton1);
+            Toast.makeText(getApplicationContext(), "Vehiculo seleccionado", Toast.LENGTH_SHORT).show();
+            seleccionado = true;
+        }
     }
+
+
 
     private void formatoLista(List<Vehiculo> vehiculos) {
         // Definimos el array adapter
@@ -282,9 +281,15 @@ public class VehiclesActivity extends AppCompatActivity implements
     /**
      * Muestra mensaje de error
      */
-    private void notificaVehiculoSeleccionado() {
+    private void notificaMatriculaConVocales() {
         Toast toast;
-        toast = Toast.makeText(getApplicationContext(), "Solo puedes tener un vehiculo asignado", Toast.LENGTH_SHORT);
+        toast = Toast.makeText(getApplicationContext(), "Las letras de la matricula no pueden ser vocales", Toast.LENGTH_LONG);
+        toast.show();
+    }
+
+    private void notificaCaracterEspecial() {
+        Toast toast;
+        toast = Toast.makeText(getApplicationContext(), "No se admiten caracteres especiales", Toast.LENGTH_LONG);
         toast.show();
     }
 
@@ -292,75 +297,75 @@ public class VehiclesActivity extends AppCompatActivity implements
         return presenterVehiculos;
     }
 
-    /*
-    ------------------------------------------------------------------
-        VehiculosArrayAdapter
+/*
+------------------------------------------------------------------
+    VehiculosArrayAdapter
 
-        Adaptador para inyectar los datos de los vehiculos
-        en el listview del layout de vehiculos de la aplicacion
-    ------------------------------------------------------------------
-    */
-    class VehiculoArrayAdapter extends ArrayAdapter<Vehiculo> {
+    Adaptador para inyectar los datos de los vehiculos
+    en el listview del layout de vehiculos de la aplicacion
+------------------------------------------------------------------
+*/
+class VehiculoArrayAdapter extends ArrayAdapter<Vehiculo> {
 
-        private Context context;
-        private List<Vehiculo> listaVehiculos;
-
-
-        // Constructor
-        public VehiculoArrayAdapter(Context context, int resource, List<Vehiculo> objects) {
-            super(context, resource, objects);
-            this.context = context;
-            this.listaVehiculos = objects;
-        }
-
-        // Llamado al renderizar la lista
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-
-            // Obtiene el elemento que se está mostrando
-            Vehiculo vehiculo = listaVehiculos.get(position);
-
-            // Indica el layout a usar en cada elemento de la lista
-            LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-
-            View view = inflater.inflate(R.layout.item_vehiculo, null);
-
-            // Asocia las variables de dicho layout
-            ImageView marca = view.findViewById(R.id.logoMarca);
-            TextView modelo = view.findViewById(R.id.TextModelo);
-            TextView matricula = view.findViewById(R.id.textMatricula);
-            TextView combustible = view.findViewById(R.id.textCombustible);
-            ImageView botonSeleccion = view.findViewById(R.id.vehiculoSeleccionado);
-
-            // Y carga los datos del item
-            modelo.setText(vehiculo.getModelo());
-            matricula.setText(vehiculo.getMatricula());
-            combustible.setText(vehiculo.getCombustible());
-            botonSeleccion.setImageResource(R.drawable.boton2);
-
-            // carga icono
-            cargaIcono(vehiculo, marca);
+    private Context context;
+    private List<Vehiculo> listaVehiculos;
 
 
-            return view;
-        }
-
-        private void cargaIcono(Vehiculo vehiculo, ImageView logo) {
-            String rotuleImageID = vehiculo.getMarca().toLowerCase();
-
-            // Tengo que protegerme ante el caso en el que el rotulo solo tiene digitos.
-            // En ese caso getIdentifier devuelve esos digitos en vez de 0.
-            int imageID = context.getResources().getIdentifier(rotuleImageID,
-                    "drawable", context.getPackageName());
-
-            if (imageID == 0 || TextUtils.isDigitsOnly(rotuleImageID)) {
-                imageID = context.getResources().getIdentifier(getResources().getString(R.string.coche),
-                        "drawable", context.getPackageName());
-            }
-            logo.setImageResource(imageID);
-        }
-
+    // Constructor
+    public VehiculoArrayAdapter(Context context, int resource, List<Vehiculo> objects) {
+        super(context, resource, objects);
+        this.context = context;
+        this.listaVehiculos = objects;
     }
+
+    // Llamado al renderizar la lista
+    @Override
+    public View getView(int position, View convertView, ViewGroup parent) {
+
+        // Obtiene el elemento que se está mostrando
+        Vehiculo vehiculo = listaVehiculos.get(position);
+
+        // Indica el layout a usar en cada elemento de la lista
+        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+        View view = inflater.inflate(R.layout.item_vehiculo, null);
+
+        // Asocia las variables de dicho layout
+        ImageView marca = view.findViewById(R.id.logoMarca);
+        TextView modelo = view.findViewById(R.id.TextModelo);
+        TextView matricula = view.findViewById(R.id.textMatricula);
+        TextView combustible = view.findViewById(R.id.textCombustible);
+        ImageView botonSeleccion = view.findViewById(R.id.vehiculoSeleccionado);
+
+        // Y carga los datos del item
+        modelo.setText(vehiculo.getModelo());
+        matricula.setText(vehiculo.getMatricula());
+        combustible.setText(vehiculo.getCombustible());
+        botonSeleccion.setImageResource(R.drawable.boton2);
+
+        // carga icono
+        cargaIcono(vehiculo, marca);
+
+
+        return view;
+    }
+
+    private void cargaIcono(Vehiculo vehiculo, ImageView logo) {
+        String rotuleImageID = vehiculo.getMarca().toLowerCase();
+
+        // Tengo que protegerme ante el caso en el que el rotulo solo tiene digitos.
+        // En ese caso getIdentifier devuelve esos digitos en vez de 0.
+        int imageID = context.getResources().getIdentifier(rotuleImageID,
+                "drawable", context.getPackageName());
+
+        if (imageID == 0 || TextUtils.isDigitsOnly(rotuleImageID)) {
+            imageID = context.getResources().getIdentifier(getResources().getString(R.string.coche),
+                    "drawable", context.getPackageName());
+        }
+        logo.setImageResource(imageID);
+    }
+
+}
 }
 
 
