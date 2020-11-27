@@ -138,10 +138,9 @@ public class PresenterVehiculos {
      * Metodo que selecciona un vehiculo y cambia el filtro de tipo de combustible
      * en funcion dle utilizado por el vehiculo seleccionado
      */
-    public void seleccionarVehiculo(String matricula){
+    public Vehiculo seleccionarVehiculo(String matricula){
             Vehiculo seleccionado=vehiculos.get(matricula);
-
-
+            return seleccionado;
     }
 
     /**

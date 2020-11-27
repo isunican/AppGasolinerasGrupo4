@@ -2,8 +2,6 @@ package com.isunican.proyectobase.views;
 
 import android.app.AlertDialog;
 import android.content.Context;
-import android.content.Intent;
-import android.nfc.Tag;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -15,7 +13,6 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -69,12 +66,11 @@ public class VehiclesActivity extends AppCompatActivity implements
 
 
     LinearLayout layoutVehiculos;
-    int cambioBoton = 1;
-    int unicaSeleccion = 0;
     ImageView botonSeleccionado;
     TextView textoMatricula;
     String matriculaUnica;
     Vehiculo vehiculoSeleccionado;
+    boolean seleccionado;
 
     /**
      * onCreate
@@ -188,27 +184,36 @@ public class VehiclesActivity extends AppCompatActivity implements
         layoutVehiculos = v.findViewById(R.id.layoutVehiculo);
         layoutVehiculos.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
+                TextView textoMatriculaTemp = (TextView) layoutVehiculos.findViewById(R.id.textMatricula);
+                Vehiculo vehiculoTemp = presenterVehiculos.seleccionarVehiculo(textoMatriculaTemp.getText().toString());
+                if(!seleccionado){
+                    vehiculoSeleccionado = presenterVehiculos.seleccionarVehiculo(textoMatriculaTemp.getText().toString());
+                    botonSeleccionado = v.findViewById(R.id.vehiculoSeleccionado);
+                    botonSeleccionado.setImageResource(R.drawable.boton1);
+                    //Toast.makeText(getApplicationContext(), "Vehiculo Seleccionado", Toast.LENGTH_SHORT).show();
+                    seleccionado = true;
+                    vehiculoSeleccionado = vehiculoTemp;
+                    Toast.makeText(getApplicationContext(), "Vehiculo Seleccionado", Toast.LENGTH_SHORT).show();
+
+                } else {
+                    botonSeleccionado.setImageResource(R.drawable.boton2);
+                    Toast.makeText(getApplicationContext(), "Vehiculo quitado de la selección", Toast.LENGTH_SHORT).show();
                     textoMatricula = (TextView) layoutVehiculos.findViewById(R.id.textMatricula);
                     String matricula = textoMatricula.getText().toString();
-                    presenterVehiculos.seleccionarVehiculo(matricula);
-                    botonSeleccionado = v.findViewById(R.id.vehiculoSeleccionado);
-                    cambiaEstadoBoton(botonSeleccionado, cambioBoton);
+                    seleccionado = false;
+                    if(vehiculoSeleccionado.equals(presenterVehiculos.seleccionarVehiculo(textoMatriculaTemp.getText().toString()))){
+                        vehiculoSeleccionado = vehiculoTemp;
+                        botonSeleccionado = v.findViewById(R.id.vehiculoSeleccionado);
+                        botonSeleccionado.setImageResource(R.drawable.boton1);
+                        seleccionado = true;
+                        Toast.makeText(getApplicationContext(), "Vehiculo Seleccionado", Toast.LENGTH_SHORT).show();
+                    }
+                }
+
+
 
             }
         });
-    }
-
-    private void cambiaEstadoBoton(ImageView imgView, int n) {
-        if (cambioBoton == 1) {
-            imgView.setImageResource(R.drawable.boton1);
-            Toast.makeText(getApplicationContext(), "Vehiculo Seleccionado", Toast.LENGTH_SHORT).show();
-            cambioBoton = 0;
-        } else {
-            imgView.setImageResource(R.drawable.boton2);
-            Toast.makeText(getApplicationContext(), "Vehiculo deja de estar seleccionado", Toast.LENGTH_SHORT).show();
-            cambioBoton = 1;
-
-        }
     }
 
     private void formatoLista(List<Vehiculo> vehiculos) {
