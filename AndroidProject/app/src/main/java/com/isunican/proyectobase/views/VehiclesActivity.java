@@ -30,6 +30,7 @@ import com.isunican.proyectobase.presenter.PresenterVehiculos;
 
 import org.w3c.dom.Text;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -60,19 +61,18 @@ public class VehiclesActivity extends AppCompatActivity implements
     Button btnCancelar;
     Button btnAceptar;
 
-
     EditText txtMarca;
     EditText txtModelo;
     EditText txtMatricula;
+    TextView txtMarcaVehiculo;
+    TextView txtModeloVehiculo;
+    TextView txtMatriculaVehiculo;
+    TextView txtCombustibleVehiculo;
     Spinner spinerTipoCombustible;
 
-
-    LinearLayout layoutVehiculos;
     ImageView botonSeleccionado;
-    TextView textoMatricula;
-    String matriculaUnica;
-    Vehiculo vehiculoSeleccionado;
     boolean seleccionado;
+    List<Vehiculo> seleccionados;
 
     /**
      * onCreate
@@ -87,6 +87,7 @@ public class VehiclesActivity extends AppCompatActivity implements
         setContentView(R.layout.activity_vehicle);
         presenterVehiculos = new PresenterVehiculos();
         vehiculos = new ArrayList<>(presenterVehiculos.getVehiculos(VehiclesActivity.this).values());
+        seleccionados = new ArrayList<>(presenterVehiculos.getVehiculos(VehiclesActivity.this).values());
         formatoLista(vehiculos);
     }
 
@@ -181,34 +182,50 @@ public class VehiclesActivity extends AppCompatActivity implements
         });
     }
 
-    public void seleccionarVehiculo(View v) {
+    public void seleccionarVehiculo(View v) throws IOException {
+        ImageView imagen = (ImageView) v.findViewById(R.id.logoMarca);
+        txtModeloVehiculo = v.findViewById(R.id.TextModelo);
+        txtMatriculaVehiculo = v.findViewById(R.id.textMatricula);
+        txtCombustibleVehiculo = v.findViewById(R.id.textCombustible);
 
         //TextView textoMatriculaTemp = (TextView) layoutVehiculos.findViewById(R.id.textMatricula);
         //Vehiculo vehiculoTemp = presenterVehiculos.seleccionarVehiculo(textoMatriculaTemp.getText().toString());
+        String mar = String.valueOf(imagen.getTag());
+        System.out.println(mar);
+        String model = txtModeloVehiculo.getText().toString();
+        String matric = txtMatriculaVehiculo.getText().toString();
+        String matricu = matric.toUpperCase();
+        String combustible = txtCombustibleVehiculo.getText().toString();
+
+        Vehiculo vehiculo = new Vehiculo(mar, model, matricu, combustible);
 
         if (seleccionado && botonSeleccionado.equals(v.findViewById(R.id.vehiculoSeleccionado))) {
-            System.out.println("Vehiculo seleccionado igual");
+            //System.out.println("Vehiculo seleccionado igual");
             botonSeleccionado = v.findViewById(R.id.vehiculoSeleccionado);
             botonSeleccionado.setImageResource(R.drawable.boton2);
             Toast.makeText(getApplicationContext(), "Vehiculo quitado de la selección", Toast.LENGTH_SHORT).show();
             seleccionado = false;
+            presenterVehiculos.borraSeleccionados(VehiclesActivity.this);
         } else if (seleccionado) {
-            System.out.println("Vehiculo seleccionado distinto");
+            //System.out.println("Vehiculo seleccionado distinto");
             botonSeleccionado.setImageResource(R.drawable.boton2);
             botonSeleccionado = v.findViewById(R.id.vehiculoSeleccionado);
             botonSeleccionado.setImageResource(R.drawable.boton1);
             Toast.makeText(getApplicationContext(), "Vehiculo quitado de la selección", Toast.LENGTH_SHORT).show();
             seleccionado = true;
+            presenterVehiculos.borraSeleccionados(VehiclesActivity.this);
+            presenterVehiculos.anhadirVehiculoSeleccionado(vehiculo);
+            presenterVehiculos.escribeVehiculoSeleccionado(vehiculo.toString(), VehiclesActivity.this);
         } else {
-            System.out.println("Vehiculo no seleccionado");
+            //System.out.println("Vehiculo no seleccionado");
             botonSeleccionado = v.findViewById(R.id.vehiculoSeleccionado);
             botonSeleccionado.setImageResource(R.drawable.boton1);
             Toast.makeText(getApplicationContext(), "Vehiculo seleccionado", Toast.LENGTH_SHORT).show();
             seleccionado = true;
+            presenterVehiculos.anhadirVehiculoSeleccionado(vehiculo);
+            presenterVehiculos.escribeVehiculoSeleccionado(vehiculo.toString(), VehiclesActivity.this);
         }
     }
-
-
 
     private void formatoLista(List<Vehiculo> vehiculos) {
         // Definimos el array adapter
@@ -363,6 +380,7 @@ class VehiculoArrayAdapter extends ArrayAdapter<Vehiculo> {
                     "drawable", context.getPackageName());
         }
         logo.setImageResource(imageID);
+        logo.setTag(rotuleImageID);
     }
 
 }

@@ -19,6 +19,7 @@ import java.util.regex.Pattern;
 
 public class PresenterVehiculos {
     private HashMap<String, Vehiculo> vehiculos;
+    private HashMap<String, Vehiculo> seleccionado;
 
     //Base de datos de donde se obtiene los vehiculos
     public static class DatoNoValido extends RuntimeException {
@@ -39,16 +40,13 @@ public class PresenterVehiculos {
     public static class DatoNulo extends RuntimeException {
     }
 
-    public static class VehiculoYaSeleccionado extends RuntimeException {
-    }
-    
-
 
     /**
      * Constructor, getters y setters
      */
     public PresenterVehiculos() {
         vehiculos = new HashMap<>();
+        seleccionado = new HashMap<>();
         this.cargaDatosDummy();
     }
 
@@ -62,6 +60,26 @@ public class PresenterVehiculos {
         return vehiculos;
     }
 
+    /**
+     * Actualiza y retorna el mapa con los vehiculos
+     *
+     * @return
+     */
+    public Map<String, Vehiculo> getSeleccionado(Context context) {
+        cargaDatosVehiculosSeleccionado(context);
+        return seleccionado;
+    }
+
+
+    /**
+     * cargaDatosVehiculos
+     * <p>
+     * Carga los datos de los vehiculos almacenados en la base de datos
+     */
+    public boolean cargaDatosVehiculosSeleccionado(Context context) {
+        String db = consultaDBSeleccionado(context);
+        return obtieneMapaSeleccionado(db);
+    }
 
     /**
      * cargaDatosVehiculos
@@ -134,13 +152,64 @@ public class PresenterVehiculos {
         }
         vehiculos.put(v.getMatricula(), v);
     }
+
     /**
-     * Metodo que selecciona un vehiculo y cambia el filtro de tipo de combustible
-     * en funcion dle utilizado por el vehiculo seleccionado
+     * Método que borra el/los vehiculos almacenados en seleccionados
      */
-    public Vehiculo seleccionarVehiculo(String matricula){
-            Vehiculo seleccionado=vehiculos.get(matricula);
-            return seleccionado;
+    public void borraSeleccionados(Context context) throws IOException {
+        seleccionado.clear();
+        try {
+            FileWriter outputStreamWriter = new FileWriter(context.getFileStreamPath("seleccionado.txt"), false);
+        } catch (IOException e) {
+            Log.e("Excepción", "Fallo al escribir en la base de datos");
+        }
+    }
+
+    /**
+     * Metodo que añade el vehiculo seleccionado al fichero y al arrayList de vehiculos
+     */
+    public void anhadirVehiculoSeleccionado(Vehiculo v) {
+
+        // Lanza excepcion si el vehiculo es nulo
+        if (v == null) {
+            throw new VehiculoNulo();
+        }
+
+        //Lanza excepcion si algun dato es nulo
+        if (v.getMarca() == null || v.getMatricula() == null || v.getModelo() == null) {
+            throw new DatoNulo();
+        }
+
+        //Metodos para guardar vehiculo en el fichero asi como comprobar las matricuals y demas.
+        String marca = v.getMarca();
+        String modelo = v.getModelo();
+        String matricula = v.getMatricula();
+        String combustible = v.getCombustible();
+
+        //Formato de matricula
+        Pattern patron = Pattern.compile("[0-9]{4}+[A-Z]{3}");
+        Matcher mat = patron.matcher(matricula);
+
+        // Lanza excepcion si uno de los campos estan vacios
+        if (marca.equals("") || modelo.equals("") || matricula.equals("")) {
+            throw new DatoNoValido();
+        }
+
+        // Lanza excepcion si el vehiculo ya existe
+        if (seleccionado.get(matricula) != null) {
+            throw new VehiculoYaExiste();
+        }
+
+        // Lanza excepcion si la matricula no es valida
+        if (!mat.matches()) {
+            throw new MatriculaNoValida();
+        }
+        // Lanza excepcion si el combustible pasado no es GasoleoA o Gasolina95
+        if (!combustible.equals("Gasolina95") && !combustible.equals("GasoleoA")) {
+            throw new CombustibleNoValido();
+        }
+        seleccionado.clear();
+        seleccionado.put(v.getMatricula(), v);
     }
 
     /**
@@ -157,12 +226,39 @@ public class PresenterVehiculos {
     }
 
     /**
+     * Escribe el vehículo pasado como parámetro en la base de datos
+     */
+    public void escribeVehiculoSeleccionado(String vehiculo, Context context) {
+
+        try (FileWriter outputStreamWriter = new FileWriter(context.getFileStreamPath("seleccionado.txt"), true)) {
+            outputStreamWriter.write(vehiculo);
+
+        } catch (IOException e) {
+            Log.e("Excepción", "Fallo al escribir en la base de datos");
+        }
+    }
+
+    /**
      * Retorna false si el fichero estaba vacio y true si tenia contenido
      *
      * @param db
      * @return
      */
     private boolean obtieneMapa(String db) {
+        HashMap<String, Vehiculo> lista = new HashMap<>();
+        char[] charDB = db.toCharArray();
+        if (charDB.length == 0) {
+            vehiculos = new HashMap<>();
+            return false;
+        }
+
+        int cont = 0;
+        buscaVehiculosEnDB(lista, charDB, cont);
+        vehiculos = lista;
+        return true;
+    }
+
+    private boolean obtieneMapaSeleccionado(String db) {
         HashMap<String, Vehiculo> lista = new HashMap<>();
         char[] charDB = db.toCharArray();
         if (charDB.length == 0) {
@@ -265,6 +361,38 @@ public class PresenterVehiculos {
         String ret = " ";
         try {
             InputStream inputStream = context.openFileInput("vehiculos.txt");
+
+            InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
+            StringBuilder stringBuilder;
+            try (BufferedReader bufferedReader = new BufferedReader(inputStreamReader)) {
+                String receiveString = "";
+                stringBuilder = new StringBuilder();
+
+                while ((receiveString = bufferedReader.readLine()) != null) {
+                    stringBuilder.append("\n").append(receiveString);
+                }
+
+
+                inputStream.close();
+                ret = stringBuilder.toString();
+            }
+        } catch (FileNotFoundException e) {
+            Log.e("login activity", "No se ha encontrado el fichero: " + e.toString());
+        } catch (IOException e) {
+            Log.e("login activity", "No se ha podido leer el fichero " + e.toString());
+        }
+        return ret;
+    }
+
+    /**
+     * Devuelve el contenido de la base de datos como un String
+     *
+     * @return
+     */
+    private String consultaDBSeleccionado(Context context) {
+        String ret = " ";
+        try {
+            InputStream inputStream = context.openFileInput("seleccionado.txt");
 
             InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
             StringBuilder stringBuilder;
