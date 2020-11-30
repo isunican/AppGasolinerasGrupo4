@@ -46,6 +46,7 @@ public class PresenterVehiculos {
     public static class CaracterEspecial extends RuntimeException {
     }
 
+
     /**
      * Constructor, getters y setters
      */
@@ -201,6 +202,7 @@ public class PresenterVehiculos {
         vehiculos.put(v.getMatricula(), v);
     }
 
+
     /**
      * Método que borra el/los vehiculos almacenados en seleccionados
      */
@@ -248,6 +250,7 @@ public class PresenterVehiculos {
             throw new VehiculoYaExiste();
         }
 
+
         // Lanza excepcion si la matricula no es valida
         if (!mat.matches()) {
             throw new MatriculaNoValida();
@@ -256,6 +259,7 @@ public class PresenterVehiculos {
         if (!combustible.equals("Gasolina95") && !combustible.equals("GasoleoA")) {
             throw new CombustibleNoValido();
         }
+
         seleccionado.clear();
         seleccionado.put(v.getMatricula(), v);
     }
@@ -278,7 +282,8 @@ public class PresenterVehiculos {
      */
     public void escribeVehiculoSeleccionado(String vehiculo, Context context) {
 
-        try (FileWriter outputStreamWriter = new FileWriter(context.getFileStreamPath("seleccionado.txt"), true)) {
+
+        try (FileWriter outputStreamWriter = new FileWriter(context.getFileStreamPath("seleccionado.txt"), false)) {
             outputStreamWriter.write(vehiculo);
 
         } catch (IOException e) {
@@ -310,13 +315,13 @@ public class PresenterVehiculos {
         HashMap<String, Vehiculo> lista = new HashMap<>();
         char[] charDB = db.toCharArray();
         if (charDB.length == 0) {
-            vehiculos = new HashMap<>();
+            seleccionado = new HashMap<>();
             return false;
         }
 
         int cont = 0;
         buscaVehiculosEnDB(lista, charDB, cont);
-        vehiculos = lista;
+        seleccionado = lista;
         return true;
     }
 
@@ -451,7 +456,6 @@ public class PresenterVehiculos {
                 while ((receiveString = bufferedReader.readLine()) != null) {
                     stringBuilder.append("\n").append(receiveString);
                 }
-
 
                 inputStream.close();
                 ret = stringBuilder.toString();

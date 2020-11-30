@@ -49,9 +49,9 @@ public class AnhadirVehiculosITest {
         presenter= activity.getPresenterVehiculos();
 
         //Inicializamos los vehículos
-        vehiculoMatriculaDistinta=new Vehiculo("Toyota", "Celica", "1234ABC", "Gasolina95");
-        vehiculoMatriculaIgual=new Vehiculo("Volkswagen", "Golf Mk2", "1234BCA", "Gasolina95");
-        vehiculoAnhadido=new Vehiculo("Honda", "Civic", "1234BCA", "Gasolina95");
+        vehiculoMatriculaDistinta=new Vehiculo("Toyota", "Celica", "1234BBC", "Gasolina95");
+        vehiculoMatriculaIgual=new Vehiculo("Volkswagen", "Golf Mk2", "1234BCB", "Gasolina95");
+        vehiculoAnhadido=new Vehiculo("Honda", "Civic", "1234BCD", "Gasolina95");
         presenter.anhadirVehiculo(vehiculoAnhadido);
     }
 
