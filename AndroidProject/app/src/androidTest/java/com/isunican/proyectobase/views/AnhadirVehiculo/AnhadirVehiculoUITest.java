@@ -79,7 +79,8 @@ public class AnhadirVehiculoUITest {
 
 
             //Se recorren la lista de vehiculos de la app y se meten en la lista
-            Vehiculo vehiculo = new Vehiculo("Ford","Focus","1234BBC","Gasolina95");
+
+            Vehiculo vehiculo = new Vehiculo("ford","Focus","1234BBC","Gasolina95");
 
            List<Vehiculo> vehiculosIniciales = new ArrayList<Vehiculo>();
             cargaListaVehiculos(vista, vehiculosIniciales);
@@ -120,6 +121,7 @@ public class AnhadirVehiculoUITest {
             marca = "BMW";
             modelo ="X1";
             matricula= "1234BBC";
+
             combustible = "GasoleoA";
             escribeDatosVehiculo(marca, modelo, matricula, combustible);
             onView(withId(R.id.idBotonAceptar)).perform(click());
