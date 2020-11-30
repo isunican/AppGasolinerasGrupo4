@@ -72,7 +72,7 @@ public class VehiclesActivity extends AppCompatActivity implements
 
     ImageView botonSeleccionado;
     boolean seleccionado;
-    List<Vehiculo> seleccionados;
+    List<Vehiculo> vehiculoSeleccionado;
 
     /**
      * onCreate
@@ -87,8 +87,8 @@ public class VehiclesActivity extends AppCompatActivity implements
         setContentView(R.layout.activity_vehicle);
         presenterVehiculos = new PresenterVehiculos();
         vehiculos = new ArrayList<>(presenterVehiculos.getVehiculos(VehiclesActivity.this).values());
-        seleccionados = new ArrayList<>(presenterVehiculos.getVehiculos(VehiclesActivity.this).values());
-        formatoLista(vehiculos);
+        vehiculoSeleccionado = new ArrayList<>(presenterVehiculos.getSeleccionado(VehiclesActivity.this).values());
+        formatoLista(vehiculos, vehiculoSeleccionado);
     }
 
     /**
@@ -158,7 +158,7 @@ public class VehiclesActivity extends AppCompatActivity implements
                     //Muestra la list view actualizada con el ultimo vehiculo
                     vehiculos = new ArrayList<>(presenterVehiculos.getVehiculos(VehiclesActivity.this).values());
 
-                    formatoLista(vehiculos);
+                    formatoLista(vehiculos, vehiculoSeleccionado);
                 } catch (PresenterVehiculos.DatoNoValido e) {
                     notificaDatoNoValido();
                 } catch (PresenterVehiculos.MatriculaNoValida e) {
@@ -190,8 +190,7 @@ public class VehiclesActivity extends AppCompatActivity implements
 
         //TextView textoMatriculaTemp = (TextView) layoutVehiculos.findViewById(R.id.textMatricula);
         //Vehiculo vehiculoTemp = presenterVehiculos.seleccionarVehiculo(textoMatriculaTemp.getText().toString());
-        String mar = String.valueOf(imagen.getTag());
-        System.out.println(mar);
+        String mar = String.valueOf(imagen.getTag()).toLowerCase();
         String model = txtModeloVehiculo.getText().toString();
         String matric = txtMatriculaVehiculo.getText().toString();
         String matricu = matric.toUpperCase();
@@ -199,37 +198,41 @@ public class VehiclesActivity extends AppCompatActivity implements
 
         Vehiculo vehiculo = new Vehiculo(mar, model, matricu, combustible);
 
-        if (seleccionado && botonSeleccionado.equals(v.findViewById(R.id.vehiculoSeleccionado))) {
-            //System.out.println("Vehiculo seleccionado igual");
+        if (seleccionado && vehiculo.equals(v.findViewById(R.id.vehiculoSeleccionado))) {
+            //Vehiculo seleccionado igual
             botonSeleccionado = v.findViewById(R.id.vehiculoSeleccionado);
             botonSeleccionado.setImageResource(R.drawable.boton2);
             Toast.makeText(getApplicationContext(), "Vehiculo quitado de la selección", Toast.LENGTH_SHORT).show();
             seleccionado = false;
             presenterVehiculos.borraSeleccionados(VehiclesActivity.this);
+            vehiculoSeleccionado.clear();
         } else if (seleccionado) {
-            //System.out.println("Vehiculo seleccionado distinto");
+            //Vehiculo seleccionado distinto
             botonSeleccionado.setImageResource(R.drawable.boton2);
             botonSeleccionado = v.findViewById(R.id.vehiculoSeleccionado);
             botonSeleccionado.setImageResource(R.drawable.boton1);
-            Toast.makeText(getApplicationContext(), "Vehiculo quitado de la selección", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), "Vehiculo seleccionado", Toast.LENGTH_SHORT).show();
             seleccionado = true;
             presenterVehiculos.borraSeleccionados(VehiclesActivity.this);
             presenterVehiculos.anhadirVehiculoSeleccionado(vehiculo);
             presenterVehiculos.escribeVehiculoSeleccionado(vehiculo.toString(), VehiclesActivity.this);
+            vehiculoSeleccionado.clear();
+            vehiculoSeleccionado.add(vehiculo);
         } else {
-            //System.out.println("Vehiculo no seleccionado");
+            //Vehiculo no seleccionado
             botonSeleccionado = v.findViewById(R.id.vehiculoSeleccionado);
             botonSeleccionado.setImageResource(R.drawable.boton1);
             Toast.makeText(getApplicationContext(), "Vehiculo seleccionado", Toast.LENGTH_SHORT).show();
             seleccionado = true;
             presenterVehiculos.anhadirVehiculoSeleccionado(vehiculo);
             presenterVehiculos.escribeVehiculoSeleccionado(vehiculo.toString(), VehiclesActivity.this);
+            vehiculoSeleccionado.add(vehiculo);
         }
     }
 
-    private void formatoLista(List<Vehiculo> vehiculos) {
+    private void formatoLista(List<Vehiculo> vehiculos, List<Vehiculo> seleccionado) {
         // Definimos el array adapter
-        adapter = new VehiculoArrayAdapter(this, 0, vehiculos);
+        adapter = new VehiculoArrayAdapter(this, 0, vehiculos, seleccionado);
 
         // Obtenemos la vista de la lista
         listViewVehiculos = findViewById(R.id.listViewVehiculos);
@@ -326,13 +329,14 @@ class VehiculoArrayAdapter extends ArrayAdapter<Vehiculo> {
 
     private Context context;
     private List<Vehiculo> listaVehiculos;
-
+    private List<Vehiculo> vehiculoSeleccionado;
 
     // Constructor
-    public VehiculoArrayAdapter(Context context, int resource, List<Vehiculo> objects) {
+    public VehiculoArrayAdapter(Context context, int resource, List<Vehiculo> objects, List<Vehiculo> vehiculoSeleccionado) {
         super(context, resource, objects);
         this.context = context;
         this.listaVehiculos = objects;
+        this.vehiculoSeleccionado = vehiculoSeleccionado;
     }
 
     // Llamado al renderizar la lista
@@ -341,6 +345,7 @@ class VehiculoArrayAdapter extends ArrayAdapter<Vehiculo> {
 
         // Obtiene el elemento que se está mostrando
         Vehiculo vehiculo = listaVehiculos.get(position);
+        vehiculo.setMarca(vehiculo.getMarca().toLowerCase());
 
         // Indica el layout a usar en cada elemento de la lista
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -363,6 +368,17 @@ class VehiculoArrayAdapter extends ArrayAdapter<Vehiculo> {
         // carga icono
         cargaIcono(vehiculo, marca);
 
+        if(vehiculoSeleccionado.size() == 0){
+            botonSeleccion.setImageResource(R.drawable.boton2);
+        } else {
+            if(vehiculoSeleccionado.get(0).equals(vehiculo)){
+                botonSeleccion.setImageResource(R.drawable.boton1);
+                seleccionado = true;
+                botonSeleccionado = botonSeleccion;
+            } else {
+                botonSeleccion.setImageResource(R.drawable.boton2);
+            }
+        }
 
         return view;
     }
