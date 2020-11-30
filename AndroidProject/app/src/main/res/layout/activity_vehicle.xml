@@ -5,10 +5,11 @@
     android:id="@+id/activity_vehicle"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:gravity="end"
     android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingBottom="@dimen/activity_vertical_margin"
     tools:context=".views.VehiclesActivity">
 
     <LinearLayout
@@ -33,8 +34,18 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_gravity="center"
                 android:layout_weight="0.2"
-                android:orientation="horizontal"></LinearLayout>
+                android:orientation="vertical">
+
+                <Button
+                    android:id="@+id/Volver"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="end"
+                    android:onClick="volverMainActivity"
+                    android:text="@string/volver" />
+            </LinearLayout>
         </LinearLayout>
 
         <LinearLayout
@@ -59,7 +70,6 @@
 
     </LinearLayout>
 
-    
 
 </RelativeLayout>
 
