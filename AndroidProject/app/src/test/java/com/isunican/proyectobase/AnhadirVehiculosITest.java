@@ -29,7 +29,7 @@ import static org.junit.Assert.fail;
 @RunWith(RobolectricTestRunner.class)
 @Config(sdk = Build.VERSION_CODES.O_MR1)
 public class AnhadirVehiculosITest {
-
+/**
     private PresenterVehiculos presenter;
     private Context context;
     private VehiclesActivity activity;
@@ -72,5 +72,5 @@ public class AnhadirVehiculosITest {
         } catch (PresenterVehiculos.VehiculoYaExiste e){
 
         };
-    }
+    }**/
 }
