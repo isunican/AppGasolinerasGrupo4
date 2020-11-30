@@ -70,7 +70,7 @@ public class AnhadirVehiculoUITest {
             //CASO UIT.1
             String marca = "Ford";
             String modelo = "Focus";
-            String matricula = "1234ABC";
+            String matricula = "1234BBC";
             String combustible = "Gasolina95";
 
             escribeDatosVehiculo(marca, modelo, matricula, combustible);
@@ -79,7 +79,7 @@ public class AnhadirVehiculoUITest {
 
 
             //Se recorren la lista de vehiculos de la app y se meten en la lista
-            Vehiculo vehiculo = new Vehiculo("Ford","Focus","1234ABC","Gasolina95");
+            Vehiculo vehiculo = new Vehiculo("ford","Focus","1234BBC","Gasolina95");
 
            List<Vehiculo> vehiculosIniciales = new ArrayList<Vehiculo>();
             cargaListaVehiculos(vista, vehiculosIniciales);
@@ -89,13 +89,13 @@ public class AnhadirVehiculoUITest {
             //CASO UIT.2
             marca = "";
             modelo ="";
-            matricula= "5678ABC";
+            matricula= "5678BBC";
             escribeDatosVehiculo(marca, modelo, matricula, combustible);
             onView(withId(R.id.idBotonAceptar)).perform(click());
             onView(withId(R.id.idBotonCancelar)).perform(click());
 
             //CASO UIT.3
-            matricula= "1234ABC";
+            matricula= "1234BBC";
             escribeDatosVehiculo(marca, modelo, matricula, combustible);
             onView(withId(R.id.idBotonCancelar)).perform(click());
 
@@ -116,7 +116,7 @@ public class AnhadirVehiculoUITest {
             //CASO UIT.4
             marca = "BMW";
             modelo ="X1";
-            matricula= "1234ABC";
+            matricula= "1234CBC";
             combustible = "GasoleoA";
             escribeDatosVehiculo(marca, modelo, matricula, combustible);
             onView(withId(R.id.idBotonAceptar)).perform(click());

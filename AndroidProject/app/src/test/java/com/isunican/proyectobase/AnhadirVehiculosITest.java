@@ -25,7 +25,7 @@ import java.io.InputStreamReader;
 import java.util.List;
 
 import static org.junit.Assert.fail;
-/**
+
 
 @RunWith(RobolectricTestRunner.class)
 @Config(sdk = Build.VERSION_CODES.O_MR1)
@@ -49,9 +49,9 @@ public class AnhadirVehiculosITest {
         presenter= activity.getPresenterVehiculos();
 
         //Inicializamos los vehículos
-        vehiculoMatriculaDistinta=new Vehiculo("Toyota", "Celica", "1234BBC", "Gasolina95");
-        vehiculoMatriculaIgual=new Vehiculo("Volkswagen", "Golf Mk2", "1234BCB", "Gasolina95");
-        vehiculoAnhadido=new Vehiculo("Honda", "Civic", "1234BCD", "Gasolina95");
+        vehiculoMatriculaDistinta=new Vehiculo("toyota", "Celica", "1234BBC", "Gasolina95");
+        vehiculoMatriculaIgual=new Vehiculo("volkswagen", "Golf Mk2", "1234BBC", "Gasolina95");
+        vehiculoAnhadido=new Vehiculo("honda", "Civic", "1234BCD", "Gasolina95");
         presenter.anhadirVehiculo(vehiculoAnhadido);
     }
 
@@ -73,4 +73,4 @@ public class AnhadirVehiculosITest {
 
         };
     }
-}**/
+}
