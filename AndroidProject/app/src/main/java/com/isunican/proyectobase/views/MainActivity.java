@@ -166,7 +166,6 @@ public class MainActivity extends AppCompatActivity implements
 
     @SuppressWarnings("Necesario parametro")
     public void myClickHandler(View view) {
-        List<Gasolinera> gasolinerasFiltradas;
         precioMin = findViewById(R.id.idPrecioMin);
         precioMax = findViewById(R.id.idPrecioMax);
 
