@@ -22,7 +22,7 @@ import static org.junit.Assert.fail;
 @Config(sdk = Build.VERSION_CODES.O_MR1)
 
 
-public class PresenterVehiculosTest {
+public class  PresenterVehiculosTest {
 
     //Declaracion de distintos vehiculos con diferentes datos que se estableceran posteriormente
     private Vehiculo vehiculoValidoA;
@@ -34,19 +34,29 @@ public class PresenterVehiculosTest {
     private Vehiculo vehiculoNulo;
     PresenterVehiculos presenterVehiculos;
 
+    //Declaracion de distintos vehiculos para testear el ticket NoCaracteresExtranhosvehiculo
+    private Vehiculo vehiculoMarcaExtranha;
+    private Vehiculo vehiculoModeloExtranho;
+    private Vehiculo vehiculoModeloMarcaExtranha;
+    private Vehiculo vehiculoValidoC;
+
     @Before
     public void setUp() throws Exception{
 
         //Inicializacion de los vehiculos
-        vehiculoValidoA = new Vehiculo("Ford", "Fiesta","1234ABC","Gasolina95");
+        vehiculoValidoA = new Vehiculo("Ford", "Fiesta","1234BBC","Gasolina95");
         vehiculoMatriculaNoValida = new Vehiculo("Opel", "Corsa","ESTODAERROR","Gasolina95");
-        vehiculoValidoB =  new Vehiculo("Toyota", "Corolla", "1086AEH", "GasoleoA");
+        vehiculoValidoB =  new Vehiculo("Toyota", "Corolla", "1086BBH", "GasoleoA");
         vehiculoConDatoNulo =  new Vehiculo("Subaru", null,"2501ERR","GasoleoA");
-        vehiculoConDatoVacio =  new Vehiculo("", "Multipla","0000ABC","GasoleoA");
-        vehiculoConOtroCarburante =  new Vehiculo("Seat", "Leon","1337OOO","GasolinaFalsa");
+        vehiculoConDatoVacio =  new Vehiculo("", "Multipla","0000DBC","GasoleoA");
+        vehiculoConOtroCarburante =  new Vehiculo("Seat", "Leon","1337BDC","GasolinaFalsa");
         vehiculoNulo = null;
 
-
+        //Inicializacion de los vehiculos para el ticket NoCaracteresExtranhosVehiculo
+        vehiculoMarcaExtranha = new Vehiculo("Renault*/-+/","Clio", "1234TPW", "GasoleoA");
+        vehiculoModeloExtranho = new Vehiculo("Renault", "Cl/-o/o--", "7654PWL", "Gasolina95");
+        vehiculoModeloMarcaExtranha = new Vehiculo("Rena--ult--", "Cl-i+..o", "3426PLS", "Gasolina95");
+        vehiculoValidoC = new Vehiculo("Renault", "Clio","1456WTS","Gasolina95");
     }
 
     @Test
@@ -120,5 +130,40 @@ public class PresenterVehiculosTest {
 
         }
 
+
+        /*
+         * Casos de pruebas para el ticket NoCaracteresExtranhosVehiculo (Victor Perez y Daniel Llovio)
+         */
+
+        //Caso UT.1a
+        try{
+            presenterVehiculos.anhadirVehiculo(vehiculoValidoC);
+        } catch(Exception e){
+            fail();
+        }
+
+        //Caso UT.1b
+        try{
+            presenterVehiculos.anhadirVehiculo(vehiculoMarcaExtranha);
+            fail();
+        } catch(PresenterVehiculos.CaracterEspecial e){
+
+        }
+
+        //Caso UT.1c
+        try{
+            presenterVehiculos.anhadirVehiculo(vehiculoModeloExtranho);
+            fail();
+        } catch(PresenterVehiculos.CaracterEspecial e){
+            
+        }
+
+        //Caso UT.1d
+        try{
+            presenterVehiculos.anhadirVehiculo(vehiculoModeloMarcaExtranha);
+            fail();
+        } catch(PresenterVehiculos.CaracterEspecial e){
+
+        }
     }
 }
