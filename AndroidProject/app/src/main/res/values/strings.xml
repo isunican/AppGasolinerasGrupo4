@@ -25,5 +25,6 @@
     <string name="maxPrecio">Max</string>
     <string name="layoutVehiculo">x</string>
     <string name="vehiculoSeleccionado">x</string>
+    <string name="volver">VOLVER</string>
 
 </resources>
