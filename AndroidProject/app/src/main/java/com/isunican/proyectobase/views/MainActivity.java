@@ -20,6 +20,7 @@ import android.util.DisplayMetrics;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -129,7 +130,7 @@ public class MainActivity extends AppCompatActivity implements
         listaVehiculoSeleccionado = new ArrayList<>(presenterVehiculos.getSeleccionado(MainActivity.this).values());
         if (listaVehiculoSeleccionado.size() != 0){
             vehiculoSeleccionado=listaVehiculoSeleccionado.get(0);
-            combustibleActual=vehiculoSeleccionado.getCombustible();
+            combustibleActual=vehiculoSeleccionado.getCombustible().toUpperCase();
         }
         //Cogemos el spinner
         Spinner spin = (Spinner) findViewById(R.id.idSpinnerCombustible);
@@ -142,7 +143,7 @@ public class MainActivity extends AppCompatActivity implements
 
         //Colocamos los datos en el spinner
         spin.setAdapter(aa);
-        if(combustibleActual.equals("GasoleoA")){
+        if(combustibleActual.equals("GASOLEOA")){
             spin.setSelection(1);
         }
     }
@@ -152,11 +153,11 @@ public class MainActivity extends AppCompatActivity implements
         super.onActivityResult(requestCode,resultCode,data);
         if(requestCode==0 && resultCode == 0 && data != null){
             String v=data.getExtras().getString("VALOR");
-            combustibleActual=v;
+            combustibleActual=v.toUpperCase();
         }
         cargaFiltroCombustiblePrecio();
         Spinner spin = (Spinner) findViewById(R.id.idSpinnerCombustible);
-        if(combustibleActual.equals("GasoleoA")){
+        if(combustibleActual.equals(combustibles[1])){
             spin.setSelection(1);
         } else {
             spin.setSelection(0);
@@ -211,13 +212,11 @@ public class MainActivity extends AppCompatActivity implements
 
         if(listaVehiculoSeleccionado.size() != 0){
             vehiculoSeleccionado=listaVehiculoSeleccionado.get(0);
-            combustibleActual=vehiculoSeleccionado.getCombustible();
-            System.out.println("coche seleccionado\n");
-            System.out.println(combustibleActual);
-        }else{
-            combustibleActual=combustibles[0];
-            System.out.println("coche sin seleccion\n");
-            System.out.println(combustibleActual);
+            if(vehiculoSeleccionado.getCombustible().toUpperCase().equals("GASOLINA95")){
+                combustibleActual=combustibles[0];
+            } else if(vehiculoSeleccionado.getCombustible().toUpperCase().equals("GASOLEOA")){
+                combustibleActual=combustibles[1];
+            }
         }
     }
 
@@ -312,7 +311,6 @@ public class MainActivity extends AppCompatActivity implements
      */
     @Override
     public void onItemSelected(AdapterView<?> arg0, View arg1, int position, long id) {
-
         combustibleActual = combustibles[position];
         cargaFiltroCombustiblePrecio();
     }
