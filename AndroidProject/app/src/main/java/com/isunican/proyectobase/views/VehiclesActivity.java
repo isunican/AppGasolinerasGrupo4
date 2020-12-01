@@ -1,7 +1,10 @@
 package com.isunican.proyectobase.views;
 
+import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.IntentService;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -201,9 +204,8 @@ public class VehiclesActivity extends AppCompatActivity implements
         txtMatriculaVehiculo = v.findViewById(R.id.textMatricula);
         txtCombustibleVehiculo = v.findViewById(R.id.textCombustible);
 
-        //TextView textoMatriculaTemp = (TextView) layoutVehiculos.findViewById(R.id.textMatricula);
-        //Vehiculo vehiculoTemp = presenterVehiculos.seleccionarVehiculo(textoMatriculaTemp.getText().toString());
 
+        Intent myIntent=new Intent();
         String mar = String.valueOf(imagen.getTag()).toLowerCase();
         String model = txtModeloVehiculo.getText().toString();
         String matric = txtMatriculaVehiculo.getText().toString();
@@ -213,7 +215,7 @@ public class VehiclesActivity extends AppCompatActivity implements
         Vehiculo vehiculo = new Vehiculo(mar, model, matricu, combustible);
 
 
-        if (seleccionado && vehiculo.equals(v.findViewById(R.id.vehiculoSeleccionado))) {
+        if (seleccionado && vehiculo.equals(vehiculoSeleccionado.get(0))) {
             //Vehiculo seleccionado igual
             botonSeleccionado = v.findViewById(R.id.vehiculoSeleccionado);
             botonSeleccionado.setImageResource(R.drawable.boton2);
@@ -221,6 +223,8 @@ public class VehiclesActivity extends AppCompatActivity implements
             seleccionado = false;
             presenterVehiculos.borraSeleccionados(VehiclesActivity.this);
             vehiculoSeleccionado.clear();
+            myIntent.putExtra("VALOR","Gasolina95");
+            setResult(0,myIntent);
         } else if (seleccionado) {
             //Vehiculo seleccionado distinto
             botonSeleccionado.setImageResource(R.drawable.boton2);
@@ -233,6 +237,8 @@ public class VehiclesActivity extends AppCompatActivity implements
             presenterVehiculos.escribeVehiculoSeleccionado(vehiculo.toString(), VehiclesActivity.this);
             vehiculoSeleccionado.clear();
             vehiculoSeleccionado.add(vehiculo);
+            myIntent.putExtra("VALOR",vehiculoSeleccionado.get(0).getCombustible());
+            setResult(0,myIntent);
         } else {
             //Vehiculo no seleccionado
             botonSeleccionado = v.findViewById(R.id.vehiculoSeleccionado);
@@ -242,8 +248,15 @@ public class VehiclesActivity extends AppCompatActivity implements
             presenterVehiculos.anhadirVehiculoSeleccionado(vehiculo);
             presenterVehiculos.escribeVehiculoSeleccionado(vehiculo.toString(), VehiclesActivity.this);
             vehiculoSeleccionado.add(vehiculo);
+            myIntent.putExtra("VALOR",vehiculoSeleccionado.get(0).getCombustible());
+            setResult(0,myIntent);
         }
     }
+
+    public void volverMainActivity(View v){
+        finish();
+    }
+
 
     private void formatoLista(List<Vehiculo> vehiculos, List<Vehiculo> seleccionado) {
         // Definimos el array adapter
