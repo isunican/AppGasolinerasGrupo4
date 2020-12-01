@@ -115,7 +115,7 @@ public class MainActivity extends AppCompatActivity implements
             @Override
             public void onRefresh() {
                 new CargaDatosGasolinerasTask(MainActivity.this).execute();
-           }
+            }
         });
 
         // Al terminar de inicializar todas las variables
@@ -123,10 +123,14 @@ public class MainActivity extends AppCompatActivity implements
         // Esto se ha de hacer en segundo plano definiendo una tarea asíncrona
         new CargaDatosGasolinerasTask(this).execute();
 
-        presenterVehiculos = new PresenterVehiculos();
+        if(presenterVehiculos == null){
+            presenterVehiculos = new PresenterVehiculos();
+        }
         listaVehiculoSeleccionado = new ArrayList<>(presenterVehiculos.getSeleccionado(MainActivity.this).values());
-        vehiculoSeleccionado=listaVehiculoSeleccionado.get(0);
-        combustibleActual=vehiculoSeleccionado.getCombustible();
+        if (listaVehiculoSeleccionado.size() != 0){
+            vehiculoSeleccionado=listaVehiculoSeleccionado.get(0);
+            combustibleActual=vehiculoSeleccionado.getCombustible();
+        }
         //Cogemos el spinner
         Spinner spin = (Spinner) findViewById(R.id.idSpinnerCombustible);
 
@@ -146,16 +150,16 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data){
         super.onActivityResult(requestCode,resultCode,data);
-        if(requestCode==0 && resultCode == Activity.RESULT_OK){
+        if(requestCode==0 && resultCode == 0 && data != null){
             String v=data.getExtras().getString("VALOR");
             combustibleActual=v;
         }
         cargaFiltroCombustiblePrecio();
         Spinner spin = (Spinner) findViewById(R.id.idSpinnerCombustible);
-        if(combustibleActual.equals("Gasolina95")){
-            spin.setSelection(0);
-        }else if(combustibleActual.equals("GasoleoA")) {
+        if(combustibleActual.equals("GasoleoA")){
             spin.setSelection(1);
+        } else {
+            spin.setSelection(0);
         }
     }
 
@@ -182,33 +186,33 @@ public class MainActivity extends AppCompatActivity implements
         cargarCombustibleVehiculo();
         List<Gasolinera> gasolinerasFiltradas;
         try {
-                switch (combustibleActual) {
-                    case GASOLINA95:
-                        gasolinerasFiltradas = PresenterGasolineras.filtrarCombustibleGasolina(presenterGasolineras.getGasolineras());
-                        gasolinerasFiltradas = PresenterGasolineras.filtraPrecioGasolina(gasolinerasFiltradas, precioMinimoActual, precioMaximoActual);
-                        cargaGasolineras(gasolinerasFiltradas, 2);
-                        break;
+            switch (combustibleActual) {
+                case GASOLINA95:
+                    gasolinerasFiltradas = PresenterGasolineras.filtrarCombustibleGasolina(presenterGasolineras.getGasolineras());
+                    gasolinerasFiltradas = PresenterGasolineras.filtraPrecioGasolina(gasolinerasFiltradas, precioMinimoActual, precioMaximoActual);
+                    cargaGasolineras(gasolinerasFiltradas, 2);
+                    break;
 
-                    case GASOLEOA:
-                        gasolinerasFiltradas = PresenterGasolineras.filtrarCombustibleGasoleo(presenterGasolineras.getGasolineras());
-                        gasolinerasFiltradas = PresenterGasolineras.filtraPrecioGasoleo(gasolinerasFiltradas, precioMinimoActual, precioMaximoActual);
-                        cargaGasolineras(gasolinerasFiltradas, 1);
-                        break;
-                    default:
-                }
-            } catch (PresenterGasolineras.DatoNoValido e) {
-                notificaDatoNoValido();
+                case GASOLEOA:
+                    gasolinerasFiltradas = PresenterGasolineras.filtrarCombustibleGasoleo(presenterGasolineras.getGasolineras());
+                    gasolinerasFiltradas = PresenterGasolineras.filtraPrecioGasoleo(gasolinerasFiltradas, precioMinimoActual, precioMaximoActual);
+                    cargaGasolineras(gasolinerasFiltradas, 1);
+                    break;
+                default:
             }
+        } catch (PresenterGasolineras.DatoNoValido e) {
+            notificaDatoNoValido();
+        }
     }
 
     private void cargarCombustibleVehiculo() {
         this.presenterVehiculos = new PresenterVehiculos();
         listaVehiculoSeleccionado = new ArrayList<>(presenterVehiculos.getSeleccionado(MainActivity.this).values());
-        vehiculoSeleccionado=listaVehiculoSeleccionado.get(0);
 
-        if(vehiculoSeleccionado!=null){
+        if(listaVehiculoSeleccionado.size() != 0){
+            vehiculoSeleccionado=listaVehiculoSeleccionado.get(0);
             combustibleActual=vehiculoSeleccionado.getCombustible();
-            System.out.println("coche seleciconado\n");
+            System.out.println("coche seleccionado\n");
             System.out.println(combustibleActual);
         }else{
             combustibleActual=combustibles[0];
@@ -230,7 +234,7 @@ public class MainActivity extends AppCompatActivity implements
                 precioMinimoActual = 0;
                 precioMaximoActual = Double.parseDouble(max);
 
-            //Si el maximo esta vacio
+                //Si el maximo esta vacio
             }else if(max.equals("")){
                 precioMaximoActual = Double.MAX_VALUE;
                 precioMinimoActual = Double.parseDouble(min);

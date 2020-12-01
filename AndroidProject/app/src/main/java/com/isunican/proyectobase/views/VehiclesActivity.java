@@ -200,7 +200,7 @@ public class VehiclesActivity extends AppCompatActivity implements
 
         Vehiculo vehiculo = new Vehiculo(mar, model, matricu, combustible);
 
-        if (seleccionado && vehiculo.equals(v.findViewById(R.id.vehiculoSeleccionado))) {
+        if (seleccionado && vehiculo.equals(vehiculoSeleccionado.get(0))) {
             //Vehiculo seleccionado igual
             botonSeleccionado = v.findViewById(R.id.vehiculoSeleccionado);
             botonSeleccionado.setImageResource(R.drawable.boton2);
@@ -208,6 +208,8 @@ public class VehiclesActivity extends AppCompatActivity implements
             seleccionado = false;
             presenterVehiculos.borraSeleccionados(VehiclesActivity.this);
             vehiculoSeleccionado.clear();
+            myIntent.putExtra("VALOR","Gasolina95");
+            setResult(0,myIntent);
         } else if (seleccionado) {
             //Vehiculo seleccionado distinto
             botonSeleccionado.setImageResource(R.drawable.boton2);
@@ -221,7 +223,7 @@ public class VehiclesActivity extends AppCompatActivity implements
             vehiculoSeleccionado.clear();
             vehiculoSeleccionado.add(vehiculo);
             myIntent.putExtra("VALOR",vehiculoSeleccionado.get(0).getCombustible());
-            setResult(Activity.RESULT_OK,myIntent);
+            setResult(0,myIntent);
         } else {
             //Vehiculo no seleccionado
             botonSeleccionado = v.findViewById(R.id.vehiculoSeleccionado);
@@ -232,7 +234,7 @@ public class VehiclesActivity extends AppCompatActivity implements
             presenterVehiculos.escribeVehiculoSeleccionado(vehiculo.toString(), VehiclesActivity.this);
             vehiculoSeleccionado.add(vehiculo);
             myIntent.putExtra("VALOR",vehiculoSeleccionado.get(0).getCombustible());
-            setResult(Activity.RESULT_OK,myIntent);
+            setResult(0,myIntent);
         }
     }
 
