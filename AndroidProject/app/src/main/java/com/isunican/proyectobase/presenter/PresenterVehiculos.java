@@ -124,24 +124,8 @@ public class PresenterVehiculos {
         }
 
         // Lanza excepcion si la matricula tiene vocales
-        char primeraLetra = matricula.charAt(4);
-        char segundaLetra = matricula.charAt(5);
-        char terceraLetra = matricula.charAt(6);
-        if(String.valueOf(primeraLetra).equals("A") || String.valueOf(primeraLetra).equals("E") ||
-                String.valueOf(primeraLetra).equals("I") || String.valueOf(primeraLetra).equals("O") ||
-                String.valueOf(primeraLetra).equals("U")){
-            throw new VocalesEnMatricula();
-        }
-
-        if(String.valueOf(segundaLetra).equals("A") || String.valueOf(segundaLetra).equals("E") ||
-                String.valueOf(segundaLetra).equals("I") || String.valueOf(segundaLetra).equals("O") ||
-                String.valueOf(segundaLetra).equals("U")){
-            throw new VocalesEnMatricula();
-        }
-
-        if(String.valueOf(terceraLetra).equals("A") || String.valueOf(terceraLetra).equals("E") ||
-                String.valueOf(terceraLetra).equals("I") || String.valueOf(terceraLetra).equals("O") ||
-                String.valueOf(terceraLetra).equals("U")){
+        if(matricula.contains("A") || matricula.contains("E") || matricula.contains("I")
+                || matricula.contains("O") || matricula.contains("U")){
             throw new VocalesEnMatricula();
         }
 
