@@ -107,6 +107,11 @@ public class VehiclesActivity extends AppCompatActivity implements
         combustibleActual = combustibles[position];
     }
 
+    /**
+     * Método que permite añadir un vehículo en la base de datos estableciendo una ventana
+     * donde el usuario puede introducir y seleccionar los datos que deseé
+     * @param v
+     */
     public void anhadirVehiculo(View v) {
         AlertDialog.Builder alert;
 
@@ -185,6 +190,13 @@ public class VehiclesActivity extends AppCompatActivity implements
         });
     }
 
+    /**
+     * Método que se llama cada vez que se pulsa en un vehículo y permite seleccionarlo
+     * para poder almacenar su tipo de gasolina y utilizarlo en la actividad principal
+     * para filtrar
+     * @param v
+     * @throws IOException
+     */
     public void seleccionarVehiculo(View v) throws IOException {
         ImageView imagen = (ImageView) v.findViewById(R.id.logoMarca);
         txtModeloVehiculo = v.findViewById(R.id.TextModelo);
@@ -200,7 +212,7 @@ public class VehiclesActivity extends AppCompatActivity implements
 
         Vehiculo vehiculo = new Vehiculo(mar, model, matricu, combustible);
 
-        if (seleccionado && vehiculo.equals(v.findViewById(R.id.vehiculoSeleccionado))) {
+        if (seleccionado && vehiculo.equals(vehiculoSeleccionado.get(0))) {
             //Vehiculo seleccionado igual
             botonSeleccionado = v.findViewById(R.id.vehiculoSeleccionado);
             botonSeleccionado.setImageResource(R.drawable.boton2);
@@ -208,6 +220,8 @@ public class VehiclesActivity extends AppCompatActivity implements
             seleccionado = false;
             presenterVehiculos.borraSeleccionados(VehiclesActivity.this);
             vehiculoSeleccionado.clear();
+            myIntent.putExtra("VALOR","Gasolina95");
+            setResult(0,myIntent);
         } else if (seleccionado) {
             //Vehiculo seleccionado distinto
             botonSeleccionado.setImageResource(R.drawable.boton2);
@@ -221,7 +235,7 @@ public class VehiclesActivity extends AppCompatActivity implements
             vehiculoSeleccionado.clear();
             vehiculoSeleccionado.add(vehiculo);
             myIntent.putExtra("VALOR",vehiculoSeleccionado.get(0).getCombustible());
-            setResult(Activity.RESULT_OK,myIntent);
+            setResult(0,myIntent);
         } else {
             //Vehiculo no seleccionado
             botonSeleccionado = v.findViewById(R.id.vehiculoSeleccionado);
@@ -232,7 +246,7 @@ public class VehiclesActivity extends AppCompatActivity implements
             presenterVehiculos.escribeVehiculoSeleccionado(vehiculo.toString(), VehiclesActivity.this);
             vehiculoSeleccionado.add(vehiculo);
             myIntent.putExtra("VALOR",vehiculoSeleccionado.get(0).getCombustible());
-            setResult(Activity.RESULT_OK,myIntent);
+            setResult(0,myIntent);
         }
     }
 
@@ -241,6 +255,11 @@ public class VehiclesActivity extends AppCompatActivity implements
     }
 
 
+    /**
+     * Método auxiliar que establece el formato de la lista de vehículos
+     * @param vehiculos
+     * @param seleccionado
+     */
     private void formatoLista(List<Vehiculo> vehiculos, List<Vehiculo> seleccionado) {
         // Definimos el array adapter
         adapter = new VehiculoArrayAdapter(this, 0, vehiculos, seleccionado);
