@@ -55,9 +55,8 @@ public class MantenerFiltroPrecioUITest {
         comparacion_min = 1.1;
 
 
-        //CASO 6
 
-        //Hace click en el primer filtro e introduce un precio mínimo
+        //Hacer click en el primer filtro e introduce un precio mínimo
         ViewInteraction evento1 = onView(withId(R.id.idPrecioMin));
         evento1.perform(click());
         evento1.perform(replaceText("1.100"));
