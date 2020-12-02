@@ -32,8 +32,12 @@ public class PresenterVehiculosTest {
     private Vehiculo vehiculoConDatoVacio;
     private Vehiculo vehiculoConOtroCarburante;
     private Vehiculo vehiculoNulo;
-    private Vehiculo vehiculoConVocal;
+
     PresenterVehiculos presenterVehiculos;
+
+    // Declaracion de los vehiculos para probar el ticket NoVocalesMatriculas
+    private Vehiculo VehiculoValidoC;
+    private Vehiculo vehiculoConVocal;
 
     @Before
     public void setUp() throws Exception{
@@ -45,10 +49,11 @@ public class PresenterVehiculosTest {
         vehiculoConDatoNulo =  new Vehiculo("Subaru", null,"2501RRR","GasoleoA");
         vehiculoConDatoVacio =  new Vehiculo("", "Multipla","0000QBC","GasoleoA");
         vehiculoConOtroCarburante =  new Vehiculo("Seat", "Leon","1337WWW","GasolinaFalsa");
-        vehiculoConVocal =  new Vehiculo("Seat", "Leon","1337AAA","GasolinaFalsa");
         vehiculoNulo = null;
 
-
+        // Inicializacion de los vehiculos para probar el ticket NoVocalesMatriculas
+        vehiculoConVocal =  new Vehiculo("Seat", "Leon","1337AAA","Gasolina95");
+        VehiculoValidoC =  new Vehiculo("Seat", "Leon","1337BBB","Gasolina95");
     }
 
     @Test
@@ -122,13 +127,24 @@ public class PresenterVehiculosTest {
 
         }
 
-        //Caso UT.1i
+        /*
+         * Ejecucion de las pruebas para el ticket NoVocalesMatriculas (Test Plan NoVocalesMatriculas)
+         *
+         */
+
+        //Caso UT.1a
+        try{
+            presenterVehiculos.anhadirVehiculo(VehiculoValidoC);
+        } catch(Exception e){
+            fail();
+        }
+
+        //Caso UT.1b
         try{
             presenterVehiculos.anhadirVehiculo(vehiculoConVocal);
             fail();
         } catch(PresenterVehiculos.VocalesEnMatricula d){
 
         }
-
     }
 }
