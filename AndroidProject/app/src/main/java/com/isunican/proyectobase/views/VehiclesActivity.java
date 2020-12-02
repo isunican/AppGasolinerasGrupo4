@@ -107,6 +107,11 @@ public class VehiclesActivity extends AppCompatActivity implements
         combustibleActual = combustibles[position];
     }
 
+    /**
+     * Método que permite añadir un vehículo en la base de datos estableciendo una ventana
+     * donde el usuario puede introducir y seleccionar los datos que deseé
+     * @param v
+     */
     public void anhadirVehiculo(View v) {
         AlertDialog.Builder alert;
 
@@ -185,6 +190,13 @@ public class VehiclesActivity extends AppCompatActivity implements
         });
     }
 
+    /**
+     * Método que se llama cada vez que se pulsa en un vehículo y permite seleccionarlo
+     * para poder almacenar su tipo de gasolina y utilizarlo en la actividad principal
+     * para filtrar
+     * @param v
+     * @throws IOException
+     */
     public void seleccionarVehiculo(View v) throws IOException {
         ImageView imagen = (ImageView) v.findViewById(R.id.logoMarca);
         txtModeloVehiculo = v.findViewById(R.id.TextModelo);
@@ -243,6 +255,11 @@ public class VehiclesActivity extends AppCompatActivity implements
     }
 
 
+    /**
+     * Método auxiliar que establece el formato de la lista de vehículos
+     * @param vehiculos
+     * @param seleccionado
+     */
     private void formatoLista(List<Vehiculo> vehiculos, List<Vehiculo> seleccionado) {
         // Definimos el array adapter
         adapter = new VehiculoArrayAdapter(this, 0, vehiculos, seleccionado);
