@@ -205,6 +205,9 @@ public class MainActivity extends AppCompatActivity implements
         }
     }
 
+    /**
+     * Método auxiliar que actualiza el combustible actual respecto al vehiculo seleccionado
+     */
     private void cargarCombustibleVehiculo() {
         this.presenterVehiculos = new PresenterVehiculos();
         listaVehiculoSeleccionado = new ArrayList<>(presenterVehiculos.getSeleccionado(MainActivity.this).values());
