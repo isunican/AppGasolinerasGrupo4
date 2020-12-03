@@ -95,6 +95,9 @@ public class MainActivity extends AppCompatActivity implements
         setContentView(R.layout.activity_main);
 
         this.presenterGasolineras = new PresenterGasolineras();
+        if(presenterVehiculos == null){
+            presenterVehiculos = new PresenterVehiculos();
+        }
 
         // Barra de progreso
         // https://materialdoc.com/components/progress/
@@ -123,9 +126,9 @@ public class MainActivity extends AppCompatActivity implements
         // Esto se ha de hacer en segundo plano definiendo una tarea asíncrona
         new CargaDatosGasolinerasTask(this).execute();
 
-        if(presenterVehiculos == null){
-            presenterVehiculos = new PresenterVehiculos();
-        }
+        presenterVehiculos.creaFicheroVehiculo(MainActivity.this);
+        presenterVehiculos.creaFicheroSeleccionado(MainActivity.this);
+
         listaVehiculoSeleccionado = new ArrayList<>(presenterVehiculos.getSeleccionado(MainActivity.this).values());
         if (!listaVehiculoSeleccionado.isEmpty()){
             vehiculoSeleccionado=listaVehiculoSeleccionado.get(0);

@@ -54,6 +54,8 @@ public class AnhadirVehiculoUITest {
         public void anhadirVehiculoTest() {
             Context context = ApplicationProvider.getApplicationContext();
             context.deleteFile("vehiculos.txt");
+            context.deleteFile("seleccionado.txt");
+
             // Open the overflow menu OR open the options menu,
             // depending on if the device has a hardware or software overflow menu button.
             //openActionBarOverflowOrOptionsMenu(context);
@@ -68,7 +70,7 @@ public class AnhadirVehiculoUITest {
 
 
             //CASO UIT.1
-            String marca = "Ford";
+            String marca = "ford";
             String modelo = "Focus";
             String matricula = "1234BBC";
             String combustible = "Gasolina95";
@@ -122,6 +124,7 @@ public class AnhadirVehiculoUITest {
             onView(withId(R.id.idBotonAceptar)).perform(click());
 
             context.deleteFile("vehiculos.txt");
+            context.deleteFile("seleccionado.txt");
         }
 
     private void cargaListaVehiculos(ListView vista, List<Vehiculo> vehiculosIniciales) {

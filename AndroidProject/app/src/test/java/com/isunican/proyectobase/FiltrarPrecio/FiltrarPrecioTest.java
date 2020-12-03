@@ -1,4 +1,4 @@
-package com.isunican.proyectobase;
+package com.isunican.proyectobase.FiltrarPrecio;
 
 import com.isunican.proyectobase.model.Gasolinera;
 import com.isunican.proyectobase.presenter.PresenterGasolineras;
@@ -17,7 +17,7 @@ import static org.junit.Assert.*;
  *
  * @see <a href="http://d.android.com/tools/testing">Testing documentation</a>
  */
-public class PresenterGasolinerasTest {
+public class FiltrarPrecioTest {
 
     // Declaracion de los objetos que vamos a usar en los test
     private List<Gasolinera> gasolinerasCompleto = new ArrayList<Gasolinera>();     //Lista de Gasolineras con gasolineras con distintos combustibles

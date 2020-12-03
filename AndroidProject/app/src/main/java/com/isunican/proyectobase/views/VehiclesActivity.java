@@ -428,7 +428,7 @@ class VehiculoArrayAdapter extends ArrayAdapter<Vehiculo> {
     }
 
     private void cargaIcono(Vehiculo vehiculo, ImageView logo) {
-        String rotuleImageID = vehiculo.getMarca();
+        String rotuleImageID = vehiculo.getMarca().toLowerCase();
 
         // Tengo que protegerme ante el caso en el que el rotulo solo tiene digitos.
         // En ese caso getIdentifier devuelve esos digitos en vez de 0.

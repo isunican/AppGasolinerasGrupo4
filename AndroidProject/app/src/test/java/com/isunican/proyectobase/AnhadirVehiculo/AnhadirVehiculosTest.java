@@ -22,7 +22,7 @@ import static org.junit.Assert.fail;
 @Config(sdk = Build.VERSION_CODES.O_MR1)
 
 
-public class PresenterVehiculosTest {
+public class AnhadirVehiculosTest {
 
     //Declaracion de distintos vehiculos con diferentes datos que se estableceran posteriormente
     private Vehiculo vehiculoValidoA;

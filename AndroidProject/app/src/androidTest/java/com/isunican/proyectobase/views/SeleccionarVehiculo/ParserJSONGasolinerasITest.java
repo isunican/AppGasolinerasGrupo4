@@ -76,18 +76,6 @@ public class ParserJSONGasolinerasITest {
                 "",0.0,0.0,"");
 
         assertEquals(gasolineraNoOk, gasolineraNoOkCreada);
-
-        /*
-        //Comprobamos que los campos de la gasolinera son los campos predeterminados para los casos invalidos.
-        assertTrue(gasolineraNoOk.getGasoleoA() == 0.00);
-        assertTrue(gasolineraNoOk.getGasolina95() == 0.00);
-        assertTrue(gasolineraNoOk.getIdeess() == -1);
-        assertEquals(gasolineraNoOk.getLocalidad(), "");
-        assertEquals(gasolineraNoOk.getDireccion(), "");
-        assertEquals(gasolineraNoOk.getProvincia(), "");
-        assertEquals(gasolineraNoOk.getRotulo(), "");
-         */
-
         print(gasolineraNoOk);
     }
 
