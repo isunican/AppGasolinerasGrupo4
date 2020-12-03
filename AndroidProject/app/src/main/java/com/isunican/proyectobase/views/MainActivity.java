@@ -52,6 +52,7 @@ public class MainActivity extends AppCompatActivity implements
     String[] combustibles = {GASOLINA95, GASOLEOA};
 
     PresenterGasolineras presenterGasolineras;
+    PresenterVehiculos presenterVehiculos;
 
     // Vista de lista y adaptador para cargar datos en ella
     ListView listViewGasolineras;
@@ -89,6 +90,9 @@ public class MainActivity extends AppCompatActivity implements
         setContentView(R.layout.activity_main);
 
         this.presenterGasolineras = new PresenterGasolineras();
+        if(presenterVehiculos == null){
+            presenterVehiculos = new PresenterVehiculos();
+        }
 
         // Barra de progreso
         // https://materialdoc.com/components/progress/
@@ -116,6 +120,7 @@ public class MainActivity extends AppCompatActivity implements
         // se lanza una tarea para cargar los datos de las gasolineras
         // Esto se ha de hacer en segundo plano definiendo una tarea asíncrona
         new CargaDatosGasolinerasTask(this).execute();
+        presenterVehiculos.creaFicheroVehiculo(MainActivity.this);
 
         //Cogemos el spinner
         Spinner spin = (Spinner) findViewById(R.id.idSpinnerCombustible);

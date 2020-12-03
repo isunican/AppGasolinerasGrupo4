@@ -16,6 +16,9 @@ import java.util.regex.Pattern;
 
 public class PresenterVehiculos {
     private HashMap<String, Vehiculo> vehiculos;
+    static final String MENSAJE_LOG = "login activity";
+    static final String FALLO_DB = "Fallo al escribir en la base de datos";
+    static final String EXCEPCION = "Excepción";
 
     //Base de datos de donde se obtiene los vehiculos
     public static class DatoNoValido extends RuntimeException {
@@ -161,7 +164,18 @@ public class PresenterVehiculos {
             outputStreamWriter.write(vehiculo);
 
         } catch (IOException e) {
-            Log.e("Excepción", "Fallo al escribir en la base de datos");
+            Log.e(EXCEPCION, FALLO_DB);
+        }
+    }
+
+    /**
+     * Escribe el vehículo pasado como parámetro en la base de datos
+     */
+    public void creaFicheroVehiculo(Context context) {
+        try (FileWriter outputStreamWriter = new FileWriter(context.getFileStreamPath("vehiculos.txt"), true)) {
+            ;
+        } catch (IOException e) {
+            Log.e(EXCEPCION, FALLO_DB);
         }
     }
 
@@ -290,9 +304,9 @@ public class PresenterVehiculos {
                 ret = stringBuilder.toString();
             }
         } catch (FileNotFoundException e) {
-            Log.e("login activity", "No se ha encontrado el fichero: " + e.toString());
+            Log.e(MENSAJE_LOG, "No se ha encontrado el fichero: " + e.toString());
         } catch (IOException e) {
-            Log.e("login activity", "No se ha podido leer el fichero " + e.toString());
+            Log.e(MENSAJE_LOG, "No se ha podido leer el fichero " + e.toString());
         }
         return ret;
     }
