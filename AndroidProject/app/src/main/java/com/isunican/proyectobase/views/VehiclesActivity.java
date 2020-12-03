@@ -165,7 +165,12 @@ public class VehiclesActivity extends AppCompatActivity implements
 
                     //Muestra la list view actualizada con el ultimo vehiculo
                     vehiculos = new ArrayList<>(presenterVehiculos.getVehiculos(VehiclesActivity.this).values());
-
+                    if(vehiculos.size() == 1){
+                        presenterVehiculos.anhadirVehiculoSeleccionado(vehiculo);
+                        presenterVehiculos.escribeVehiculoSeleccionado(vehiculo.toString(), VehiclesActivity.this);
+                        seleccionado = true;
+                        vehiculoSeleccionado = new ArrayList<>(presenterVehiculos.getSeleccionado(VehiclesActivity.this).values());
+                    }
                     formatoLista(vehiculos, vehiculoSeleccionado);
                 } catch (PresenterVehiculos.DatoNoValido e) {
                     notificaDatoNoValido();
@@ -402,6 +407,11 @@ class VehiculoArrayAdapter extends ArrayAdapter<Vehiculo> {
 
         if(vehiculoSeleccionado.size() == 0){
             botonSeleccion.setImageResource(R.drawable.boton2);
+        } else if(vehiculos.size() == 1) {
+            botonSeleccion.setImageResource(R.drawable.boton1);
+            vehiculoSeleccionado.set(0,vehiculo);
+            seleccionado = true;
+            botonSeleccionado = botonSeleccion;
         } else {
             if(vehiculoSeleccionado.get(0).equals(vehiculo)){
                 botonSeleccion.setImageResource(R.drawable.boton1);
