@@ -20,7 +20,6 @@ import android.util.DisplayMetrics;
 import java.util.ArrayList;
 import java.util.List;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -128,7 +127,7 @@ public class MainActivity extends AppCompatActivity implements
             presenterVehiculos = new PresenterVehiculos();
         }
         listaVehiculoSeleccionado = new ArrayList<>(presenterVehiculos.getSeleccionado(MainActivity.this).values());
-        if (listaVehiculoSeleccionado.size() != 0){
+        if (!listaVehiculoSeleccionado.isEmpty()){
             vehiculoSeleccionado=listaVehiculoSeleccionado.get(0);
             combustibleActual=vehiculoSeleccionado.getCombustible().toUpperCase();
         }
@@ -212,7 +211,7 @@ public class MainActivity extends AppCompatActivity implements
         this.presenterVehiculos = new PresenterVehiculos();
         listaVehiculoSeleccionado = new ArrayList<>(presenterVehiculos.getSeleccionado(MainActivity.this).values());
 
-        if(listaVehiculoSeleccionado.size() != 0){
+        if(!listaVehiculoSeleccionado.isEmpty()){
             vehiculoSeleccionado=listaVehiculoSeleccionado.get(0);
             if(vehiculoSeleccionado.getCombustible().toUpperCase().equals("GASOLINA95")){
                 combustibleActual=combustibles[0];
