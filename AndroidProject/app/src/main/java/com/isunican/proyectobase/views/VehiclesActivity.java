@@ -254,6 +254,7 @@ public class VehiclesActivity extends AppCompatActivity implements
     }
 
     public void volverMainActivity(View v){
+        v.findViewById(R.id.imageViewLogo);
         finish();
     }
 
@@ -397,7 +398,7 @@ class VehiculoArrayAdapter extends ArrayAdapter<Vehiculo> {
         matricula.setText(vehiculo.getMatricula());
         combustible.setText(vehiculo.getCombustible());
         botonSeleccion.setImageResource(R.drawable.boton2);
-        
+
         // carga icono
         cargaIcono(vehiculo, marca);
 
