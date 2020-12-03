@@ -209,7 +209,7 @@ public class VehiclesActivity extends AppCompatActivity implements
         txtCombustibleVehiculo = v.findViewById(R.id.textCombustible);
 
         Intent myIntent=new Intent();
-        String mar = String.valueOf(imagen.getTag()).toLowerCase();
+        String mar = String.valueOf(imagen.getTag());
         String model = txtModeloVehiculo.getText().toString();
         String matric = txtMatriculaVehiculo.getText().toString();
         String matricu = matric.toUpperCase();
@@ -222,7 +222,6 @@ public class VehiclesActivity extends AppCompatActivity implements
             botonSeleccionado = v.findViewById(R.id.vehiculoSeleccionado);
             botonSeleccionado.setImageResource(R.drawable.boton2);
             botonSeleccionado.setTag(R.drawable.boton2);
-            System.out.println(botonSeleccionado.getTag());     //ELIMINAR
             Toast.makeText(getApplicationContext(), "Vehiculo quitado de la selección", Toast.LENGTH_SHORT).show();
             seleccionado = false;
             presenterVehiculos.borraSeleccionados(VehiclesActivity.this);
@@ -384,7 +383,7 @@ class VehiculoArrayAdapter extends ArrayAdapter<Vehiculo> {
 
         // Obtiene el elemento que se está mostrando
         Vehiculo vehiculo = listaVehiculos.get(position);
-        vehiculo.setMarca(vehiculo.getMarca().toLowerCase());
+        vehiculo.setMarca(vehiculo.getMarca());
 
         // Indica el layout a usar en cada elemento de la lista
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -404,13 +403,26 @@ class VehiculoArrayAdapter extends ArrayAdapter<Vehiculo> {
         combustible.setText(vehiculo.getCombustible());
         botonSeleccion.setImageResource(R.drawable.boton2);
 
+        if(!vehiculoSeleccionado.isEmpty())
+        {
+        System.out.println(vehiculoSeleccionado.get(0).getMarca());
+        System.out.println(vehiculoSeleccionado.get(0).getModelo());
+        System.out.println(vehiculoSeleccionado.get(0).getMatricula());
+        System.out.println(vehiculoSeleccionado.get(0).getCombustible());
+
+        System.out.println(vehiculo.getMarca());
+        System.out.println(vehiculo.getModelo());
+        System.out.println(vehiculo.getMatricula());
+        System.out.println(vehiculo.getCombustible());
+        }
+
+
         // carga icono
         cargaIcono(vehiculo, marca);
 
         if(vehiculoSeleccionado.size() == 0){
             botonSeleccion.setImageResource(R.drawable.boton2);
-            botonSeleccionado = botonSeleccion;
-            botonSeleccionado.setTag(R.drawable.boton2);
+            botonSeleccion.setTag(R.drawable.boton2);
 
         } else if(vehiculos.size() == 1) {
             botonSeleccion.setImageResource(R.drawable.boton1);
@@ -426,8 +438,7 @@ class VehiculoArrayAdapter extends ArrayAdapter<Vehiculo> {
                 botonSeleccionado.setTag(R.drawable.boton1);
             } else {
                 botonSeleccion.setImageResource(R.drawable.boton2);
-                botonSeleccionado = botonSeleccion;
-                botonSeleccionado.setTag(R.drawable.boton2);
+                botonSeleccion.setTag(R.drawable.boton2);
             }
         }
 
@@ -435,7 +446,7 @@ class VehiculoArrayAdapter extends ArrayAdapter<Vehiculo> {
     }
 
     private void cargaIcono(Vehiculo vehiculo, ImageView logo) {
-        String rotuleImageID = vehiculo.getMarca().toLowerCase();
+        String rotuleImageID = vehiculo.getMarca();
 
         // Tengo que protegerme ante el caso en el que el rotulo solo tiene digitos.
         // En ese caso getIdentifier devuelve esos digitos en vez de 0.
