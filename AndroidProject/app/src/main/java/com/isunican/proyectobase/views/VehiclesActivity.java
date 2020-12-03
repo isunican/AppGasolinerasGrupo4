@@ -107,6 +107,11 @@ public class VehiclesActivity extends AppCompatActivity implements
         combustibleActual = combustibles[position];
     }
 
+    /**
+     * Método que permite añadir un vehículo en la base de datos estableciendo una ventana
+     * donde el usuario puede introducir y seleccionar los datos que deseé
+     * @param v
+     */
     public void anhadirVehiculo(View v) {
         AlertDialog.Builder alert;
 
@@ -160,7 +165,12 @@ public class VehiclesActivity extends AppCompatActivity implements
 
                     //Muestra la list view actualizada con el ultimo vehiculo
                     vehiculos = new ArrayList<>(presenterVehiculos.getVehiculos(VehiclesActivity.this).values());
-
+                    if(vehiculos.size() == 1){
+                        presenterVehiculos.anhadirVehiculoSeleccionado(vehiculo);
+                        presenterVehiculos.escribeVehiculoSeleccionado(vehiculo.toString(), VehiclesActivity.this);
+                        seleccionado = true;
+                        vehiculoSeleccionado = new ArrayList<>(presenterVehiculos.getSeleccionado(VehiclesActivity.this).values());
+                    }
                     formatoLista(vehiculos, vehiculoSeleccionado);
                 } catch (PresenterVehiculos.DatoNoValido e) {
                     notificaDatoNoValido();
@@ -185,6 +195,13 @@ public class VehiclesActivity extends AppCompatActivity implements
         });
     }
 
+    /**
+     * Método que se llama cada vez que se pulsa en un vehículo y permite seleccionarlo
+     * para poder almacenar su tipo de gasolina y utilizarlo en la actividad principal
+     * para filtrar
+     * @param v
+     * @throws IOException
+     */
     public void seleccionarVehiculo(View v) throws IOException {
         ImageView imagen = (ImageView) v.findViewById(R.id.logoMarca);
         txtModeloVehiculo = v.findViewById(R.id.TextModelo);
@@ -192,7 +209,7 @@ public class VehiclesActivity extends AppCompatActivity implements
         txtCombustibleVehiculo = v.findViewById(R.id.textCombustible);
 
         Intent myIntent=new Intent();
-        String mar = String.valueOf(imagen.getTag()).toLowerCase();
+        String mar = String.valueOf(imagen.getTag());
         String model = txtModeloVehiculo.getText().toString();
         String matric = txtMatriculaVehiculo.getText().toString();
         String matricu = matric.toUpperCase();
@@ -200,19 +217,23 @@ public class VehiclesActivity extends AppCompatActivity implements
 
         Vehiculo vehiculo = new Vehiculo(mar, model, matricu, combustible);
 
-        if (seleccionado && vehiculo.equals(v.findViewById(R.id.vehiculoSeleccionado))) {
+        if (seleccionado && vehiculo.equals(vehiculoSeleccionado.get(0))) {
             //Vehiculo seleccionado igual
             botonSeleccionado = v.findViewById(R.id.vehiculoSeleccionado);
             botonSeleccionado.setImageResource(R.drawable.boton2);
+            botonSeleccionado.setTag(R.drawable.boton2);
             Toast.makeText(getApplicationContext(), "Vehiculo quitado de la selección", Toast.LENGTH_SHORT).show();
             seleccionado = false;
             presenterVehiculos.borraSeleccionados(VehiclesActivity.this);
             vehiculoSeleccionado.clear();
+            myIntent.putExtra("VALOR","Gasolina95");
+            setResult(0,myIntent);
         } else if (seleccionado) {
             //Vehiculo seleccionado distinto
             botonSeleccionado.setImageResource(R.drawable.boton2);
             botonSeleccionado = v.findViewById(R.id.vehiculoSeleccionado);
             botonSeleccionado.setImageResource(R.drawable.boton1);
+            botonSeleccionado.setTag(R.drawable.boton1);
             Toast.makeText(getApplicationContext(), "Vehiculo seleccionado", Toast.LENGTH_SHORT).show();
             seleccionado = true;
             presenterVehiculos.borraSeleccionados(VehiclesActivity.this);
@@ -221,18 +242,19 @@ public class VehiclesActivity extends AppCompatActivity implements
             vehiculoSeleccionado.clear();
             vehiculoSeleccionado.add(vehiculo);
             myIntent.putExtra("VALOR",vehiculoSeleccionado.get(0).getCombustible());
-            setResult(Activity.RESULT_OK,myIntent);
+            setResult(0,myIntent);
         } else {
             //Vehiculo no seleccionado
             botonSeleccionado = v.findViewById(R.id.vehiculoSeleccionado);
             botonSeleccionado.setImageResource(R.drawable.boton1);
+            botonSeleccionado.setTag(R.drawable.boton1);
             Toast.makeText(getApplicationContext(), "Vehiculo seleccionado", Toast.LENGTH_SHORT).show();
             seleccionado = true;
             presenterVehiculos.anhadirVehiculoSeleccionado(vehiculo);
             presenterVehiculos.escribeVehiculoSeleccionado(vehiculo.toString(), VehiclesActivity.this);
             vehiculoSeleccionado.add(vehiculo);
             myIntent.putExtra("VALOR",vehiculoSeleccionado.get(0).getCombustible());
-            setResult(Activity.RESULT_OK,myIntent);
+            setResult(0,myIntent);
         }
     }
 
@@ -241,6 +263,11 @@ public class VehiclesActivity extends AppCompatActivity implements
     }
 
 
+    /**
+     * Método auxiliar que establece el formato de la lista de vehículos
+     * @param vehiculos
+     * @param seleccionado
+     */
     private void formatoLista(List<Vehiculo> vehiculos, List<Vehiculo> seleccionado) {
         // Definimos el array adapter
         adapter = new VehiculoArrayAdapter(this, 0, vehiculos, seleccionado);
@@ -356,7 +383,7 @@ class VehiculoArrayAdapter extends ArrayAdapter<Vehiculo> {
 
         // Obtiene el elemento que se está mostrando
         Vehiculo vehiculo = listaVehiculos.get(position);
-        vehiculo.setMarca(vehiculo.getMarca().toLowerCase());
+        vehiculo.setMarca(vehiculo.getMarca());
 
         // Indica el layout a usar en cada elemento de la lista
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -376,18 +403,42 @@ class VehiculoArrayAdapter extends ArrayAdapter<Vehiculo> {
         combustible.setText(vehiculo.getCombustible());
         botonSeleccion.setImageResource(R.drawable.boton2);
 
+        if(!vehiculoSeleccionado.isEmpty())
+        {
+        System.out.println(vehiculoSeleccionado.get(0).getMarca());
+        System.out.println(vehiculoSeleccionado.get(0).getModelo());
+        System.out.println(vehiculoSeleccionado.get(0).getMatricula());
+        System.out.println(vehiculoSeleccionado.get(0).getCombustible());
+
+        System.out.println(vehiculo.getMarca());
+        System.out.println(vehiculo.getModelo());
+        System.out.println(vehiculo.getMatricula());
+        System.out.println(vehiculo.getCombustible());
+        }
+
+
         // carga icono
         cargaIcono(vehiculo, marca);
 
         if(vehiculoSeleccionado.size() == 0){
             botonSeleccion.setImageResource(R.drawable.boton2);
+            botonSeleccion.setTag(R.drawable.boton2);
+
+        } else if(vehiculos.size() == 1) {
+            botonSeleccion.setImageResource(R.drawable.boton1);
+            vehiculoSeleccionado.set(0,vehiculo);
+            seleccionado = true;
+            botonSeleccionado = botonSeleccion;
+            botonSeleccionado.setTag(R.drawable.boton1);
         } else {
             if(vehiculoSeleccionado.get(0).equals(vehiculo)){
                 botonSeleccion.setImageResource(R.drawable.boton1);
                 seleccionado = true;
                 botonSeleccionado = botonSeleccion;
+                botonSeleccionado.setTag(R.drawable.boton1);
             } else {
                 botonSeleccion.setImageResource(R.drawable.boton2);
+                botonSeleccion.setTag(R.drawable.boton2);
             }
         }
 
@@ -395,7 +446,7 @@ class VehiculoArrayAdapter extends ArrayAdapter<Vehiculo> {
     }
 
     private void cargaIcono(Vehiculo vehiculo, ImageView logo) {
-        String rotuleImageID = vehiculo.getMarca().toLowerCase();
+        String rotuleImageID = vehiculo.getMarca();
 
         // Tengo que protegerme ante el caso en el que el rotulo solo tiene digitos.
         // En ese caso getIdentifier devuelve esos digitos en vez de 0.
