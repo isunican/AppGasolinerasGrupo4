@@ -222,6 +222,7 @@ public class VehiclesActivity extends AppCompatActivity implements
             botonSeleccionado = v.findViewById(R.id.vehiculoSeleccionado);
             botonSeleccionado.setImageResource(R.drawable.boton2);
             botonSeleccionado.setTag(R.drawable.boton2);
+            System.out.println(botonSeleccionado.getTag());     //ELIMINAR
             Toast.makeText(getApplicationContext(), "Vehiculo quitado de la selección", Toast.LENGTH_SHORT).show();
             seleccionado = false;
             presenterVehiculos.borraSeleccionados(VehiclesActivity.this);
@@ -233,6 +234,7 @@ public class VehiclesActivity extends AppCompatActivity implements
             botonSeleccionado.setImageResource(R.drawable.boton2);
             botonSeleccionado = v.findViewById(R.id.vehiculoSeleccionado);
             botonSeleccionado.setImageResource(R.drawable.boton1);
+            botonSeleccionado.setTag(R.drawable.boton1);
             Toast.makeText(getApplicationContext(), "Vehiculo seleccionado", Toast.LENGTH_SHORT).show();
             seleccionado = true;
             presenterVehiculos.borraSeleccionados(VehiclesActivity.this);
@@ -407,18 +409,25 @@ class VehiculoArrayAdapter extends ArrayAdapter<Vehiculo> {
 
         if(vehiculoSeleccionado.size() == 0){
             botonSeleccion.setImageResource(R.drawable.boton2);
+            botonSeleccionado = botonSeleccion;
+            botonSeleccionado.setTag(R.drawable.boton2);
+
         } else if(vehiculos.size() == 1) {
             botonSeleccion.setImageResource(R.drawable.boton1);
             vehiculoSeleccionado.set(0,vehiculo);
             seleccionado = true;
             botonSeleccionado = botonSeleccion;
+            botonSeleccionado.setTag(R.drawable.boton1);
         } else {
             if(vehiculoSeleccionado.get(0).equals(vehiculo)){
                 botonSeleccion.setImageResource(R.drawable.boton1);
                 seleccionado = true;
                 botonSeleccionado = botonSeleccion;
+                botonSeleccionado.setTag(R.drawable.boton1);
             } else {
                 botonSeleccion.setImageResource(R.drawable.boton2);
+                botonSeleccionado = botonSeleccion;
+                botonSeleccionado.setTag(R.drawable.boton2);
             }
         }
 

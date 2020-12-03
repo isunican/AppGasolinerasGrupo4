@@ -60,12 +60,6 @@ public class SeleccionarVehiculoUITest {
     public void SeleccionarVehiculoTest() {
         Context context = ApplicationProvider.getApplicationContext();
         context.deleteFile("vehiculos.txt");
-        // Open the overflow menu OR open the options menu,
-        // depending on if the device has a hardware or software overflow menu button.
-        //openActionBarOverflowOrOptionsMenu(context);
-
-        // Click the item.
-        //onView(withText("Vehiculos")).perform(click());
 
         //Obtiene la lista de cada objeto Gasolinera después de aplicar el filtro
 
@@ -86,7 +80,7 @@ public class SeleccionarVehiculoUITest {
         cargaListaVehiculos(vista, vehiculosIniciales);
 
         //Obtenemos el primer coche y en este caso unico
-        onData(anything()).inAdapterView(withId(R.id.listViewVehiculos)).atPosition(0).onChildView(withId(R.id.vehiculoSeleccionado)).check(matches(withTagValue(CoreMatchers.<Object>equalTo(R.drawable.boton2))));
+        onData(anything()).inAdapterView(withId(R.id.listViewVehiculos)).atPosition(0).onChildView(withId(R.id.vehiculoSeleccionado)).check(matches(withTagValue(CoreMatchers.<Object>equalTo(R.drawable.boton1))));
 
         //CASO UIT.2
         marca = "Ford";
@@ -99,7 +93,7 @@ public class SeleccionarVehiculoUITest {
         cargaListaVehiculos(vista, vehiculosIniciales);
 
         // Obtenemos el segundo coche que no deberia de estar seleccionado
-        //onData(anything()).inAdapterView(withId(R.id.listViewVehiculos)).atPosition(1).onChildView(withId(R.id.vehiculoSeleccionado)).check((ViewAssertion) withTagValue(CoreMatchers.<Object>equalTo(R.drawable.boton1)));
+        onData(anything()).inAdapterView(withId(R.id.listViewVehiculos)).atPosition(1).onChildView(withId(R.id.vehiculoSeleccionado)).check(matches(withTagValue(CoreMatchers.<Object>equalTo(R.drawable.boton2))));
         context.deleteFile("vehiculos.txt");
     }
 
