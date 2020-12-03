@@ -36,6 +36,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.withTagValue;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.anything;
 import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertEquals;
@@ -85,7 +86,7 @@ public class SeleccionarVehiculoUITest {
         cargaListaVehiculos(vista, vehiculosIniciales);
 
         //Obtenemos el primer coche y en este caso unico
-        //onData(anything()).inAdapterView(withId(R.id.listViewVehiculos)).atPosition(0).onChildView(withId(R.id.vehiculoSeleccionado)).check((ViewAssertion) withTagValue(CoreMatchers.<Object>equalTo(R.drawable.boton2)));
+        onData(anything()).inAdapterView(withId(R.id.listViewVehiculos)).atPosition(0).onChildView(withId(R.id.vehiculoSeleccionado)).check(matches(withTagValue(CoreMatchers.<Object>equalTo(R.drawable.boton2))));
 
         //CASO UIT.2
         marca = "Ford";

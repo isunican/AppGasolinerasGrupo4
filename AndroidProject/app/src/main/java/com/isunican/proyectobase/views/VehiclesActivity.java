@@ -216,6 +216,7 @@ public class VehiclesActivity extends AppCompatActivity implements
             //Vehiculo seleccionado igual
             botonSeleccionado = v.findViewById(R.id.vehiculoSeleccionado);
             botonSeleccionado.setImageResource(R.drawable.boton2);
+            botonSeleccionado.setTag(R.drawable.boton2);
             Toast.makeText(getApplicationContext(), "Vehiculo quitado de la selección", Toast.LENGTH_SHORT).show();
             seleccionado = false;
             presenterVehiculos.borraSeleccionados(VehiclesActivity.this);
@@ -240,6 +241,7 @@ public class VehiclesActivity extends AppCompatActivity implements
             //Vehiculo no seleccionado
             botonSeleccionado = v.findViewById(R.id.vehiculoSeleccionado);
             botonSeleccionado.setImageResource(R.drawable.boton1);
+            botonSeleccionado.setTag(R.drawable.boton1);
             Toast.makeText(getApplicationContext(), "Vehiculo seleccionado", Toast.LENGTH_SHORT).show();
             seleccionado = true;
             presenterVehiculos.anhadirVehiculoSeleccionado(vehiculo);
