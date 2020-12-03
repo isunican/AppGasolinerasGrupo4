@@ -61,7 +61,7 @@ public class SeleccionarVehiculoITest {
 
         ListView vista = (ListView) mActivityTestRuleVehicle.getActivity().findViewById(R.id.listViewVehiculos);
 
-        //Anhadimos el primer vehiculo
+        //Anhadimos el primer vehiculo y se selecciona automáticamente
         String marca = "Ford";
         String modelo = "Focus";
         String matricula = "1234BBC";
@@ -79,17 +79,16 @@ public class SeleccionarVehiculoITest {
         onView(withId(R.id.idBotonAceptar)).perform(click());
 
         //Seleccionamos el segundo vehiculo
-        //Hace click en el primer vehiculo
+        /*//Hace click en el primer vehiculo
         DataInteraction evento = onData(anything()).inAdapterView(withId(R.id.listViewVehiculos)).atPosition(0);
         evento.perform(click());
 
         //Comprobamos que se encuentra en el fichero
-
+*/
 
         //Hace click en el segundo vehiculo
-        evento = onData(anything()).inAdapterView(withId(R.id.listViewVehiculos)).atPosition(1);
+        DataInteraction evento = onData(anything()).inAdapterView(withId(R.id.listViewVehiculos)).atPosition(1);
         evento.perform(click());
-        System.out.println("Mangos");
 
         //Guarda el string del vehiculo seleccionado
         String seleccionado = consultaDBSeleccionado(context);
@@ -97,14 +96,15 @@ public class SeleccionarVehiculoITest {
         //Comprueba que el vehiculo en el fichero es el vehiculo que realmente esta seleccionado
         seleccionado.equals("Marca:Seat-Modelo:Ibiza-Matricula:1111BBB-Combustible:Gasolina95-");
 
-
         //Deseleccionamos el vehiculo
         //Hace click en el segundo vehiculo
         evento = onData(anything()).inAdapterView(withId(R.id.listViewVehiculos)).atPosition(1);
         evento.perform(click());
 
-        //Comprobamos que el fichero no existe
-        assertFalse(context.deleteFile("seleccionado.txt"));
+        String seleccionado2 = consultaDBSeleccionado(context);
+
+        //Comprobamos que el fichero ha borrado los datos
+        seleccionado2.equals("");
 
         context.deleteFile("vehiculos.txt");
     }

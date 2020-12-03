@@ -1,8 +1,10 @@
 package com.isunican.proyectobase.views.FiltrarCombustible;
 
+import androidx.test.core.app.ApplicationProvider;
 import androidx.test.rule.ActivityTestRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
+import android.content.Context;
 import android.widget.ListView;
 
 import com.isunican.proyectobase.model.Gasolinera;
@@ -38,6 +40,10 @@ public class FiltrarCombustibleUITest {
 
     @Test
     public void useAppContext() {
+
+        Context context = ApplicationProvider.getApplicationContext();
+        context.deleteFile("vehiculos.txt");
+        context.deleteFile("seleccionado.txt");
 
         Gasolinera gasolinera;
 

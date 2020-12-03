@@ -279,6 +279,30 @@ public class PresenterVehiculos {
     }
 
     /**
+     * Escribe el vehículo pasado como parámetro en la base de datos
+     */
+    public void creaFicheroVehiculo(Context context) {
+        try (FileWriter outputStreamWriter = new FileWriter(context.getFileStreamPath("vehiculos.txt"), true)) {
+            ;
+        } catch (IOException e) {
+            Log.e(EXCEPCION, FALLO_DB);
+        }
+    }
+
+    /**
+     * Escribe el vehículo pasado como parámetro en la base de datos
+     */
+    public void creaFicheroSeleccionado(Context context) {
+        if(seleccionado.isEmpty()){
+            try (FileWriter outputStreamWriter = new FileWriter(context.getFileStreamPath(FICHERO_SELECCIONADO), false)) {
+                ;
+            } catch (IOException e) {
+                Log.e(EXCEPCION, FALLO_DB);
+            }
+        }
+    }
+
+    /**
      * Retorna false si el fichero estaba vacio y true si tenia contenido
      *
      * @param db
