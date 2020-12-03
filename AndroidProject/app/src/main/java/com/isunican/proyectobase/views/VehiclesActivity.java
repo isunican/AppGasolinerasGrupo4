@@ -1,8 +1,6 @@
 package com.isunican.proyectobase.views;
 
-import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.IntentService;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
@@ -17,7 +15,6 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
@@ -30,9 +27,6 @@ import com.isunican.proyectobase.R;
 import com.isunican.proyectobase.model.Vehiculo;
 import com.isunican.proyectobase.presenter.PresenterVehiculos;
 
-
-import org.w3c.dom.Text;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -43,6 +37,7 @@ public class VehiclesActivity extends AppCompatActivity implements
 
     static final String GASOLINA95 = "Gasolina95";
     static final String GASOLEOA = "GasoleoA";
+    static final String VALOR = "VALOR";
 
     //Opciones del spinner
     String[] combustibles = {GASOLINA95, GASOLEOA};
@@ -226,7 +221,7 @@ public class VehiclesActivity extends AppCompatActivity implements
             seleccionado = false;
             presenterVehiculos.borraSeleccionados(VehiclesActivity.this);
             vehiculoSeleccionado.clear();
-            myIntent.putExtra("VALOR","Gasolina95");
+            myIntent.putExtra(VALOR,GASOLINA95);
             setResult(0,myIntent);
         } else if (seleccionado) {
             //Vehiculo seleccionado distinto
@@ -241,7 +236,7 @@ public class VehiclesActivity extends AppCompatActivity implements
             presenterVehiculos.escribeVehiculoSeleccionado(vehiculo.toString(), VehiclesActivity.this);
             vehiculoSeleccionado.clear();
             vehiculoSeleccionado.add(vehiculo);
-            myIntent.putExtra("VALOR",vehiculoSeleccionado.get(0).getCombustible());
+            myIntent.putExtra(VALOR,vehiculoSeleccionado.get(0).getCombustible());
             setResult(0,myIntent);
         } else {
             //Vehiculo no seleccionado
@@ -253,12 +248,13 @@ public class VehiclesActivity extends AppCompatActivity implements
             presenterVehiculos.anhadirVehiculoSeleccionado(vehiculo);
             presenterVehiculos.escribeVehiculoSeleccionado(vehiculo.toString(), VehiclesActivity.this);
             vehiculoSeleccionado.add(vehiculo);
-            myIntent.putExtra("VALOR",vehiculoSeleccionado.get(0).getCombustible());
+            myIntent.putExtra(VALOR, vehiculoSeleccionado.get(0).getCombustible());
             setResult(0,myIntent);
         }
     }
 
     public void volverMainActivity(View v){
+        v.findViewById(R.id.imageViewLogo);
         finish();
     }
 
@@ -403,24 +399,10 @@ class VehiculoArrayAdapter extends ArrayAdapter<Vehiculo> {
         combustible.setText(vehiculo.getCombustible());
         botonSeleccion.setImageResource(R.drawable.boton2);
 
-        if(!vehiculoSeleccionado.isEmpty())
-        {
-        System.out.println(vehiculoSeleccionado.get(0).getMarca());
-        System.out.println(vehiculoSeleccionado.get(0).getModelo());
-        System.out.println(vehiculoSeleccionado.get(0).getMatricula());
-        System.out.println(vehiculoSeleccionado.get(0).getCombustible());
-
-        System.out.println(vehiculo.getMarca());
-        System.out.println(vehiculo.getModelo());
-        System.out.println(vehiculo.getMatricula());
-        System.out.println(vehiculo.getCombustible());
-        }
-
-
         // carga icono
         cargaIcono(vehiculo, marca);
 
-        if(vehiculoSeleccionado.size() == 0){
+        if(vehiculoSeleccionado.isEmpty()){
             botonSeleccion.setImageResource(R.drawable.boton2);
             botonSeleccion.setTag(R.drawable.boton2);
 

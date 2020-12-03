@@ -20,10 +20,12 @@ import java.util.regex.Pattern;
 public class PresenterVehiculos {
     private HashMap<String, Vehiculo> vehiculos;
     private HashMap<String, Vehiculo> seleccionado;
-    static final String mensajeLog = "login activity";
-    static final String falloDB = "Fallo al escribir en la base de datos";
-    static final String ficheroSeleccionado = "seleccionado.txt";
-
+    static final String MENSAJE_LOG = "login activity";
+    static final String FALLO_DB = "Fallo al escribir en la base de datos";
+    static final String FICHERO_SELECCIONADO = "seleccionado.txt";
+    static final String GASOLINA95 = "Gasolina95";
+    static final String GASOLEOA = "GasoleoA";
+    static final String EXCEPCION = "Excepción";
 
     //Base de datos de donde se obtiene los vehiculos
     public static class DatoNoValido extends RuntimeException {
@@ -151,7 +153,7 @@ public class PresenterVehiculos {
             throw new MatriculaNoValida();
         }
         // Lanza excepcion si el combustible pasado no es GasoleoA o Gasolina95
-        if (!combustible.equals("Gasolina95") && !combustible.equals("GasoleoA")) {
+        if (!combustible.equals(GASOLINA95) && !combustible.equals(GASOLEOA)) {
             throw new CombustibleNoValido();
         }
         vehiculos.put(v.getMatricula(), v);
@@ -162,10 +164,10 @@ public class PresenterVehiculos {
      */
     public void borraSeleccionados(Context context) throws IOException {
         seleccionado.clear();
-        try(FileWriter ignored = new FileWriter(context.getFileStreamPath(ficheroSeleccionado), false)) {
-
+        try(FileWriter ignored = new FileWriter(context.getFileStreamPath(FICHERO_SELECCIONADO), false)) {
+            ;
         } catch (IOException e) {
-            Log.e("Excepción", falloDB);
+            Log.e(EXCEPCION, FALLO_DB);
         }
     }
 
@@ -204,7 +206,7 @@ public class PresenterVehiculos {
             throw new MatriculaNoValida();
         }
         // Lanza excepcion si el combustible pasado no es GasoleoA o Gasolina95
-        if (!combustible.equals("Gasolina95") && !combustible.equals("GasoleoA")) {
+        if (!combustible.equals(GASOLINA95) && !combustible.equals(GASOLEOA)) {
             throw new CombustibleNoValido();
         }
 
@@ -221,7 +223,7 @@ public class PresenterVehiculos {
             outputStreamWriter.write(vehiculo);
 
         } catch (IOException e) {
-            Log.e("Excepción", falloDB);
+            Log.e(EXCEPCION, FALLO_DB);
         }
     }
 
@@ -230,11 +232,11 @@ public class PresenterVehiculos {
      */
     public void escribeVehiculoSeleccionado(String vehiculo, Context context) {
 
-        try (FileWriter outputStreamWriter = new FileWriter(context.getFileStreamPath(ficheroSeleccionado), false)) {
+        try (FileWriter outputStreamWriter = new FileWriter(context.getFileStreamPath(FICHERO_SELECCIONADO), false)) {
             outputStreamWriter.write(vehiculo);
 
         } catch (IOException e) {
-            Log.e("Excepción", falloDB);
+            Log.e(EXCEPCION, FALLO_DB);
         }
     }
 
@@ -332,7 +334,7 @@ public class PresenterVehiculos {
                 cont++;
                 tmp = Character.toString(charDB[cont]);
 
-                if (combustible.equals("Gasolina95") || combustible.equals("GasoleoA")) {
+                if (combustible.equals(GASOLINA95) || combustible.equals(GASOLEOA)) {
                     tmp = "-";
                 }
 
@@ -372,14 +374,13 @@ public class PresenterVehiculos {
                     stringBuilder.append("\n").append(receiveString);
                 }
 
-
                 inputStream.close();
                 ret = stringBuilder.toString();
             }
         } catch (FileNotFoundException e) {
-            Log.e(mensajeLog, "No se ha encontrado el fichero: " + e.toString());
+            Log.e(MENSAJE_LOG, "No se ha encontrado el fichero: " + e.toString());
         } catch (IOException e) {
-            Log.e(mensajeLog, "No se ha podido leer el fichero " + e.toString());
+            Log.e(MENSAJE_LOG, "No se ha podido leer el fichero " + e.toString());
         }
         return ret;
     }
@@ -392,7 +393,7 @@ public class PresenterVehiculos {
     private String consultaDBSeleccionado(Context context) {
         String ret = " ";
         try {
-            InputStream inputStream = context.openFileInput(ficheroSeleccionado);
+            InputStream inputStream = context.openFileInput(FICHERO_SELECCIONADO);
 
             InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
             StringBuilder stringBuilder;
@@ -408,9 +409,9 @@ public class PresenterVehiculos {
                 ret = stringBuilder.toString();
             }
         } catch (FileNotFoundException e) {
-            Log.e(mensajeLog, "No se ha encontrado el fichero: " + e.toString());
+            Log.e(MENSAJE_LOG, "No se ha encontrado el fichero: " + e.toString());
         } catch (IOException e) {
-            Log.e(mensajeLog, "No se ha podido leer el fichero " + e.toString());
+            Log.e(MENSAJE_LOG, "No se ha podido leer el fichero " + e.toString());
         }
         return ret;
     }
