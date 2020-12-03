@@ -33,20 +33,14 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 @RunWith(AndroidJUnit4.class)
-public class ParserJSONGasolinerasTest {
+public class ParserJSONGasolinerasITest {
 
     @Before
     public void setUp() throws Exception {
     }
 
-
     @Test
-    public void readGasolineraTest() throws JSONException, ParseException, IOException {
-
-    }
-
-    @Test
-    public void parseaArrayGasolinerasTest() throws IOException {
+    public void readGasolineraTest() throws IOException {
         //Creamos la gasolinera que queremos que se parsee correctamente
         String cadenaParseable = "{\"Localidad\": \"LAREDO\"," +
                 "\"Precio Gasoleo A\": \"0,996\"," +
@@ -73,23 +67,89 @@ public class ParserJSONGasolinerasTest {
         String cadenaNoParseable = "{"+
                 "}";
 
-        Gasolinera gasolineraNoOkcreada;
-
         //Creamos un JSONreader para leer la gasolinera
         reader = new JsonReader(new StringReader(cadenaNoParseable));
 
         Gasolinera gasolineraNoOk = ParserJSONGasolineras.readGasolinera(reader);
 
+        Gasolinera gasolineraNoOkCreada = new Gasolinera(-1,"", "",
+                "",0.0,0.0,"");
+
+        assertEquals(gasolineraNoOk, gasolineraNoOkCreada);
+
+        /*
         //Comprobamos que los campos de la gasolinera son los campos predeterminados para los casos invalidos.
         assertTrue(gasolineraNoOk.getGasoleoA() == 0.00);
         assertTrue(gasolineraNoOk.getGasolina95() == 0.00);
-
-       // assertTrue(gasolineraNoOk.getIdeess() == -1);
+        assertTrue(gasolineraNoOk.getIdeess() == -1);
+        assertEquals(gasolineraNoOk.getLocalidad(), "");
         assertEquals(gasolineraNoOk.getDireccion(), "");
         assertEquals(gasolineraNoOk.getProvincia(), "");
         assertEquals(gasolineraNoOk.getRotulo(), "");
+         */
 
         print(gasolineraNoOk);
+    }
+
+    @Test
+    public void parseaArrayGasolinerasTest() throws JSONException, ParseException, IOException {
+        List<Gasolinera> listaGasolinerasOk;
+
+        //Creamos el array de gasolineras a leer
+        String cadenaLargaParseable = "{\"ListaEESSPrecio\": [{\"Localidad\": \"COLINDRES\"," +
+                "\"Precio Gasoleo A\": \"1,096\"," +
+                "\"Precio Gasolina 95 E5\": \"1,012\"," +
+                "\"Provincia\": \"CANTABRIA\"," +
+                "\"IDEESS\": \"55555\"," +
+                "\"Dirección\": \"Avenida Real 1\"," +
+                "\"Rótulo\": \"REPSOL\"" +
+                "}," +
+                "{\"Localidad\": \"LIMPIAS\"," +
+                "\"Precio Gasoleo A\": \"0,896\"," +
+                "\"Precio Gasolina 95 E5\": \"0,812\"," +
+                "\"Provincia\": \"CANTABRIA\"," +
+                "\"IDEESS\": \"66666\"," +
+                "\"Dirección\": \"Avenida Real 2\"," +
+                "\"Rótulo\": \"AVIA\"" +
+                "}]}";
+
+        //Creamos un JSONreader para leer las gasolineras
+        JsonReader reader = new JsonReader(new StringReader(cadenaLargaParseable));
+
+        listaGasolinerasOk = readArrayGasolineras(reader);
+
+        List<Gasolinera> listaGasolinerasOkCreada = new ArrayList<Gasolinera>();
+
+        Gasolinera gasPrueba1 = new Gasolinera(55555,"COLINDRES", "CANTABRIA",
+                "Avenida Real 1",1.096,1.012,"REPSOL");
+        Gasolinera gasPrueba2 = new Gasolinera(66666,"LIMPIAS", "CANTABRIA",
+                "Avenida Real 2",0.896,0.812,"AVIA");
+
+        listaGasolinerasOkCreada.add(gasPrueba1);
+        listaGasolinerasOkCreada.add(gasPrueba2);
+
+        assertEquals(listaGasolinerasOk, listaGasolinerasOkCreada);
+
+        List<Gasolinera> listaGasolinerasNoOk;
+
+        String cadenaLargaNoParseable = "{\"ListaEESSPrecio\": [{},{}]}";
+
+        reader = new JsonReader(new StringReader(cadenaLargaNoParseable));
+
+        listaGasolinerasNoOk = readArrayGasolineras(reader);
+
+        List<Gasolinera> listaGasolinerasNoOkCreada = new ArrayList<Gasolinera>();
+
+        Gasolinera gasPruebaMal1 = new Gasolinera(-1,"", "",
+                "",0.0,0.0,"");
+        Gasolinera gasPruebaMal2 = new Gasolinera(-1,"", "",
+                "",0.0,0.0,"");
+
+        listaGasolinerasNoOkCreada.add(gasPruebaMal1);
+        listaGasolinerasNoOkCreada.add(gasPruebaMal2);
+
+        assertEquals(listaGasolinerasNoOk, listaGasolinerasNoOkCreada);
+
     }
 
     private Gasolinera readGasolinera (JsonReader reader) throws IOException {
