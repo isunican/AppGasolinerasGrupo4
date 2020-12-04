@@ -2,6 +2,7 @@ package com.isunican.proyectobase.views;
 
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -19,15 +20,17 @@ import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import androidx.appcompat.app.AppCompatActivity;
+
 import com.isunican.proyectobase.R;
 import com.isunican.proyectobase.model.Vehiculo;
 import com.isunican.proyectobase.presenter.PresenterVehiculos;
 
+import java.io.IOException;
 
 import java.util.ArrayList;
 import java.util.List;
-
 
 
 public class VehiclesActivity extends AppCompatActivity implements
@@ -35,6 +38,7 @@ public class VehiclesActivity extends AppCompatActivity implements
 
     static final String GASOLINA95 = "Gasolina95";
     static final String GASOLEOA = "GasoleoA";
+    static final String VALOR = "VALOR";
 
     //Opciones del spinner
     String[] combustibles = {GASOLINA95, GASOLEOA};
@@ -44,7 +48,7 @@ public class VehiclesActivity extends AppCompatActivity implements
     // Vista de lista y adaptador para cargar datos en ella
     ListView listViewVehiculos;
     ArrayAdapter<Vehiculo> adapter;
-    List<Vehiculo>vehiculos;
+    List<Vehiculo> vehiculos;
 
     // Creacion del PresenterVehiculos
     PresenterVehiculos presenterVehiculos;
@@ -53,12 +57,21 @@ public class VehiclesActivity extends AppCompatActivity implements
     ProgressBar progressBar;
 
     // Elementos del formulario para anhadir vehiculo
-    Button  btnCancelar;
-    Button  btnAceptar;
+    Button btnCancelar;
+    Button btnAceptar;
+
     EditText txtMarca;
     EditText txtModelo;
     EditText txtMatricula;
+    TextView txtMarcaVehiculo;
+    TextView txtModeloVehiculo;
+    TextView txtMatriculaVehiculo;
+    TextView txtCombustibleVehiculo;
     Spinner spinerTipoCombustible;
+
+    ImageView botonSeleccionado;
+    boolean seleccionado;
+    List<Vehiculo> vehiculoSeleccionado;
 
     /**
      * onCreate
@@ -73,29 +86,34 @@ public class VehiclesActivity extends AppCompatActivity implements
         setContentView(R.layout.activity_vehicle);
         presenterVehiculos = new PresenterVehiculos();
         vehiculos = new ArrayList<>(presenterVehiculos.getVehiculos(VehiclesActivity.this).values());
-        formatoLista(vehiculos);
+        vehiculoSeleccionado = new ArrayList<>(presenterVehiculos.getSeleccionado(VehiclesActivity.this).values());
+        formatoLista(vehiculos, vehiculoSeleccionado);
     }
 
     /**
      * Permite seleccionar el combustible del vehiculo que se va a anhadir.
      *
-     * @param arg0 adapter
-     * @param arg1 view
+     * @param arg0     adapter
+     * @param arg1     view
      * @param position int
-     * @param id long
+     * @param id       long
      */
     @Override
     public void onItemSelected(AdapterView<?> arg0, View arg1, int position, long id) {
         combustibleActual = combustibles[position];
     }
 
-    public void anhadirVehiculo(View v){
+    /**
+     * Método que permite añadir un vehículo en la base de datos estableciendo una ventana
+     * donde el usuario puede introducir y seleccionar los datos que deseé
+     * @param v
+     */
+    public void anhadirVehiculo(View v) {
         AlertDialog.Builder alert;
 
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             alert = new AlertDialog.Builder(this, android.R.style.Theme_Material_Dialog_Alert);
-        }
-        else{
+        } else {
             alert = new AlertDialog.Builder(this);
         }
         LayoutInflater inflater = getLayoutInflater();
@@ -129,7 +147,7 @@ public class VehiclesActivity extends AppCompatActivity implements
         btnAceptar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String mar = txtMarca.getText().toString();
+                String mar = txtMarca.getText().toString().toLowerCase();
                 String model = txtModelo.getText().toString();
                 String matric = txtMatricula.getText().toString();
                 String matricu = matric.toUpperCase();
@@ -142,20 +160,22 @@ public class VehiclesActivity extends AppCompatActivity implements
                     dialog.dismiss();
 
                     //Muestra la list view actualizada con el ultimo vehiculo
-                    vehiculos=new ArrayList<>(presenterVehiculos.getVehiculos(VehiclesActivity.this).values());
-
-                    formatoLista(vehiculos);
-
+                    vehiculos = new ArrayList<>(presenterVehiculos.getVehiculos(VehiclesActivity.this).values());
+                    if(vehiculos.size() == 1){
+                        presenterVehiculos.anhadirVehiculoSeleccionado(vehiculo);
+                        presenterVehiculos.escribeVehiculoSeleccionado(vehiculo.toString(), VehiclesActivity.this);
+                        seleccionado = true;
+                        vehiculoSeleccionado = new ArrayList<>(presenterVehiculos.getSeleccionado(VehiclesActivity.this).values());
+                    }
+                    formatoLista(vehiculos, vehiculoSeleccionado);
                 } catch (PresenterVehiculos.DatoNoValido e) {
                     notificaDatoNoValido();
-                }
-
-                catch (PresenterVehiculos.MatriculaNoValida e) {
+                } catch (PresenterVehiculos.MatriculaNoValida e) {
                     notificaFormatoMatriculaNoValida();
                 }
 
                 catch (PresenterVehiculos.VehiculoNulo e) {
-                    notificaVehiculoExiste();
+                    notificaVehiculoNulo();
                 }
 
                 catch (PresenterVehiculos.CombustibleNoValido e) {
@@ -163,11 +183,12 @@ public class VehiclesActivity extends AppCompatActivity implements
                 }
 
                 catch (PresenterVehiculos.VehiculoYaExiste e) {
-                    notificaVehiculoNulo();
+                    notificaVehiculoExiste();
                 }
 
-
-
+                catch (PresenterVehiculos.CaracterEspecial e) {
+                    notificaCaracterEspecial();
+                }
             }
         });
 
@@ -180,9 +201,85 @@ public class VehiclesActivity extends AppCompatActivity implements
         });
     }
 
-    private void formatoLista(List<Vehiculo> vehiculos) {
+    /**
+     * Método que se llama cada vez que se pulsa en un vehículo y permite seleccionarlo
+     * para poder almacenar su tipo de gasolina y utilizarlo en la actividad principal
+     * para filtrar
+     * @param v
+     * @throws IOException
+     */
+    public void seleccionarVehiculo(View v) throws IOException {
+        ImageView imagen = (ImageView) v.findViewById(R.id.logoMarca);
+        txtModeloVehiculo = v.findViewById(R.id.TextModelo);
+        txtMatriculaVehiculo = v.findViewById(R.id.textMatricula);
+        txtCombustibleVehiculo = v.findViewById(R.id.textCombustible);
+
+
+        Intent myIntent=new Intent();
+        String mar = String.valueOf(imagen.getTag());
+        String model = txtModeloVehiculo.getText().toString();
+        String matric = txtMatriculaVehiculo.getText().toString();
+        String matricu = matric.toUpperCase();
+        String combustible = txtCombustibleVehiculo.getText().toString();
+
+        Vehiculo vehiculo = new Vehiculo(mar, model, matricu, combustible);
+
+
+        if (seleccionado && vehiculo.equals(vehiculoSeleccionado.get(0))) {
+            //Vehiculo seleccionado igual
+            botonSeleccionado = v.findViewById(R.id.vehiculoSeleccionado);
+            botonSeleccionado.setImageResource(R.drawable.boton2);
+            botonSeleccionado.setTag(R.drawable.boton2);
+            Toast.makeText(getApplicationContext(), "Vehiculo quitado de la selección", Toast.LENGTH_SHORT).show();
+            seleccionado = false;
+            presenterVehiculos.borraSeleccionados(VehiclesActivity.this);
+            vehiculoSeleccionado.clear();
+            myIntent.putExtra(VALOR,GASOLINA95);
+            setResult(0,myIntent);
+        } else if (seleccionado) {
+            //Vehiculo seleccionado distinto
+            botonSeleccionado.setImageResource(R.drawable.boton2);
+            botonSeleccionado = v.findViewById(R.id.vehiculoSeleccionado);
+            botonSeleccionado.setImageResource(R.drawable.boton1);
+            botonSeleccionado.setTag(R.drawable.boton1);
+            Toast.makeText(getApplicationContext(), "Vehiculo seleccionado", Toast.LENGTH_SHORT).show();
+            seleccionado = true;
+            presenterVehiculos.borraSeleccionados(VehiclesActivity.this);
+            presenterVehiculos.anhadirVehiculoSeleccionado(vehiculo);
+            presenterVehiculos.escribeVehiculoSeleccionado(vehiculo.toString(), VehiclesActivity.this);
+            vehiculoSeleccionado.clear();
+            vehiculoSeleccionado.add(vehiculo);
+            myIntent.putExtra(VALOR,vehiculoSeleccionado.get(0).getCombustible());
+            setResult(0,myIntent);
+        } else {
+            //Vehiculo no seleccionado
+            botonSeleccionado = v.findViewById(R.id.vehiculoSeleccionado);
+            botonSeleccionado.setImageResource(R.drawable.boton1);
+            botonSeleccionado.setTag(R.drawable.boton1);
+            Toast.makeText(getApplicationContext(), "Vehiculo seleccionado", Toast.LENGTH_SHORT).show();
+            seleccionado = true;
+            presenterVehiculos.anhadirVehiculoSeleccionado(vehiculo);
+            presenterVehiculos.escribeVehiculoSeleccionado(vehiculo.toString(), VehiclesActivity.this);
+            vehiculoSeleccionado.add(vehiculo);
+            myIntent.putExtra(VALOR, vehiculoSeleccionado.get(0).getCombustible());
+            setResult(0,myIntent);
+        }
+    }
+
+    public void volverMainActivity(View v){
+        v.findViewById(R.id.imageViewLogo);
+        finish();
+    }
+
+
+    /**
+     * Método auxiliar que establece el formato de la lista de vehículos
+     * @param vehiculos
+     * @param seleccionado
+     */
+    private void formatoLista(List<Vehiculo> vehiculos, List<Vehiculo> seleccionado) {
         // Definimos el array adapter
-        adapter = new VehiculoArrayAdapter(this,0, vehiculos);
+        adapter = new VehiculoArrayAdapter(this, 0, vehiculos, seleccionado);
 
         // Obtenemos la vista de la lista
         listViewVehiculos = findViewById(R.id.listViewVehiculos);
@@ -194,7 +291,7 @@ public class VehiclesActivity extends AppCompatActivity implements
         }
     }
 
-    public PresenterVehiculos getPresenterVehiculos(){
+    public PresenterVehiculos getPresenterVehiculos() {
         return presenterVehiculos;
     }
 
@@ -248,73 +345,118 @@ public class VehiclesActivity extends AppCompatActivity implements
         toast.show();
     }
 
-    public PresenterVehiculos getPresenter(){
+    /**
+     * Muestra mensaje de error
+     */
+    private void notificaMatriculaConVocales() {
+        Toast toast;
+        toast = Toast.makeText(getApplicationContext(), "Las letras de la matricula no pueden ser vocales", Toast.LENGTH_LONG);
+        toast.show();
+    }
+
+    private void notificaCaracterEspecial() {
+        Toast toast;
+        toast = Toast.makeText(getApplicationContext(), "No se admiten caracteres especiales", Toast.LENGTH_LONG);
+        toast.show();
+    }
+
+    public PresenterVehiculos getPresenter() {
         return presenterVehiculos;
     }
-    /*
-    ------------------------------------------------------------------
-        VehiculosArrayAdapter
 
-        Adaptador para inyectar los datos de los vehiculos
-        en el listview del layout de vehiculos de la aplicacion
-    ------------------------------------------------------------------
-    */
-    class VehiculoArrayAdapter extends ArrayAdapter<Vehiculo> {
+/*
+------------------------------------------------------------------
+    VehiculosArrayAdapter
 
-        private Context context;
-        private List<Vehiculo> listaVehiculos;
+    Adaptador para inyectar los datos de los vehiculos
+    en el listview del layout de vehiculos de la aplicacion
+------------------------------------------------------------------
+*/
+class VehiculoArrayAdapter extends ArrayAdapter<Vehiculo> {
 
+    private Context context;
+    private List<Vehiculo> listaVehiculos;
+    private List<Vehiculo> vehiculoSeleccionado;
 
-        // Constructor
-        public VehiculoArrayAdapter(Context context, int resource, List<Vehiculo> objects) {
-            super(context, resource, objects);
-            this.context = context;
-            this.listaVehiculos = objects;
-        }
-
-        // Llamado al renderizar la lista
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-
-            // Obtiene el elemento que se está mostrando
-            Vehiculo vehiculo = listaVehiculos.get(position);
-
-            // Indica el layout a usar en cada elemento de la lista
-            LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-
-            View view = inflater.inflate(R.layout.item_vehiculo, null);
-
-            // Asocia las variables de dicho layout
-            ImageView marca = view.findViewById(R.id.logoMarca);
-            TextView modelo = view.findViewById(R.id.TextModelo);
-            TextView matricula = view.findViewById(R.id.textMatricula);
-            TextView combustible = view.findViewById(R.id.textCombustible);
-
-            // Y carga los datos del item
-            modelo.setText(vehiculo.getModelo());
-            matricula.setText(vehiculo.getMatricula());
-            combustible.setText(vehiculo.getCombustible());
-
-            // carga icono
-            cargaIcono(vehiculo, marca);
-
-            return view;
-        }
-
-        private void cargaIcono(Vehiculo vehiculo, ImageView logo) {
-            String rotuleImageID = vehiculo.getMarca().toLowerCase();
-
-            // Tengo que protegerme ante el caso en el que el rotulo solo tiene digitos.
-            // En ese caso getIdentifier devuelve esos digitos en vez de 0.
-            int imageID = context.getResources().getIdentifier(rotuleImageID,
-                    "drawable", context.getPackageName());
-
-            if (imageID == 0 || TextUtils.isDigitsOnly(rotuleImageID)) {
-                imageID = context.getResources().getIdentifier(getResources().getString(R.string.coche),
-                        "drawable", context.getPackageName());
-            }
-            logo.setImageResource(imageID);
-        }
+    // Constructor
+    public VehiculoArrayAdapter(Context context, int resource, List<Vehiculo> objects, List<Vehiculo> vehiculoSeleccionado) {
+        super(context, resource, objects);
+        this.context = context;
+        this.listaVehiculos = objects;
+        this.vehiculoSeleccionado = vehiculoSeleccionado;
     }
+
+    // Llamado al renderizar la lista
+    @Override
+    public View getView(int position, View convertView, ViewGroup parent) {
+
+        // Obtiene el elemento que se está mostrando
+        Vehiculo vehiculo = listaVehiculos.get(position);
+        vehiculo.setMarca(vehiculo.getMarca());
+
+        // Indica el layout a usar en cada elemento de la lista
+        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+        View view = inflater.inflate(R.layout.item_vehiculo, null);
+
+        // Asocia las variables de dicho layout
+        ImageView marca = view.findViewById(R.id.logoMarca);
+        TextView modelo = view.findViewById(R.id.TextModelo);
+        TextView matricula = view.findViewById(R.id.textMatricula);
+        TextView combustible = view.findViewById(R.id.textCombustible);
+        ImageView botonSeleccion = view.findViewById(R.id.vehiculoSeleccionado);
+
+        // Y carga los datos del item
+        modelo.setText(vehiculo.getModelo());
+        matricula.setText(vehiculo.getMatricula());
+        combustible.setText(vehiculo.getCombustible());
+        botonSeleccion.setImageResource(R.drawable.boton2);
+
+        // carga icono
+        cargaIcono(vehiculo, marca);
+
+        if(vehiculoSeleccionado.isEmpty()){
+            botonSeleccion.setImageResource(R.drawable.boton2);
+            botonSeleccion.setTag(R.drawable.boton2);
+
+        } else if(vehiculos.size() == 1) {
+            botonSeleccion.setImageResource(R.drawable.boton1);
+            vehiculoSeleccionado.set(0,vehiculo);
+            seleccionado = true;
+            botonSeleccionado = botonSeleccion;
+            botonSeleccionado.setTag(R.drawable.boton1);
+        } else {
+            if(vehiculoSeleccionado.get(0).equals(vehiculo)){
+                botonSeleccion.setImageResource(R.drawable.boton1);
+                seleccionado = true;
+                botonSeleccionado = botonSeleccion;
+                botonSeleccionado.setTag(R.drawable.boton1);
+            } else {
+                botonSeleccion.setImageResource(R.drawable.boton2);
+                botonSeleccion.setTag(R.drawable.boton2);
+            }
+        }
+
+        return view;
+    }
+
+    private void cargaIcono(Vehiculo vehiculo, ImageView logo) {
+        String rotuleImageID = vehiculo.getMarca().toLowerCase();
+
+        // Tengo que protegerme ante el caso en el que el rotulo solo tiene digitos.
+        // En ese caso getIdentifier devuelve esos digitos en vez de 0.
+        int imageID = context.getResources().getIdentifier(rotuleImageID,
+                "drawable", context.getPackageName());
+
+        if (imageID == 0 || TextUtils.isDigitsOnly(rotuleImageID)) {
+            imageID = context.getResources().getIdentifier(getResources().getString(R.string.coche),
+                    "drawable", context.getPackageName());
+        }
+        logo.setImageResource(imageID);
+        logo.setTag(rotuleImageID);
+    }
+
 }
+}
+
 

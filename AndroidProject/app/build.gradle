@@ -86,7 +86,10 @@ dependencies {
     androidTestImplementation 'androidx.annotation:annotation:1.0.0'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.0'
     androidTestImplementation 'androidx.test.espresso:espresso-intents:3.1.0'
-
+    testImplementation 'com.googlecode.json-simple:json-simple:1.1'
+    androidTestImplementation 'com.googlecode.json-simple:json-simple:1.1'
     androidTestImplementation 'androidx.test:runner:1.1.0'
     androidTestImplementation 'androidx.test:rules:1.1.0'
+    testImplementation 'org.json:json:20140107'
+   androidTestImplementation 'org.json:json:20140107'
 }

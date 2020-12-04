@@ -2,13 +2,17 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
+    android:layout_width="wrap_content"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:onClick="seleccionarVehiculo">
+    tools:context=".views.VehiclesActivity">
 
     <LinearLayout
+        android:id="@+id/layoutVehiculo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:baselineAligned="false"
         android:orientation="horizontal">
 
         <LinearLayout
@@ -25,21 +29,21 @@
         </LinearLayout>
 
         <LinearLayout
-            android:layout_width="match_parent"
+            android:layout_width="226dp"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
             android:orientation="vertical">
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="25dp"
-                android:layout_weight="1"
-                android:orientation="horizontal"
-                android:layout_marginTop="13dp">
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:layout_marginTop="10dp"
+                android:orientation="horizontal">
 
                 <TextView
                     android:id="@+id/modelo"
-                    android:layout_width="25dp"
+                    android:layout_width="138dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:text="Modelo:"
@@ -47,20 +51,21 @@
 
                 <TextView
                     android:id="@+id/TextModelo"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
+                    android:layout_width="167dp"
+                    android:layout_height="wrap_content"
                     android:layout_weight="2"
                     android:text="Texto" />
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="25dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
                 android:orientation="horizontal">
 
                 <TextView
                     android:id="@+id/matricula"
-                    android:layout_width="25dp"
+                    android:layout_width="73dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:text="Matricula:"
@@ -77,11 +82,13 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:layout_marginBottom="10dp"
                 android:orientation="horizontal">
 
                 <TextView
                     android:id="@+id/combustible"
-                    android:layout_width="25dp"
+                    android:layout_width="73dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="Combustible:"
@@ -98,12 +105,17 @@
 
         </LinearLayout>
 
+        <ImageView
+            android:id="@+id/vehiculoSeleccionado"
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            tools:srcCompat="@drawable/boton" />
+
     </LinearLayout>
 
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:layout_below="@+id/textCombustible"
         android:layout_marginTop="10dp"
         android:background="@color/colorPrimary" />
 </LinearLayout>
