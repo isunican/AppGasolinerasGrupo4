@@ -52,6 +52,7 @@ public class AnhadirVehiculosITest {
         vehiculoMatriculaDistinta=new Vehiculo("toyota", "Celica", "1234BBC", "Gasolina95");
         vehiculoMatriculaIgual=new Vehiculo("volkswagen", "Golf Mk2", "1234BBC", "Gasolina95");
         vehiculoAnhadido=new Vehiculo("honda", "Civic", "1234BCD", "Gasolina95");
+
         presenter.anhadirVehiculo(vehiculoAnhadido);
     }
 

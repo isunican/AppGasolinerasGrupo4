@@ -20,7 +20,6 @@ import static org.junit.Assert.fail;
 
 @RunWith(RobolectricTestRunner.class)
 @Config(sdk = Build.VERSION_CODES.O_MR1)
-
 public class AnhadirVehiculosTest {
 
     //Declaracion de distintos vehiculos con diferentes datos que se estableceran posteriormente
