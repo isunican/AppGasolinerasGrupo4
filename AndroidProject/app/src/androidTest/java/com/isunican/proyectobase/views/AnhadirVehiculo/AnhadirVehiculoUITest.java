@@ -51,8 +51,8 @@ import static org.junit.Assert.assertTrue;
 //@RunWith(AndroidJUnit4.class)
 public class AnhadirVehiculoUITest {
 /*
-        @Rule
-        public ActivityTestRule<MainActivity> mActivityTestRule = new ActivityTestRule<>(MainActivity.class);
+        //@Rule
+        //public ActivityTestRule<MainActivity> mActivityTestRule = new ActivityTestRule<>(MainActivity.class);
 
         @Rule
         public ActivityTestRule<VehiclesActivity> mActivityTestRuleVehicle = new ActivityTestRule<>(VehiclesActivity.class);
