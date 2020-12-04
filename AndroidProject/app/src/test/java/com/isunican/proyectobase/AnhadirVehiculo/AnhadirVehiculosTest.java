@@ -34,14 +34,14 @@ public class AnhadirVehiculosTest {
     PresenterVehiculos presenterVehiculos;
 
     // Declaracion de los vehiculos para probar el ticket NoVocalesMatriculas
-    private Vehiculo VehiculoValidoC;
     private Vehiculo vehiculoConVocal;
+    private Vehiculo vehiculoValidoC;
 
     //Declaracion de distintos vehiculos para testear el ticket NoCaracteresExtranhosvehiculo
     private Vehiculo vehiculoMarcaExtranha;
     private Vehiculo vehiculoModeloExtranho;
     private Vehiculo vehiculoModeloMarcaExtranha;
-    private Vehiculo vehiculoValidoC;
+    private Vehiculo vehiculoValidoD;
 
     @Before
     public void setUp() throws Exception{
@@ -57,13 +57,13 @@ public class AnhadirVehiculosTest {
 
         // Inicializacion de los vehiculos para probar el ticket NoVocalesMatriculas
         vehiculoConVocal =  new Vehiculo("Seat", "Leon","1337AAA","Gasolina95");
-        VehiculoValidoC =  new Vehiculo("Seat", "Leon","1337BBB","Gasolina95");
+        vehiculoValidoC =  new Vehiculo("Seat", "Leon","1337BBB","Gasolina95");
 
         //Inicializacion de los vehiculos para el ticket NoCaracteresExtranhosVehiculo
         vehiculoMarcaExtranha = new Vehiculo("Renault*/-+/","Clio", "1234TPW", "GasoleoA");
         vehiculoModeloExtranho = new Vehiculo("Renault", "Cl/-o/o--", "7654PWL", "Gasolina95");
         vehiculoModeloMarcaExtranha = new Vehiculo("Rena--ult--", "Cl-i+..o", "3426PLS", "Gasolina95");
-        vehiculoValidoC = new Vehiculo("Renault", "Clio","1456WTS","Gasolina95");
+        vehiculoValidoD = new Vehiculo("Renault", "Clio","1456WTS","Gasolina95");
     }
 
     @Test
@@ -139,12 +139,12 @@ public class AnhadirVehiculosTest {
 
 
         /*
-         * Casos de pruebas para el ticket NoCaracteresExtranhosVehiculo (Victor Perez y Daniel Llovio)
+         * Casos de pruebas para el ticket NoVocalesMatricula (Victor Perez y Daniel Llovio)
          */
 
         //Caso UT.1a
         try{
-            presenterVehiculos.anhadirVehiculo(VehiculoValidoC);
+            presenterVehiculos.anhadirVehiculo(vehiculoValidoC);
 
         } catch(Exception e){
             fail();
@@ -156,6 +156,26 @@ public class AnhadirVehiculosTest {
             fail();
         } catch(PresenterVehiculos.VocalesEnMatricula d){
 
+        } catch(PresenterVehiculos.CaracterEspecial e){
+
+        }
+
+        /*
+         * Casos de pruebas para el ticket NoCaracteresExtranhosVehiculo (Victor Perez y Daniel Llovio)
+         */
+
+        //Caso UT.1a
+        try{
+            presenterVehiculos.anhadirVehiculo(vehiculoValidoD);
+
+        } catch(Exception e){
+            fail();
+        }
+
+        //Caso UT.1b
+        try{
+            presenterVehiculos.anhadirVehiculo(vehiculoMarcaExtranha);
+            fail();
         } catch(PresenterVehiculos.CaracterEspecial e){
 
         }
