@@ -147,7 +147,7 @@ public class VehiclesActivity extends AppCompatActivity implements
         btnAceptar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String mar = txtMarca.getText().toString();
+                String mar = txtMarca.getText().toString().toLowerCase();
                 String model = txtModelo.getText().toString();
                 String matric = txtMatricula.getText().toString();
                 String matricu = matric.toUpperCase();

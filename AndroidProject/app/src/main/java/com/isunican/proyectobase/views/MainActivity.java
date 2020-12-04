@@ -17,6 +17,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -98,6 +99,7 @@ public class MainActivity extends AppCompatActivity implements
         this.presenterGasolineras = new PresenterGasolineras();
         if(presenterVehiculos == null){
             presenterVehiculos = new PresenterVehiculos();
+            presenterVehiculos.cargaDatosVehiculosSeleccionado(this);
         }
 
         // Barra de progreso
@@ -126,6 +128,7 @@ public class MainActivity extends AppCompatActivity implements
         // se lanza una tarea para cargar los datos de las gasolineras
         // Esto se ha de hacer en segundo plano definiendo una tarea asíncrona
         new CargaDatosGasolinerasTask(this).execute();
+
         presenterVehiculos.creaFicheroVehiculo(MainActivity.this);
 
         presenterVehiculos.creaFicheroSeleccionado(MainActivity.this);

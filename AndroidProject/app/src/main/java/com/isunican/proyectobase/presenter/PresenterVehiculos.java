@@ -291,7 +291,7 @@ public class PresenterVehiculos {
      */
     public void creaFicheroSeleccionado(Context context) {
         if(seleccionado.isEmpty()){
-            try (FileWriter outputStreamWriter = new FileWriter(context.getFileStreamPath(FICHERO_SELECCIONADO), false)) {
+            try (FileWriter outputStreamWriter = new FileWriter(context.getFileStreamPath(FICHERO_SELECCIONADO), true)) {
                 ;
             } catch (IOException e) {
                 Log.e(EXCEPCION, FALLO_DB);
