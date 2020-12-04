@@ -87,7 +87,6 @@ public class AnhadirVehiculoUITest {
 
 
             //Se recorren la lista de vehiculos de la app y se meten en la lista
-
             Vehiculo vehiculo = new Vehiculo("ford","Focus","1234BBC","Gasolina95");
 
            List<Vehiculo> vehiculosIniciales = new ArrayList<Vehiculo>();
@@ -106,6 +105,7 @@ public class AnhadirVehiculoUITest {
             //Comprobamos que no se ha añadido ningun vehiculo.
             List<Vehiculo> vehiculos = new ArrayList<Vehiculo>();
             cargaListaVehiculos(vista, vehiculos);
+            assertEquals(vehiculos,vehiculosIniciales );
 
             //CASO UIT.3
             matricula= "1234BBC";
@@ -125,6 +125,7 @@ public class AnhadirVehiculoUITest {
             onView(withId(R.id.idIntroduceMatricula)).check(matches(withText("")));
 
             onView(withId(R.id.idBotonCancelar)).perform(click());
+
             //CASO UIT.4
             marca = "BMW";
             modelo ="X1";
@@ -134,23 +135,67 @@ public class AnhadirVehiculoUITest {
             escribeDatosVehiculo(marca, modelo, matricula, combustible);
             onView(withId(R.id.idBotonAceptar)).perform(click());
             onView(withId(R.id.idBotonCancelar)).perform(click());
+
             //Comprobamos que no se ha añadido ningun vehiculo.
             vehiculos = new ArrayList<Vehiculo>();
             cargaListaVehiculos(vista, vehiculos);
             assertEquals(vehiculos,vehiculosIniciales );
 
             //CASO UIT.5
-            marca = "Seat";
-            modelo ="Leon";
-            matricula= "1111VVA";
-            escribeDatosVehiculo(marca, modelo, matricula, combustible);
-            onView(withId(R.id.idBotonAceptar)).perform(click());
+
+            //marca = "Seat";
+            //modelo ="Leon";
+            //matricula= "1111VVA";
+            //escribeDatosVehiculo(marca, modelo, matricula, combustible);
+            //onView(withId(R.id.idBotonAceptar)).perform(click());
+            //onView(withId(R.id.idBotonCancelar)).perform(click());
 
             //Comprobamos que no se ha añadido ningun vehiculo.
             //vehiculos = new ArrayList<Vehiculo>();
             //cargaListaVehiculos(vista, vehiculos);
             //assertEquals(vehiculos,vehiculosIniciales );
 
+            //CASO UIT.6
+            marca = "Se@t";
+            modelo ="!´!";
+            matricula= "2222VVV";
+            escribeDatosVehiculo(marca, modelo, matricula, combustible);
+            onView(withId(R.id.idBotonAceptar)).perform(click());
+            onView(withId(R.id.idBotonCancelar)).perform(click());
+
+            //Comprobamos que no se ha añadido ningun vehiculo.
+            vehiculos = new ArrayList<Vehiculo>();
+            cargaListaVehiculos(vista, vehiculos);
+            assertEquals(vehiculos,vehiculosIniciales);
+
+            //CASO UIT.7
+            marca = "Chevrolet";
+            modelo ="----";
+            matricula= "3333VVV";
+            escribeDatosVehiculo(marca, modelo, matricula, combustible);
+            onView(withId(R.id.idBotonAceptar)).perform(click());
+            onView(withId(R.id.idBotonCancelar)).perform(click());
+
+            //Comprobamos que no se ha añadido ningun vehiculo.
+            vehiculos = new ArrayList<Vehiculo>();
+            cargaListaVehiculos(vista, vehiculos);
+            assertEquals(vehiculos,vehiculosIniciales);
+
+            //CASO UIT.8
+            marca = "::::";
+            modelo ="Golf";
+            matricula= "4444VVV";
+            escribeDatosVehiculo(marca, modelo, matricula, combustible);
+            onView(withId(R.id.idBotonAceptar)).perform(click());
+            onView(withId(R.id.idBotonCancelar)).perform(click());
+
+            //Comprobamos que no se ha añadido ningun vehiculo.
+            vehiculos = new ArrayList<Vehiculo>();
+            cargaListaVehiculos(vista, vehiculos);
+            assertEquals(vehiculos,vehiculosIniciales);
+
+
+            //borramos la lista
             context.deleteFile("vehiculos.txt");
         }
 

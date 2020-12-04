@@ -53,6 +53,7 @@ public class MainActivity extends AppCompatActivity implements
     String[] combustibles = {GASOLINA95, GASOLEOA};
 
     PresenterGasolineras presenterGasolineras;
+    PresenterVehiculos presenterVehiculos;
 
     // Vista de lista y adaptador para cargar datos en ella
     ListView listViewGasolineras;
@@ -80,7 +81,7 @@ public class MainActivity extends AppCompatActivity implements
     static final String GASOLEOA = "GasoleoA";
 
     List<Vehiculo> listaVehiculoSeleccionado;
-    PresenterVehiculos presenterVehiculos;
+    //PresenterVehiculos presenterVehiculos;
     Vehiculo vehiculoSeleccionado;
     /**
      * onCreate
@@ -125,8 +126,8 @@ public class MainActivity extends AppCompatActivity implements
         // se lanza una tarea para cargar los datos de las gasolineras
         // Esto se ha de hacer en segundo plano definiendo una tarea asíncrona
         new CargaDatosGasolinerasTask(this).execute();
-
         presenterVehiculos.creaFicheroVehiculo(MainActivity.this);
+
         presenterVehiculos.creaFicheroSeleccionado(MainActivity.this);
 
         listaVehiculoSeleccionado = new ArrayList<>(presenterVehiculos.getSeleccionado(MainActivity.this).values());

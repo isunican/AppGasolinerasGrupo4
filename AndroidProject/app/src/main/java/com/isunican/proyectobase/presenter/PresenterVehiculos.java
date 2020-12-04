@@ -2,10 +2,7 @@ package com.isunican.proyectobase.presenter;
 
 import android.content.Context;
 import android.util.Log;
-
 import com.isunican.proyectobase.model.Vehiculo;
-
-
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;

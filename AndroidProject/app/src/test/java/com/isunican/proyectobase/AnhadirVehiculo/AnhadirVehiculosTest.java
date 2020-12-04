@@ -37,6 +37,12 @@ public class AnhadirVehiculosTest {
     private Vehiculo VehiculoValidoC;
     private Vehiculo vehiculoConVocal;
 
+    //Declaracion de distintos vehiculos para testear el ticket NoCaracteresExtranhosvehiculo
+    private Vehiculo vehiculoMarcaExtranha;
+    private Vehiculo vehiculoModeloExtranho;
+    private Vehiculo vehiculoModeloMarcaExtranha;
+    private Vehiculo vehiculoValidoC;
+
     @Before
     public void setUp() throws Exception{
 
@@ -52,6 +58,12 @@ public class AnhadirVehiculosTest {
         // Inicializacion de los vehiculos para probar el ticket NoVocalesMatriculas
         vehiculoConVocal =  new Vehiculo("Seat", "Leon","1337AAA","Gasolina95");
         VehiculoValidoC =  new Vehiculo("Seat", "Leon","1337BBB","Gasolina95");
+
+        //Inicializacion de los vehiculos para el ticket NoCaracteresExtranhosVehiculo
+        vehiculoMarcaExtranha = new Vehiculo("Renault*/-+/","Clio", "1234TPW", "GasoleoA");
+        vehiculoModeloExtranho = new Vehiculo("Renault", "Cl/-o/o--", "7654PWL", "Gasolina95");
+        vehiculoModeloMarcaExtranha = new Vehiculo("Rena--ult--", "Cl-i+..o", "3426PLS", "Gasolina95");
+        vehiculoValidoC = new Vehiculo("Renault", "Clio","1456WTS","Gasolina95");
     }
 
     @Test
@@ -125,14 +137,15 @@ public class AnhadirVehiculosTest {
 
         }
 
+
         /*
-         * Ejecucion de las pruebas para el ticket NoVocalesMatriculas (Test Plan NoVocalesMatriculas)
-         *
+         * Casos de pruebas para el ticket NoCaracteresExtranhosVehiculo (Victor Perez y Daniel Llovio)
          */
 
         //Caso UT.1a
         try{
             presenterVehiculos.anhadirVehiculo(VehiculoValidoC);
+
         } catch(Exception e){
             fail();
         }
@@ -142,6 +155,24 @@ public class AnhadirVehiculosTest {
             presenterVehiculos.anhadirVehiculo(vehiculoConVocal);
             fail();
         } catch(PresenterVehiculos.VocalesEnMatricula d){
+
+        } catch(PresenterVehiculos.CaracterEspecial e){
+
+        }
+
+        //Caso UT.1c
+        try{
+            presenterVehiculos.anhadirVehiculo(vehiculoModeloExtranho);
+            fail();
+        } catch(PresenterVehiculos.CaracterEspecial e){
+            
+        }
+
+        //Caso UT.1d
+        try{
+            presenterVehiculos.anhadirVehiculo(vehiculoModeloMarcaExtranha);
+            fail();
+        } catch(PresenterVehiculos.CaracterEspecial e){
 
         }
     }

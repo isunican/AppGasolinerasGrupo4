@@ -28,6 +28,7 @@ import com.isunican.proyectobase.model.Vehiculo;
 import com.isunican.proyectobase.presenter.PresenterVehiculos;
 
 import java.io.IOException;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -183,10 +184,6 @@ public class VehiclesActivity extends AppCompatActivity implements
 
                 catch (PresenterVehiculos.VehiculoYaExiste e) {
                     notificaVehiculoExiste();
-                }
-
-                catch (PresenterVehiculos.VocalesEnMatricula e){
-                    notificaMatriculaConVocales();
                 }
 
                 catch (PresenterVehiculos.CaracterEspecial e) {
